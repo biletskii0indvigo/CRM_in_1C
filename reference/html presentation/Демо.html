@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>1С:Медицина - Модуль CRM (Институт Движения)</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+    
+    <style>
+        /* 1C:Enterprise 8.3 "Taxi" Theme Variables */
+        :root {
+            --1c-yellow: #f8c325;
+            --1c-yellow-hover: #e0b020;
+            --1c-bg: #f0efed;
+            --1c-panel: #ffffff;
+            --1c-border: #b5b5b5;
+            --1c-border-light: #d8d6d2;
+            --1c-text: #1a1a1a;
+            --1c-link: #0050a0;
+            --1c-link-hover: #003070;
+            --1c-active-bg: #1565c0;
+            --1c-btn-bg: #fdfdfd;
+            --1c-btn-hover: #ebf1fa;
+            --font-size-base: 13px;
+        }
+
+        body {
+            font-family: Arial, "Segoe UI", sans-serif;
+            font-size: var(--font-size-base);
+            color: var(--1c-text);
+            background-color: var(--1c-bg);
+            overflow: hidden; 
+            user-select: none;
+        }
+
+        /* Standard 1C Buttons */
+        .btn-1c {
+            background-color: var(--1c-btn-bg);
+            border: 1px solid var(--1c-border);
+            border-radius: 3px;
+            padding: 4px 12px;
+            color: var(--1c-text);
+            font-size: 13px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.1s;
+            box-shadow: inset 0 -1px 0 rgba(0,0,0,0.05);
+        }
+        .btn-1c:hover { background-color: var(--1c-btn-hover); border-color: #8daed3; }
+        .btn-1c:active { background-color: #d4e0ef; box-shadow: inset 0 1px 2px rgba(0,0,0,0.1); }
+        .btn-1c:disabled { opacity: 0.6; cursor: not-allowed; pointer-events: none; }
+        
+        .btn-1c-primary {
+            background-color: var(--1c-yellow);
+            border-color: #d6a111;
+            font-weight: bold;
+        }
+        .btn-1c-primary:hover { background-color: var(--1c-yellow-hover); border-color: #c0900f; }
+
+        /* AI Buttons */
+        .btn-ai {
+            background-color: #f3e8ff;
+            border: 1px solid #d8b4fe;
+            color: #6b21a8;
+        }
+        .btn-ai:hover:not(:disabled) {
+            background-color: #e9d5ff;
+            border-color: #c084fc;
+        }
+
+        /* 1C Inputs & Selects */
+        .input-1c {
+            border: 1px solid var(--1c-border);
+            border-radius: 2px;
+            padding: 3px 6px;
+            font-size: 13px;
+            background-color: #fff;
+            outline: none;
+            color: var(--1c-text);
+        }
+        .input-1c:focus { border-color: #5599dd; box-shadow: 0 0 0 1px #5599dd; }
+
+        /* Scrollbars */
+        ::-webkit-scrollbar { width: 12px; height: 12px; }
+        ::-webkit-scrollbar-track { background: #e8e7e5; border-left: 1px solid var(--1c-border-light); }
+        ::-webkit-scrollbar-thumb { background: #cdcdcd; border: 1px solid #e8e7e5; border-radius: 2px; }
+        ::-webkit-scrollbar-thumb:hover { background: #a0a0a0; }
+
+        /* Layout & Tabs */
+        .main-header { background-color: var(--1c-yellow); height: 44px; display: flex; align-items: center; padding: 0 16px; justify-content: space-between; border-bottom: 1px solid #d6a111; }
+        .main-nav { display: flex; background-color: var(--1c-bg); border-bottom: 1px solid var(--1c-border); padding: 0 12px; overflow-x: auto; align-items: flex-end; height: 32px;}
+        .main-nav-tab { padding: 6px 16px; cursor: pointer; color: #444; border: 1px solid transparent; border-bottom: none; border-radius: 4px 4px 0 0; margin-right: 2px; font-size: 13px;}
+        .main-nav-tab:hover { background-color: #e0dfdc; }
+        .main-nav-tab.active { background-color: #fff; border-color: var(--1c-border); color: #000; font-weight: bold; position: relative; bottom: -1px; padding-bottom: 7px; }
+
+        .sub-nav { display: flex; flex-direction: column; width: 240px; background-color: #fff; border-right: 1px solid var(--1c-border); height: 100%; overflow-y: auto; }
+        .sub-nav-item { padding: 6px 12px; cursor: pointer; display: flex; align-items: center; gap: 8px; color: #333; margin: 2px 4px; border-radius: 3px; }
+        .sub-nav-item:hover { background-color: var(--1c-btn-hover); }
+        .sub-nav-item.active { background-color: #fff4d1; font-weight: bold; color: #000; border-left: 4px solid var(--1c-yellow); padding-left: 8px; }
+
+        /* Kanban Specifics */
+        .kanban-board { display: flex; gap: 8px; padding: 12px; height: 100%; overflow-x: auto; overflow-y: hidden; background: #e8e7e5; }
+        .kanban-col { background-color: #f5f4f2; border-radius: 3px; min-width: 280px; max-width: 280px; display: flex; flex-direction: column; border: 1px solid var(--1c-border-light); }
+        .kanban-col-header { padding: 8px 12px; font-weight: bold; color: #333; border-bottom: 1px solid var(--1c-border-light); display: flex; justify-content: space-between; align-items: center; background: #faf9f8;}
+        .kanban-cards { flex-grow: 1; overflow-y: auto; padding: 8px; display: flex; flex-direction: column; gap: 8px; min-height: 50px; }
+        
+        .k-card { background: #fff; border: 1px solid var(--1c-border); border-radius: 2px; padding: 8px; cursor: grab; box-shadow: 0 1px 2px rgba(0,0,0,0.05); position: relative; border-left: 4px solid transparent;}
+        .k-card:active { cursor: grabbing; }
+        .k-card:hover { border-color: #999; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .k-card.dragging { opacity: 0.5; }
+        .k-card .multi-deal-warn { position: absolute; top: 4px; right: 4px; color: #d32f2f; cursor: help; font-size: 14px; }
+        
+        /* Drag & Drop Zones */
+        .dropzone.drag-over { background-color: #cce4ff; border: 1px dashed #5599dd; }
+
+        /* Modals / Windows */
+        .window-overlay { position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(0,0,0,0.4); z-index: 1000; display: none; justify-content: center; align-items: center; }
+        .window-1c { background: var(--1c-bg); border: 1px solid #777; box-shadow: 0 4px 16px rgba(0,0,0,0.2); display: flex; flex-direction: column; border-radius: 2px; overflow: hidden;}
+        .window-header { background-color: #e8e7e5; padding: 6px 12px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--1c-border); font-weight: bold; cursor: default;}
+        .window-close { cursor: pointer; color: #666; font-size: 16px; }
+        .window-close:hover { color: #d32f2f; }
+        .window-toolbar { background: #fdfdfd; padding: 6px 12px; border-bottom: 1px solid var(--1c-border); display: flex; gap: 8px; align-items: center; }
+        .window-content { padding: 12px; overflow-y: auto; background: var(--1c-bg); flex-grow: 1; }
+
+        /* Links */
+        .link-1c { color: var(--1c-link); text-decoration: none; cursor: pointer; }
+        .link-1c:hover { text-decoration: underline; color: var(--1c-link-hover); }
+
+        /* Toast */
+        #toast-container { position: fixed; bottom: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; }
+        .toast { background: #fff; color: #333; padding: 12px 16px; border: 1px solid #ccc; border-left: 4px solid var(--1c-yellow); border-radius: 2px; box-shadow: 0 4px 6px rgba(0,0,0,0.1); animation: slideIn 0.3s ease-out; display: flex; align-items: center; gap: 8px; font-size: 13px; min-width: 250px;}
+        @keyframes slideIn { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+
+        /* Chart */
+        .chart-wrapper { position: relative; width: 100%; max-width: 600px; height: 300px; margin: 0 auto; }
+    </style>
+</head>
+<body>
+
+    <!-- 1C Top Header -->
+    <header class="main-header">
+        <div class="flex items-center gap-3">
+            <i class="ti ti-menu-2 text-xl text-[#664d00] cursor-pointer hover:bg-yellow-500 p-1 rounded" onclick="app.toast('Главное меню 1С')"></i>
+            <span class="font-bold text-[15px] text-[#4d3a00] tracking-tight flex items-center gap-1">
+                <i class="ti ti-activity"></i> 1С:Медицина. Поликлиника
+            </span>
+            <div class="text-[11px] text-[#806000] ml-2 px-2 border-l border-[#d6a111]">Институт Движения</div>
+        </div>
+        <div class="flex items-center gap-4 text-xs font-medium text-[#4d3a00]">
+            <div class="flex items-center gap-1 cursor-pointer hover:underline" onclick="app.toast('Глобальный поиск')">
+                <i class="ti ti-search text-base"></i> Поиск
+            </div>
+            <div class="flex items-center gap-1 cursor-pointer hover:underline" onclick="app.toast('Центр оповещений')">
+                <i class="ti ti-bell text-base"></i> Оповещения <span class="bg-red-600 text-white rounded px-1 py-0.5 text-[9px] font-bold">3</span>
+            </div>
+            <div class="flex items-center gap-1 cursor-pointer hover:underline" onclick="app.toast('Настройки пользователя')">
+                <i class="ti ti-user-circle text-base"></i> О. Иванова (Куратор)
+            </div>
+        </div>
+    </header>
+
+    <!-- MIS Modules Horizontal Tabs (Structure Context) -->
+    <nav class="main-nav shadow-sm z-10 relative">
+        <div class="main-nav-tab" onclick="app.toast('Модуль МИС: Регистратура')">Регистратура</div>
+        <div class="main-nav-tab" onclick="app.toast('Модуль МИС: Пациенты')">Пациенты</div>
+        <div class="main-nav-tab" onclick="app.toast('Модуль МИС: Расписание')">Расписание</div>
+        <div class="main-nav-tab" onclick="app.toast('Модуль МИС: Мед.учет')">Мед.учет</div>
+        <div class="main-nav-tab active">CRM (Продажи)</div>
+        <div class="main-nav-tab" onclick="app.toast('Модуль МИС: Касса')">Касса</div>
+        <div class="main-nav-tab" onclick="app.toast('Модуль МИС: Отчеты')">Отчеты</div>
+    </nav>
+
+    <!-- Body Layout -->
+    <div class="flex" style="height: calc(100vh - 77px);">
+        
+        <!-- Left Sub-navigation for CRM Module -->
+        <aside class="sub-nav shrink-0 pt-2 shadow-[2px_0_5px_rgba(0,0,0,0.02)] z-10">
+            <div class="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wide">Рабочие места (АРМ)</div>
+            <div class="sub-nav-item active" id="nav-kanban" onclick="app.switchView('kanban')">
+                <i class="ti ti-layout-kanban text-[#0050a0] text-lg"></i> Мои продажи
+            </div>
+            <div class="sub-nav-item" id="nav-dist" onclick="app.switchView('distribution')">
+                <i class="ti ti-users-group text-green-700 text-lg"></i> Распределение
+            </div>
+            <div class="sub-nav-item" id="nav-dash" onclick="app.switchView('dashboard')">
+                <i class="ti ti-chart-pie text-purple-700 text-lg"></i> Монитор РОП
+            </div>
+            
+            <div class="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wide mt-2">Документы</div>
+            <div class="sub-nav-item" onclick="app.openDocList('Интересы')">
+                <i class="ti ti-file-invoice text-gray-500 text-lg"></i> Интересы клиентов
+            </div>
+            <div class="sub-nav-item" onclick="app.openDocList('Задачи')">
+                <i class="ti ti-checkbox text-gray-500 text-lg"></i> Задачи куратора
+            </div>
+            
+            <div class="px-4 py-2 text-[10px] font-bold text-gray-400 uppercase tracking-wide mt-2">Справочники</div>
+            <div class="sub-nav-item" onclick="app.openDocList('Сегменты')">
+                <i class="ti ti-tags text-gray-500 text-lg"></i> Сегменты пациентов
+            </div>
+        </aside>
+
+        <!-- Main Workspace Area -->
+        <main class="flex-grow flex flex-col relative bg-[var(--1c-bg)] overflow-hidden" id="workspace">
+            
+            <!-- VIEW: KANBAN -->
+            <div id="view-kanban" class="flex flex-col h-full w-full">
+                <!-- Toolbar -->
+                <div class="bg-white border-b border-[var(--1c-border)] p-2 flex items-center justify-between shrink-0 shadow-sm z-0">
+                    <div class="flex items-center gap-3">
+                        <button class="btn-1c btn-1c-primary" onclick="app.createDeal()">
+                            <i class="ti ti-circle-plus"></i> Создать
+                        </button>
+                        <div class="w-px h-5 bg-gray-300 mx-1"></div>
+                        
+                        <!-- Filters -->
+                        <div class="flex items-center gap-1">
+                            <span class="text-gray-500 text-xs">Куратор:</span>
+                            <select class="input-1c w-40 font-bold text-[#0050a0]" id="filter-curator" onchange="app.renderKanban()">
+                                <option value="all">Все кураторы</option>
+                                <option value="unassigned">Нераспределенные</option>
+                                <!-- Populated via JS -->
+                            </select>
+                        </div>
+                        <div class="flex items-center gap-1 ml-2">
+                            <span class="text-gray-500 text-xs">Врач (Направил):</span>
+                            <select class="input-1c w-48" id="filter-doctor" onchange="app.renderKanban()">
+                                <option value="all">Все врачи</option>
+                                <!-- Populated via JS -->
+                            </select>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-3">
+                        <div class="text-xs bg-[#faf9f8] px-3 py-1 border border-[var(--1c-border-light)] rounded flex items-center gap-2">
+                            <span class="text-gray-500">Потенциал:</span>
+                            <strong id="kanban-total-sum" class="text-[14px]">0 ₽</strong>
+                        </div>
+                        <button class="btn-1c" onclick="app.renderKanban()"><i class="ti ti-refresh text-green-700"></i></button>
+                    </div>
+                </div>
+                <!-- Board -->
+                <div class="kanban-board" id="kanban-board-container">
+                    <!-- Columns rendered via JS -->
+                </div>
+            </div>
+
+            <!-- VIEW: DISTRIBUTION -->
+            <div id="view-distribution" class="hidden flex-col h-full w-full">
+                <div class="bg-white border-b border-[var(--1c-border)] p-2 flex items-center justify-between shrink-0 shadow-sm">
+                    <div class="flex items-center gap-2">
+                        <button class="btn-1c btn-1c-primary" onclick="app.autoDistribute()">
+                            <i class="ti ti-wand"></i> Автораспределение
+                        </button>
+                        <button class="btn-1c" onclick="app.toast('Открыт справочник правил маршрутизации пациентов')">
+                            <i class="ti ti-settings"></i> Правила
+                        </button>
+                        <div class="w-px h-5 bg-gray-300 mx-2"></div>
+                        <div class="flex items-center gap-1">
+                            <span class="text-gray-500 text-xs">Врач:</span>
+                            <select class="input-1c w-48" id="dist-filter-doctor" onchange="app.renderDistribution()">
+                                <option value="all">Все врачи</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="flex h-full overflow-hidden p-3 gap-3 bg-[var(--1c-bg)]">
+                    <!-- Left: Unassigned -->
+                    <div class="w-1/3 bg-white border border-[var(--1c-border)] flex flex-col rounded shadow-sm">
+                        <div class="bg-[#f0f0f0] p-2 font-bold border-b border-[var(--1c-border)] flex justify-between items-center">
+                            <span><i class="ti ti-inbox text-gray-500"></i> Очередь</span> 
+                            <span class="bg-red-500 text-white px-2 py-0.5 rounded-full text-[10px]" id="dist-unassigned-count">0</span>
+                        </div>
+                        <div class="flex-grow p-2 overflow-y-auto flex flex-col gap-2 dropzone bg-[#faf9f8]" id="dist-pool" data-zone="pool">
+                            <!-- Cards -->
+                        </div>
+                    </div>
+                    <!-- Right: Curators -->
+                    <div class="w-2/3 flex flex-col gap-3 overflow-y-auto pr-2" id="dist-curators-container">
+                        <!-- Curator rows rendered via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- VIEW: DASHBOARD -->
+            <div id="view-dashboard" class="hidden flex-col h-full w-full overflow-y-auto p-4 bg-[#e8e7e5]">
+                <div class="bg-white border border-[var(--1c-border)] p-4 rounded shadow-sm mb-4">
+                    <h2 class="text-[15px] font-bold mb-4 border-b border-gray-200 pb-2 flex items-center gap-2 text-[#333]"><i class="ti ti-chart-bar text-[#0050a0]"></i> Монитор руководителя ОП</h2>
+                    <div class="grid grid-cols-3 gap-4 mb-6">
+                        <div class="bg-[#fdfcfb] p-4 rounded border border-[var(--1c-border-light)]">
+                            <div class="text-gray-500 text-[10px] uppercase mb-1">Сделок в работе</div>
+                            <div class="text-2xl font-bold text-[#0050a0]" id="dash-active-deals">0</div>
+                        </div>
+                        <div class="bg-[#fdfcfb] p-4 rounded border border-[var(--1c-border-light)]">
+                            <div class="text-gray-500 text-[10px] uppercase mb-1">Оплачено (Текущий месяц)</div>
+                            <div class="text-2xl font-bold text-green-700" id="dash-paid-sum">0 ₽</div>
+                        </div>
+                        <div class="bg-[#fff5f5] p-4 rounded border border-[#ffcccc] cursor-pointer hover:bg-[#ffe6e6] transition-colors" onclick="app.toast('Сформирован отчет: Просроченные задачи кураторов')">
+                            <div class="text-gray-500 text-[10px] uppercase mb-1">Просрочено задач / Контактов</div>
+                            <div class="text-2xl font-bold text-[#d32f2f]">4 <i class="ti ti-alert-circle text-[14px]"></i></div>
+                        </div>
+                    </div>
+                    <div class="chart-wrapper">
+                        <canvas id="dashboard-chart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+        </main>
+    </div>
+
+    <!-- MODAL: DEAL CARD (Интерес) -->
+    <div class="window-overlay" id="modal-deal">
+        <div class="window-1c w-11/12 max-w-[1000px] h-[90vh]">
+            <div class="window-header">
+                <div class="flex items-center gap-2">
+                    <i class="ti ti-file-invoice text-yellow-600 text-[16px]"></i>
+                    <span>Интерес клиента: <span id="mdl-id" class="font-bold text-[#0050a0]"></span> от <span id="mdl-date"></span></span>
+                    <span id="mdl-stage-badge" class="ml-4 px-2 py-0.5 bg-[#f0f0f0] border border-[#ccc] rounded text-[11px] font-normal text-gray-700"></span>
+                </div>
+                <div class="flex gap-2">
+                    <i class="ti ti-minus window-close" onclick="app.closeModal('modal-deal')"></i>
+                    <i class="ti ti-maximize window-close" onclick="app.toast('Развернуть на весь экран')"></i>
+                    <i class="ti ti-x window-close text-red-500" onclick="app.closeModal('modal-deal')"></i>
+                </div>
+            </div>
+            <div class="window-toolbar">
+                <button class="btn-1c btn-1c-primary" onclick="app.saveAndCloseModal()"><i class="ti ti-device-floppy"></i> Провести и закрыть</button>
+                <button class="btn-1c" onclick="app.toast('Документ записан (сохранен черновик)')"><i class="ti ti-device-floppy text-gray-500"></i> Записать</button>
+                <div class="w-px h-5 bg-gray-300 mx-1"></div>
+                <button class="btn-1c" onclick="app.toast('Сформирована печатная форма: Коммерческое предложение (html)')"><i class="ti ti-printer text-gray-600"></i> Печать КП</button>
+                <button class="btn-1c" onclick="app.generatePayment()"><i class="ti ti-qrcode text-gray-600"></i> Ссылка на оплату</button>
+                <button class="btn-1c ml-auto text-gray-500" onclick="app.toast('Связанные документы: Заказы, Оплаты, Задачи')"><i class="ti ti-sitemap"></i> Структура подчиненности</button>
+            </div>
+            
+            <div class="window-content flex flex-col gap-2 p-2 bg-[#f0efed]">
+                
+                <!-- Warning for Multiple Deals -->
+                <div id="mdl-multi-warn" class="hidden bg-[#fff4e5] border border-[#ffcccc] p-2 text-[#d32f2f] text-xs flex items-center gap-2 rounded">
+                    <i class="ti ti-alert-triangle text-lg"></i>
+                    <strong>Внимание!</strong> У данного пациента есть другие активные сделки. Убедитесь, что ваши действия не конфликтуют с назначениями других врачей или планами других кураторов.
+                </div>
+
+                <!-- Top Data Block -->
+                <div class="bg-white border border-[var(--1c-border)] p-3 grid grid-cols-[2fr_2fr_1fr] gap-4 shrink-0">
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <span class="w-24 text-gray-500 text-[12px]">Пациент:</span> 
+                            <a href="#" class="link-1c font-bold text-[14px]" id="mdl-patient" onclick="app.toast('Открыта карта пациента')"></a>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <span class="w-24 text-gray-500 text-[12px]">Сегменты:</span> 
+                            <span id="mdl-tags" class="flex gap-1 flex-wrap"></span>
+                        </div>
+                        <div class="flex items-center">
+                            <span class="w-24 text-gray-500 text-[12px]">Источник:</span> 
+                            <span id="mdl-source" class="text-[12px]"></span>
+                        </div>
+                    </div>
+                    <div>
+                        <div class="flex items-center mb-2">
+                            <span class="w-24 text-gray-500 text-[12px]">Врач (автор):</span> 
+                            <span id="mdl-doctor" class="font-bold text-[13px]"></span>
+                        </div>
+                        <div class="flex items-center mb-2">
+                            <span class="w-24 text-gray-500 text-[12px]">Куратор:</span> 
+                            <select id="mdl-curator-select" class="input-1c font-bold text-[#0050a0] w-48"></select>
+                        </div>
+                        <div class="flex items-center mt-2 pt-2 border-t border-dashed border-gray-300">
+                            <span class="w-24 text-gray-500 text-[12px]">Долг клиента:</span> 
+                            <span id="mdl-debt" class="font-bold text-[#d32f2f] text-[13px]"></span>
+                        </div>
+                    </div>
+                    <div class="bg-[#faf9f8] p-3 border border-[var(--1c-border-light)] rounded flex flex-col justify-center items-center text-center">
+                        <div class="text-[10px] text-gray-500 uppercase mb-1">Сумма документа</div>
+                        <div class="text-xl font-bold text-[#333]" id="mdl-sum">0 ₽</div>
+                        <div class="text-xs text-green-700 mt-1 font-bold" id="mdl-paid">Оплачено: 0 ₽</div>
+                    </div>
+                </div>
+
+                <!-- 1C Internal Tabs -->
+                <div class="bg-white border border-[var(--1c-border)] flex-grow flex flex-col min-h-0">
+                    <div class="flex border-b border-[var(--1c-border)] bg-[#f5f4f2] shrink-0 pt-1">
+                        <div class="main-nav-tab active" id="mtab-btn-main" onclick="app.switchModalTab('main')">Главное</div>
+                        <div class="main-nav-tab" id="mtab-btn-plan" onclick="app.switchModalTab('plan')">План лечения (Заказы) <span class="text-[#d32f2f] font-bold ml-1">*</span></div>
+                        <div class="main-nav-tab" id="mtab-btn-tasks" onclick="app.switchModalTab('tasks')">Задачи и Сценарии</div>
+                    </div>
+                    
+                    <div class="flex-grow overflow-y-auto p-4 bg-white" id="mtab-main">
+                        <div class="grid grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-[#555] mb-1 font-bold text-[12px]">Жалоба / Потребность (из МИС):</label>
+                                <textarea class="input-1c w-full h-24 mb-4 bg-[#f9f9f9]" readonly id="mdl-complaint"></textarea>
+                                
+                                <label class="block text-[#555] mb-1 font-bold text-[12px]">Тип ведения (FR):</label>
+                                <select class="input-1c w-full mb-4">
+                                    <option>Контрольный визит</option>
+                                    <option>Поддерживающее лечение</option>
+                                    <option>Контроль диагностики</option>
+                                </select>
+                            </div>
+                            <div class="flex flex-col">
+                                <div class="flex justify-between items-end mb-1">
+                                    <label class="block text-[#555] font-bold text-[12px]">Скрипт для куратора:</label>
+                                    <button class="btn-1c btn-ai text-[11px] py-0.5" id="btn-ai-script" onclick="app.generateAiScript()">
+                                        <i class="ti ti-sparkles"></i> AI-Сгенерировать скрипт
+                                    </button>
+                                </div>
+                                <textarea id="mdl-script-textarea" class="input-1c w-full flex-grow mb-4 border-[#0050a0] resize-none" placeholder="Введите скрипт или воспользуйтесь AI-помощником для автоматической генерации на основе жалобы и сегментов пациента..."></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex-grow overflow-y-auto p-4 bg-white hidden" id="mtab-plan">
+                        <div class="flex justify-between items-start mb-3 gap-4">
+                            <div class="bg-[#e6f1fb] text-[#0050a0] p-2 text-xs border border-[#b5d4f4] flex items-start gap-2 rounded flex-grow">
+                                <i class="ti ti-info-circle text-lg mt-0.5"></i>
+                                <div><strong>FR-07.04 (Видимость плана):</strong> Консультативный лист врача отображается полностью. Сделка привязана к конкретным назначениям одного врача. Смешивание назначений разных врачей в одном Интересе запрещено логикой системы.</div>
+                            </div>
+                            <button class="btn-1c btn-ai shrink-0 mt-1" id="btn-ai-plan" onclick="app.explainMedicalPlan()">
+                                <i class="ti ti-sparkles"></i> AI-Адаптация для пациента
+                            </button>
+                        </div>
+                        
+                        <!-- AI Explanation Panel -->
+                        <div id="ai-plan-explanation" class="hidden bg-[#faf5ff] border border-[#d8b4fe] p-3 mb-4 rounded text-[#581c87] text-[12px] leading-relaxed shadow-inner relative">
+                            <div class="font-bold mb-1 flex items-center gap-1"><i class="ti ti-sparkles"></i> Адаптированное объяснение плана лечения (от Gemini):</div>
+                            <div id="ai-plan-content"></div>
+                            <i class="ti ti-x absolute top-2 right-2 cursor-pointer hover:text-red-500" onclick="document.getElementById('ai-plan-explanation').classList.add('hidden')"></i>
+                        </div>
+
+                        <table class="w-full border-collapse border border-[var(--1c-border)] text-left text-[12px]">
+                            <thead class="bg-[#e8e7e5] text-[#333]">
+                                <tr>
+                                    <th class="border border-[var(--1c-border)] p-1.5 w-8 text-center">№</th>
+                                    <th class="border border-[var(--1c-border)] p-1.5">Номенклатура медицинской услуги</th>
+                                    <th class="border border-[var(--1c-border)] p-1.5 w-24">Сумма</th>
+                                    <th class="border border-[var(--1c-border)] p-1.5 w-32">Мед. статус</th>
+                                    <th class="border border-[var(--1c-border)] p-1.5 w-32">Оплата</th>
+                                </tr>
+                            </thead>
+                            <tbody id="mdl-plan-table">
+                                <!-- Populated by JS -->
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="flex-grow overflow-y-auto p-4 bg-white hidden" id="mtab-tasks">
+                        <div class="grid grid-cols-[1fr_300px] gap-6 h-full">
+                            <div class="flex flex-col border border-[var(--1c-border-light)] rounded overflow-hidden">
+                                <div class="bg-[#faf9f8] p-2 font-bold border-b border-[var(--1c-border-light)] flex justify-between items-center shrink-0 text-[#333]">
+                                    <span>Лента взаимодействий (История)</span>
+                                    <button class="btn-1c py-1" onclick="app.toast('Открыта форма создания новой задачи/звонка')"><i class="ti ti-plus"></i> Событие</button>
+                                </div>
+                                <div class="flex-grow overflow-y-auto p-3 space-y-4" id="mdl-history">
+                                    <!-- History items -->
+                                </div>
+                            </div>
+                            <div class="border border-[#d6a111] bg-[#fffcf5] flex flex-col rounded overflow-hidden">
+                                <div class="bg-[#f8c325] p-2 font-bold border-b border-[#d6a111] shrink-0 text-[#4d3a00]">
+                                    <i class="ti ti-route"></i> Сценарии (Дожим 0-3-7)
+                                </div>
+                                <div class="p-3 flex-grow overflow-y-auto">
+                                    <div class="text-[11px] text-gray-600 mb-4">Выберите стандартный регламент удержания. Система автоматически создаст отложенные задачи.</div>
+                                    
+                                    <button class="btn-1c w-full justify-start mb-2 bg-white border-[var(--1c-border-light)]" onclick="app.applyStrategy('pause')">
+                                        <i class="ti ti-player-pause text-[#0050a0]"></i> Взял паузу (Звонок через 3 дн)
+                                    </button>
+                                    <button class="btn-1c w-full justify-start mb-2 bg-white border-[var(--1c-border-light)]" onclick="app.applyStrategy('sms')">
+                                        <i class="ti ti-message-2 text-green-700"></i> Мягкий контакт (Авто-SMS)
+                                    </button>
+                                    <button class="btn-1c w-full justify-start bg-[#fff5f5] border-[#ffcccc]" onclick="app.toast('Сделка переведена в статус «Отказ». Назначена задача на РОП.')">
+                                        <i class="ti ti-alert-triangle text-[#d32f2f]"></i> Эскалация РОП (Отказ)
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast Container -->
+    <div id="toast-container"></div>
+
+    <script>
+        // Gemini API Configuration
+        const apiKey = "";
+        
+        async function callGeminiAPI(prompt, systemInstruction) {
+            const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash-preview-09-2025:generateContent?key=${apiKey}`;
+            const payload = {
+                contents: [{ parts: [{ text: prompt }] }],
+                systemInstruction: { parts: [{ text: systemInstruction }] }
+            };
+
+            let delay = 1000;
+            for (let i = 0; i < 5; i++) {
+                try {
+                    const response = await fetch(url, {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(payload)
+                    });
+                    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
+                    const data = await response.json();
+                    return data.candidates?.[0]?.content?.parts?.[0]?.text || "Нет ответа";
+                } catch (e) {
+                    console.error("Gemini API Error:", e);
+                    await new Promise(r => setTimeout(r, delay));
+                    delay *= 2;
+                }
+            }
+            return "Ошибка генерации. Пожалуйста, проверьте API ключ или попробуйте позже.";
+        }
+
+        /**
+         * 1C:CRM Logic Module
+         * Implements Data handling, 1C Taxi UI behaviors, D&D, Filters, and AI features
+         */
+        const app = {
+            state: {
+                view: 'kanban',
+                filterCurator: 'all',
+                filterDoctor: 'all',
+                distFilterDoctor: 'all',
+                draggedDealId: null,
+                activeDealId: null,
+                chartInstance: null
+            },
+            
+            // Core Data Model
+            data: {
+                curators: [
+                    { id: 'c1', name: 'Ольга (Куратор)' },
+                    { id: 'c2', name: 'Иван (Куратор)' },
+                    { id: 'c3', name: 'Наталья (РОП)' }
+                ],
+                doctors: [
+                    { id: 'd1', name: 'Смирнов А.В. (Невролог)' },
+                    { id: 'd2', name: 'Петрова Е.И. (Ортопед)' },
+                    { id: 'd3', name: 'Кузнецов Д.Д. (Терапевт)' }
+                ],
+                stages: [
+                    { id: 'lead', name: 'Обращения (Лиды)', color: '#888780' },
+                    { id: 'stage1', name: 'Первичный контакт', color: '#378add' },
+                    { id: 'stage2', name: 'Переговоры / Презентация', color: '#ba7517' },
+                    { id: 'stage3', name: 'Оформление оплаты', color: '#e24b4a' },
+                    { id: 'stage4', name: 'В процессе лечения', color: '#1d9e75' },
+                    { id: 'won', name: 'Завершена успешно', color: '#0f6e56' }
+                ],
+                // Deals Table
+                deals: [
+                    {
+                        id: 'IN-00101', patient: 'Иванов И.И.', phone: '+7 (999) 111-22-33',
+                        tags: ['Первичный', 'Иногородний'], source: 'Сайт (SEO)',
+                        complaint: 'Сильные боли в спине, отдающие в правую ногу. Трудно сидеть.', date: '12.05.2026',
+                        doctorId: 'd1', curatorId: null, stage: 'lead', // Unassigned
+                        sum: 45000, paid: 0,
+                        plan: [
+                            { name: 'МРТ пояснично-крестцового отдела позвоночника', sum: 5000, medStatus: 'Выполнено', payStatus: 'Не оплачено' },
+                            { name: 'Внутримышечная инъекция (блокада)', sum: 2000, medStatus: 'Назначено', payStatus: 'Не оплачено' },
+                            { name: 'Курс физиотерапии (магнитотерапия, 10 сеансов)', sum: 38000, medStatus: 'Рекомендовано', payStatus: 'Не оплачено' }
+                        ],
+                        history: [{ d: '12.05.2026 10:00', t: 'Врач Смирнов А.В. заполнил конс. лист. Сделка создана.' }]
+                    },
+                    {
+                        id: 'IN-00102', patient: 'Иванов И.И.', phone: '+7 (999) 111-22-33',
+                        tags: ['Повторный'], source: 'Прямой визит',
+                        complaint: 'Изготовление ортопедических стелек для спортивной обуви.', date: '10.04.2026',
+                        doctorId: 'd2', curatorId: 'c1', stage: 'stage4', 
+                        sum: 12000, paid: 12000,
+                        plan: [
+                            { name: 'Изготовление индивидуальных ортезов стопы', sum: 12000, medStatus: 'В процессе', payStatus: 'Оплачено полностью' }
+                        ],
+                        history: [{ d: '10.04.2026 14:00', t: 'Полная оплата. Передано в производство.' }]
+                    },
+                    {
+                        id: 'IN-00103', patient: 'Сидорова А.М.', phone: '+7 (900) 555-00-11',
+                        tags: ['ДМС', 'VIP', 'Тревожный'], source: 'Звонок',
+                        complaint: 'Реабилитация после операции на плечевом суставе (артроскопия). Ограничение подвижности.', date: '14.05.2026',
+                        doctorId: 'd2', curatorId: 'c2', stage: 'stage2',
+                        sum: 85000, paid: 0,
+                        plan: [
+                            { name: 'Курс кинезиотерапии на аппарате Экзарта (12 занятий)', sum: 60000, medStatus: 'Назначено', payStatus: 'Ожидание гарантийного письма' },
+                            { name: 'Ударно-волновая терапия (УВТ)', sum: 25000, medStatus: 'Назначено', payStatus: 'Не оплачено' }
+                        ],
+                        history: [{ d: '14.05.2026 09:30', t: 'Проведена презентация. Ждем ответа от страховой.' }]
+                    },
+                    {
+                        id: 'IN-00104', patient: 'Васильев К.Н.', phone: '+7 (911) 222-33-44',
+                        tags: ['Местный', 'Скептик'], source: 'VKontakte',
+                        complaint: 'Общая слабость, утомляемость, хочет проверить здоровье.', date: '14.05.2026',
+                        doctorId: 'd3', curatorId: null, stage: 'lead',
+                        sum: 15000, paid: 0,
+                        plan: [
+                            { name: 'Комплексный чек-ап "Здоровье+', sum: 15000, medStatus: 'Назначено', payStatus: 'Не оплачено' }
+                        ],
+                        history: [{ d: '14.05.2026 11:00', t: 'Заявка из соцсетей. Требует распределения.' }]
+                    }
+                ]
+            },
+
+            init() {
+                this.populateFilters();
+                this.renderKanban();
+            },
+
+            populateFilters() {
+                // Curators
+                const curSelect = document.getElementById('filter-curator');
+                const mdlCuratorSelect = document.getElementById('mdl-curator-select');
+                mdlCuratorSelect.innerHTML = '<option value="">Не назначен</option>';
+                
+                this.data.curators.forEach(c => {
+                    curSelect.appendChild(new Option(c.name, c.id));
+                    mdlCuratorSelect.appendChild(new Option(c.name, c.id));
+                });
+
+                // Doctors
+                const docSelect = document.getElementById('filter-doctor');
+                const distDocSelect = document.getElementById('dist-filter-doctor');
+                this.data.doctors.forEach(d => {
+                    docSelect.appendChild(new Option(d.name, d.id));
+                    distDocSelect.appendChild(new Option(d.name, d.id));
+                });
+            },
+
+            // --- VIEW SWITCHING ---
+            switchView(viewName) {
+                this.state.view = viewName;
+                
+                document.querySelectorAll('.sub-nav-item').forEach(el => el.classList.remove('active'));
+                document.getElementById(`nav-${viewName.substring(0,4)}`).classList.add('active');
+
+                ['kanban', 'distribution', 'dashboard'].forEach(v => {
+                    document.getElementById(`view-${v}`).classList.add('hidden');
+                    document.getElementById(`view-${v}`).classList.remove('flex');
+                });
+                
+                const target = document.getElementById(`view-${viewName}`);
+                target.classList.remove('hidden');
+                target.classList.add('flex');
+
+                if(viewName === 'kanban') this.renderKanban();
+                if(viewName === 'distribution') this.renderDistribution();
+                if(viewName === 'dashboard') this.renderDashboard();
+            },
+
+            // --- MULTI-DEAL CHECK ---
+            hasOtherActiveDeals(deal) {
+                return this.data.deals.some(d => 
+                    d.patient === deal.patient && 
+                    d.id !== deal.id && 
+                    d.stage !== 'won'
+                );
+            },
+
+            // --- KANBAN VIEW ---
+            renderKanban() {
+                this.state.filterCurator = document.getElementById('filter-curator').value;
+                this.state.filterDoctor = document.getElementById('filter-doctor').value;
+
+                const board = document.getElementById('kanban-board-container');
+                board.innerHTML = '';
+                let totalSum = 0;
+
+                this.data.stages.forEach(stage => {
+                    let stageDeals = this.data.deals.filter(d => d.stage === stage.id);
+                    
+                    if (this.state.filterCurator !== 'all') {
+                        if (this.state.filterCurator === 'unassigned') stageDeals = stageDeals.filter(d => d.curatorId === null);
+                        else stageDeals = stageDeals.filter(d => d.curatorId === this.state.filterCurator);
+                    }
+                    if (this.state.filterDoctor !== 'all') {
+                        stageDeals = stageDeals.filter(d => d.doctorId === this.state.filterDoctor);
+                    }
+
+                    const stageSum = stageDeals.reduce((acc, d) => acc + d.sum, 0);
+                    totalSum += stageSum;
+
+                    const col = document.createElement('div');
+                    col.className = 'kanban-col shrink-0 dropzone-stage shadow-sm';
+                    col.dataset.stageId = stage.id;
+                    
+                    col.innerHTML = `
+                        <div class="kanban-col-header" style="border-top: 3px solid ${stage.color}">
+                            <div>${stage.name} <span class="text-gray-500 font-normal ml-1 text-xs">(${stageDeals.length})</span></div>
+                            <div class="text-[11px] font-normal text-gray-500">${this.formatCurrency(stageSum)}</div>
+                        </div>
+                        <div class="kanban-cards"></div>
+                    `;
+                    
+                    const cardsContainer = col.querySelector('.kanban-cards');
+                    stageDeals.forEach(deal => cardsContainer.appendChild(this.createCardElement(deal)));
+
+                    this.setupDropzone(col, 'stage');
+                    board.appendChild(col);
+                });
+
+                document.getElementById('kanban-total-sum').textContent = this.formatCurrency(totalSum);
+            },
+
+            // --- DISTRIBUTION VIEW ---
+            renderDistribution() {
+                this.state.distFilterDoctor = document.getElementById('dist-filter-doctor').value;
+                
+                const pool = document.getElementById('dist-pool');
+                const curatorsContainer = document.getElementById('dist-curators-container');
+                pool.innerHTML = '';
+                curatorsContainer.innerHTML = '';
+
+                let unassigned = this.data.deals.filter(d => d.curatorId === null);
+                if(this.state.distFilterDoctor !== 'all') {
+                    unassigned = unassigned.filter(d => d.doctorId === this.state.distFilterDoctor);
+                }
+
+                document.getElementById('dist-unassigned-count').textContent = unassigned.length;
+                unassigned.forEach(deal => pool.appendChild(this.createCardElement(deal)));
+                this.setupDropzone(pool, 'pool');
+
+                this.data.curators.forEach(c => {
+                    const cDeals = this.data.deals.filter(d => d.curatorId === c.id);
+                    const row = document.createElement('div');
+                    row.className = 'bg-white border border-[var(--1c-border)] rounded shadow-sm flex flex-col dropzone-curator min-h-[140px]';
+                    row.dataset.curatorId = c.id;
+                    
+                    row.innerHTML = `
+                        <div class="bg-[#faf9f8] p-2 font-bold border-b border-[var(--1c-border-light)] flex justify-between items-center text-[#333]">
+                            <div class="flex items-center gap-2"><i class="ti ti-user-circle text-[#0050a0] text-lg"></i> ${c.name}</div>
+                            <div class="text-xs font-normal bg-blue-50 text-[#0050a0] px-2 py-0.5 rounded border border-blue-200">В работе: ${cDeals.length}</div>
+                        </div>
+                        <div class="p-3 flex gap-3 overflow-x-auto flex-grow items-start kanban-cards"></div>
+                    `;
+                    
+                    const cardsContainer = row.querySelector('.kanban-cards');
+                    cDeals.forEach(deal => cardsContainer.appendChild(this.createCardElement(deal, true)));
+                    
+                    this.setupDropzone(row, 'curator');
+                    curatorsContainer.appendChild(row);
+                });
+            },
+
+            // --- DASHBOARD VIEW ---
+            renderDashboard() {
+                const active = this.data.deals.filter(d => d.stage !== 'won').length;
+                const paid = this.data.deals.reduce((a,b)=>a+b.paid,0);
+                
+                document.getElementById('dash-active-deals').textContent = active;
+                document.getElementById('dash-paid-sum').textContent = this.formatCurrency(paid);
+
+                if (this.state.chartInstance) this.state.chartInstance.destroy();
+
+                const ctx = document.getElementById('dashboard-chart').getContext('2d');
+                Chart.defaults.font.size = 11;
+                Chart.defaults.font.family = 'Arial, sans-serif';
+                
+                const sums = this.data.stages.map(s => this.data.deals.filter(d => d.stage === s.id).reduce((a,b)=>a+b.sum,0));
+
+                this.state.chartInstance = new Chart(ctx, {
+                    type: 'bar',
+                    data: {
+                        labels: this.data.stages.map(s=>s.name),
+                        datasets: [{
+                            label: 'Потенциал сделок (₽)',
+                            data: sums,
+                            backgroundColor: '#f8c325',
+                            borderColor: '#d6a111',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        plugins: { legend: { display: false } },
+                        scales: { y: { beginAtZero: true } }
+                    }
+                });
+            },
+
+            // --- CARD CREATION & DRAG LOGIC ---
+            createCardElement(deal, isHorizontal = false) {
+                const card = document.createElement('div');
+                const stageColor = this.data.stages.find(s=>s.id===deal.stage)?.color || '#ccc';
+                
+                card.className = `k-card ${isHorizontal ? 'min-w-[220px] shrink-0' : ''}`;
+                card.draggable = true;
+                card.dataset.id = deal.id;
+                card.onclick = () => this.openDealModal(deal.id);
+                card.style.borderLeftColor = stageColor;
+                
+                const debt = deal.sum - deal.paid;
+                const debtStr = debt > 0 ? `<span class="text-[#d32f2f] font-bold">${this.formatCurrency(debt)}</span>` : `<span class="text-green-700 font-bold">Оплачено</span>`;
+                const docName = this.data.doctors.find(d=>d.id===deal.doctorId)?.name.split(' ')[0] || 'Врач';
+                
+                const multiWarn = this.hasOtherActiveDeals(deal) ? `<i class="ti ti-alert-triangle multi-deal-warn" title="У пациента есть другие активные сделки!"></i>` : '';
+
+                card.innerHTML = `
+                    ${multiWarn}
+                    <div class="flex justify-between items-start mb-1 pr-4">
+                        <div class="font-bold text-[#0050a0] hover:underline truncate text-[13px]" title="${deal.patient}">${deal.patient}</div>
+                    </div>
+                    <div class="text-[10px] text-gray-400 mb-1">${deal.id.split('-')[1]}</div>
+                    <div class="text-[11px] text-[#333] mb-2 truncate" title="${deal.complaint}">${deal.complaint}</div>
+                    
+                    <div class="flex justify-between items-center text-[10px] text-gray-500 mb-2 border-b border-dashed border-[var(--1c-border-light)] pb-1">
+                        <span title="Направил врач"><i class="ti ti-stethoscope text-[#0050a0]"></i> ${docName}</span>
+                        ${deal.curatorId === null ? '<span class="text-white bg-[#d32f2f] px-1 rounded shadow-sm animate-pulse">Нет куратора</span>' : ''}
+                    </div>
+                    
+                    <div class="flex justify-between items-end text-xs">
+                        <div class="font-bold text-gray-700">${this.formatCurrency(deal.sum)}</div>
+                        <div>${debtStr}</div>
+                    </div>
+                `;
+
+                card.addEventListener('dragstart', () => {
+                    this.state.draggedDealId = deal.id;
+                    setTimeout(() => card.classList.add('dragging'), 0);
+                });
+                card.addEventListener('dragend', () => {
+                    card.classList.remove('dragging');
+                    this.state.draggedDealId = null;
+                });
+
+                return card;
+            },
+
+            setupDropzone(element, type) {
+                element.addEventListener('dragover', e => { e.preventDefault(); element.classList.add('drag-over'); });
+                element.addEventListener('dragleave', () => { element.classList.remove('drag-over'); });
+                element.addEventListener('drop', e => {
+                    e.preventDefault();
+                    element.classList.remove('drag-over');
+                    const dealId = this.state.draggedDealId;
+                    if(!dealId) return;
+
+                    const deal = this.data.deals.find(d => d.id === dealId);
+                    if(!deal) return;
+
+                    const now = new Date().toLocaleString('ru-RU').slice(0, 16);
+
+                    if (type === 'stage') {
+                        const stageId = element.dataset.stageId;
+                        if(deal.stage !== stageId) {
+                            deal.stage = stageId;
+                            deal.history.unshift({d: now, t: `Смена этапа воронки на ручном канбане.`});
+                            if(this.state.filterCurator !== 'all' && this.state.filterCurator !== 'unassigned' && deal.curatorId !== this.state.filterCurator) {
+                                deal.curatorId = this.state.filterCurator;
+                                deal.history.unshift({d: now, t: `Назначен куратор (через Канбан).`});
+                            }
+                            this.renderKanban();
+                        }
+                    } else if (type === 'curator') {
+                        const cId = element.dataset.curatorId;
+                        if(deal.curatorId !== cId) {
+                            deal.curatorId = cId;
+                            if(deal.stage === 'lead') deal.stage = 'stage1'; 
+                            deal.history.unshift({d: now, t: `Ручное распределение. Назначен куратор.`});
+                            this.renderDistribution();
+                        }
+                    } else if (type === 'pool') {
+                        if(deal.curatorId !== null) {
+                            deal.curatorId = null;
+                            deal.history.unshift({d: now, t: `Снята привязка куратора. Возврат в очередь.`});
+                            this.renderDistribution();
+                        }
+                    }
+                });
+            },
+
+            // --- DEAL MODAL ---
+            openDealModal(id) {
+                this.state.activeDealId = id;
+                const deal = this.data.deals.find(d => d.id === id);
+                if(!deal) return;
+
+                document.getElementById('mdl-id').textContent = deal.id;
+                document.getElementById('mdl-date').textContent = deal.date;
+                document.getElementById('mdl-patient').textContent = deal.patient;
+                document.getElementById('mdl-source').textContent = deal.source;
+                document.getElementById('mdl-complaint').value = deal.complaint;
+                
+                // Clear AI script text area when opening new deal
+                document.getElementById('mdl-script-textarea').value = '';
+                document.getElementById('ai-plan-explanation').classList.add('hidden');
+                
+                document.getElementById('mdl-curator-select').value = deal.curatorId || '';
+                document.getElementById('mdl-doctor').textContent = this.data.doctors.find(d=>d.id === deal.doctorId)?.name || 'Не указан';
+                
+                const stageName = this.data.stages.find(s=>s.id === deal.stage)?.name || '';
+                document.getElementById('mdl-stage-badge').textContent = stageName;
+
+                document.getElementById('mdl-tags').innerHTML = deal.tags.map(t=>`<span class="bg-[#f0f0f0] border border-[#ccc] rounded px-1.5 text-[10px] text-gray-700">${t}</span>`).join('');
+
+                document.getElementById('mdl-sum').textContent = this.formatCurrency(deal.sum);
+                document.getElementById('mdl-paid').textContent = `Оплачено: ${this.formatCurrency(deal.paid)}`;
+                document.getElementById('mdl-debt').textContent = this.formatCurrency(deal.sum - deal.paid);
+
+                const warnBox = document.getElementById('mdl-multi-warn');
+                if(this.hasOtherActiveDeals(deal)) {
+                    warnBox.classList.remove('hidden');
+                } else {
+                    warnBox.classList.add('hidden');
+                }
+
+                // Plan (Consultation List)
+                document.getElementById('mdl-plan-table').innerHTML = deal.plan.map((p, i) => `
+                    <tr class="border-b border-[var(--1c-border-light)] bg-white hover:bg-[#f9f9f9]">
+                        <td class="border border-[var(--1c-border-light)] p-1.5 text-center text-gray-500">${i+1}</td>
+                        <td class="border border-[var(--1c-border-light)] p-1.5">${p.name}</td>
+                        <td class="border border-[var(--1c-border-light)] p-1.5 font-bold">${this.formatCurrency(p.sum)}</td>
+                        <td class="border border-[var(--1c-border-light)] p-1.5 ${p.medStatus==='Выполнено'?'text-green-700':''}">${p.medStatus}</td>
+                        <td class="border border-[var(--1c-border-light)] p-1.5 ${p.payStatus.includes('Оплачено')?'text-green-700 font-bold':'text-[#d32f2f]'}">${p.payStatus}</td>
+                    </tr>
+                `).join('');
+
+                // History
+                document.getElementById('mdl-history').innerHTML = deal.history.map(h => `
+                    <div class="relative border-l-2 border-[#0050a0] pl-3 py-1">
+                        <div class="absolute -left-[5px] top-2 w-2 h-2 bg-[#0050a0] rounded-full"></div>
+                        <div class="text-[10px] text-gray-500 mb-0.5">${h.d}</div>
+                        <div class="text-xs text-[#333] bg-[#f9f9f9] p-2 border border-[var(--1c-border-light)] rounded">${h.t}</div>
+                    </div>
+                `).join('');
+
+                this.switchModalTab('main');
+                document.getElementById('modal-deal').style.display = 'flex';
+            },
+
+            closeModal(id) {
+                document.getElementById(id).style.display = 'none';
+                this.state.activeDealId = null;
+            },
+
+            saveAndCloseModal() {
+                const deal = this.data.deals.find(d => d.id === this.state.activeDealId);
+                if(deal) {
+                    const newCurId = document.getElementById('mdl-curator-select').value || null;
+                    if(deal.curatorId !== newCurId) {
+                        deal.curatorId = newCurId;
+                        deal.history.unshift({d: new Date().toLocaleString('ru-RU').slice(0, 16), t: 'Смена куратора в карточке.'});
+                    }
+                }
+                this.toast('Документ проведен. Изменения сохранены в базе 1С.');
+                this.closeModal('modal-deal');
+                if(this.state.view === 'kanban') this.renderKanban();
+                if(this.state.view === 'distribution') this.renderDistribution();
+            },
+
+            switchModalTab(tab) {
+                ['main','plan','tasks'].forEach(t => {
+                    document.getElementById(`mtab-btn-${t}`).classList.remove('active');
+                    document.getElementById(`mtab-${t}`).classList.add('hidden');
+                });
+                document.getElementById(`mtab-btn-${tab}`).classList.add('active');
+                document.getElementById(`mtab-${tab}`).classList.remove('hidden');
+            },
+
+            // --- LLM (Gemini API) Integrations ---
+            
+            async generateAiScript() {
+                const deal = this.data.deals.find(d => d.id === this.state.activeDealId);
+                if(!deal) return;
+
+                const textarea = document.getElementById('mdl-script-textarea');
+                const btn = document.getElementById('btn-ai-script');
+                
+                textarea.value = "✨ AI собирает данные и генерирует скрипт...";
+                btn.disabled = true;
+
+                const prompt = `Пациент: ${deal.patient}.
+Жалобы: ${deal.complaint}.
+Категории (сегменты): ${deal.tags.join(', ')}.
+Сумма лечения: ${deal.sum} рублей.
+Напиши короткий, вежливый и эмпатичный скрипт для звонка медицинского куратора (менеджера). Цель: предложить записаться на лечение, опираясь на его жалобы и учитывая его сегменты (если он 'Тревожный' - успокоить, если 'Иногородний' - предложить помощь с логистикой и т.д.). Объем: 3-4 предложения. Прямая речь куратора.`;
+
+                const systemInstruction = "Ты эксперт по медицинским продажам и клиентскому сервису высшего уровня. Пишешь скрипты продаж для дорогих клиник.";
+                
+                const result = await callGeminiAPI(prompt, systemInstruction);
+                
+                textarea.value = result;
+                btn.disabled = false;
+                
+                deal.history.unshift({d: new Date().toLocaleString('ru-RU').slice(0, 16), t: '✨ Сгенерирован персонализированный AI-скрипт.'});
+                this.toast("AI-Скрипт успешно сгенерирован!");
+            },
+
+            async explainMedicalPlan() {
+                const deal = this.data.deals.find(d => d.id === this.state.activeDealId);
+                if(!deal || !deal.plan.length) {
+                    this.toast("План лечения пуст.");
+                    return;
+                }
+
+                const btn = document.getElementById('btn-ai-plan');
+                const panel = document.getElementById('ai-plan-explanation');
+                const content = document.getElementById('ai-plan-content');
+                
+                panel.classList.remove('hidden');
+                content.innerHTML = "<em>✨ Перевожу медицинские термины на понятный язык...</em>";
+                btn.disabled = true;
+
+                const planItems = deal.plan.map(p => p.name).join('; ');
+                const prompt = `Врач назначил пациенту следующие процедуры: ${planItems}.
+Объясни простым и понятным языком (без сложных медицинских терминов) для пациента-обывателя, зачем нужна каждая из этих процедур и какую пользу она принесет. Форматируй ответ в виде аккуратного списка (HTML теги <ul><li>). Кратко, по 1-2 предложения на каждую процедуру.`;
+
+                const systemInstruction = "Ты добрый и внимательный врач-терапевт. Умеешь объяснять сложные медицинские вещи простым языком без запугивания.";
+                
+                const result = await callGeminiAPI(prompt, systemInstruction);
+                
+                // Process markdown response to raw html slightly (handling asterisks mostly as the prompt asks for UL/LI)
+                let formattedResult = result.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+                content.innerHTML = formattedResult;
+                btn.disabled = false;
+                
+                deal.history.unshift({d: new Date().toLocaleString('ru-RU').slice(0, 16), t: '✨ Запрошена AI-адаптация плана лечения.'});
+            },
+
+            // --- ACTIONS ---
+            applyStrategy(type) {
+                const deal = this.data.deals.find(d => d.id === this.state.activeDealId);
+                if(!deal) return;
+                const now = new Date().toLocaleString('ru-RU').slice(0, 16);
+                
+                if (type === 'pause') {
+                    deal.history.unshift({d: now, t: `Сценарий: Пациент взял паузу. Создана системная задача куратору на звонок через 3 дня.`});
+                } else {
+                    deal.history.unshift({d: now, t: `Сценарий: Мягкий контакт. Выслано SMS-сообщение с материалами.`});
+                }
+                
+                this.openDealModal(deal.id); 
+                this.toast('Сценарий применен. Задачи поставлены в очередь.');
+            },
+
+            autoDistribute() {
+                const unassigned = this.data.deals.filter(d => d.curatorId === null);
+                if(unassigned.length === 0) { this.toast('Очередь пуста. Нет сделок для распределения.'); return; }
+                
+                let cidIndex = 0;
+                unassigned.forEach(d => {
+                    d.curatorId = this.data.curators[cidIndex].id;
+                    d.stage = 'stage1'; 
+                    d.history.unshift({d: new Date().toLocaleString('ru-RU').slice(0, 16), t: 'Сработало правило автораспределения (Round-Robin).'});
+                    cidIndex = (cidIndex + 1) % this.data.curators.length;
+                });
+                
+                this.toast(`Система автоматически распределила ${unassigned.length} сделок.`);
+                if(this.state.view === 'kanban') this.renderKanban();
+                if(this.state.view === 'distribution') this.renderDistribution();
+            },
+
+            createDeal() {
+                this.toast('Открывается стандартная форма создания документа "Интерес" 1С...');
+            },
+
+            generatePayment() {
+                this.toast('Сгенерирована ссылка СБП и отправлена пациенту в WhatsApp/SMS.');
+            },
+
+            openDocList(name) {
+                this.toast(`Открытие стандартного списка документов 1С: ${name}`);
+            },
+
+            // --- UTILS ---
+            formatCurrency(num) {
+                return new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', maximumFractionDigits: 0 }).format(num);
+            },
+
+            toast(msg) {
+                const container = document.getElementById('toast-container');
+                const t = document.createElement('div');
+                t.className = 'toast';
+                t.innerHTML = `<i class="ti ti-info-circle text-[#0050a0] text-lg"></i> ${msg}`;
+                container.appendChild(t);
+                setTimeout(() => {
+                    t.style.opacity = '0';
+                    t.style.transition = 'opacity 0.3s';
+                    setTimeout(() => t.remove(), 300);
+                }, 3500);
+            }
+        };
+
+        document.addEventListener('DOMContentLoaded', () => {
+            app.init();
+        });
+    </script>
+</body>
+</html>
