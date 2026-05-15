@@ -1,6 +1,6 @@
 # Пакет документов по проекту CRM Индвиго
 
-**Версия:** v0.5  
+**Версия:** v0.6  
 **Последнее обновление:** 2026
 
 ---
@@ -13,19 +13,33 @@
 | `README.md` | Основная информация о проекте |
 | `INDEX.md` | Индекс структуры репозитория |
 | `.gitignore` | Настройки игнорирования Git |
+| `GAP_ANALYSIS_README_vs_MoM_FR_BR.md` | Анализ разрывов между README, MoM, FR, BR |
+| `PROJECT LIFECYCLE FRAMEWORK — IT PROJECT.md` | Фреймворк жизненного цикла IT-проекта |
+| `figma_blueprint_crm_1_c_medicine_module_v_1.md` | Blueprint CRM для медицины (Figma) |
 
 ### 📂 Протоколы встреч (`MoM/`)
 Документация по встречам с Заказчиком:
 
+#### Общие документы
+| Файл | Описание |
+|------|----------|
+| `Indvigo_CRM_Meeting_Analysis.docx` | Анализ встреч (DOCX) |
+| `Indvigo_CRM_Meeting_Analysis.md` | Анализ встреч (Markdown) |
+| `Summary_Meet_1_и_2.docx` | Сводное резюме встреч 1 и 2 (DOCX) |
+| `Summary_Meet_1_и_2.md` | Сводное резюме встреч 1 и 2 (Markdown) |
+
 #### Встреча 0 (2026 апрель 14)
 - `Meet 0 _ 2026 April 14 (with SH)/`
-  - `202160403 _ SUMMARY MEET.docx` — резюме встречи
-  - `CRM CHECK.docx`
+  - `202160403 _ SUMMARY MEET.docx` — резюме встречи (DOCX)
+  - `202160403 _ SUMMARY MEET.md` — резюме встречи (Markdown)
+  - `CRM CHECK.docx` — чек-лист (DOCX)
+  - `CRM CHECK.md` — чек-лист (Markdown)
 
 #### Встреча 1 (2026 апрель 28)
 - `Meet 1 _ 2026 April 28 (with SH)/`
   - `01_resume_vstrechi_1_indvigo_crm.md` — резюме встречи
-  - `Indvigo_CRM_Meet1_Analyst.docx` — анализ встречи
+  - `Indvigo_CRM_Meet1_Analyst.docx` — анализ встречи (DOCX)
+  - `Indvigo_CRM_Meet1_Analyst.md` — анализ встречи (Markdown)
   - `indvigo_crm_meeting_1_protocol_tasks_transcript_v0_1/`
     - `01_predvaritelnyy_protokol_vstrechi_1_indvigo_crm.md` — предварительный протокол
     - `02_perechen_zadach_vstrechi_1_indvigo_crm.md` — перечень задач
@@ -36,29 +50,45 @@
 - `Meet 2 _ 2026 April 30 (with SH)/`
   - `02_resume_vstrechi_2_indvigo_crm.md` — резюме встречи
   - `Indvigo_CRM_Summary_Meet2.docx` — резюме встречи (DOCX)
+  - `Indvigo_CRM_Summary_Meet2.md` — резюме встречи (Markdown)
   - `Voice-260430_152844-discussion-crm.pdf` — аудиозапись обсуждения
 
 #### Встреча 3 (2026 май 05)
 - `Meet 3 _ 2026 May 05 (with SH)/`
   - `0505.md` — протокол встречи
 
-#### Общие документы
-- `Indvigo_CRM_Meeting_Analysis.docx` — анализ встреч
-- `Summary_Meet_1_и_2.docx` — сводное резюме встреч 1 и 2
+#### Встреча 4 (2026 май 08)
+- `Meet 4 _ 2026 May 08 (with SH)/`
+  - `screen_1778242529135.docx` — скриншот/материалы (DOCX)
+  - `screen_1778242529135.md` — скриншот/материалы (Markdown)
+
+#### Встреча 5 (2026 май 13)
+- `Meet 5 _ 2026 May 13 (with SH)/`
+  - `05141.docx` — материалы встречи (DOCX)
+  - `05141.md` — материалы встречи (Markdown)
+
+#### Встреча 6 (2026 май 14)
+- `Meet 6 _ 2026 May 14 (with SH)/`
+  - `голос-260514_142026-опрос-коп.docx` — опрос/обсуждение (DOCX)
+  - `голос-260514_142026-опрос-коп.md` — опрос/обсуждение (Markdown)
 
 ### 📂 Функциональные требования (`FR from Business Stakeholder/`)
 | Файл | Описание |
 |------|----------|
 | `04_functional_requirements_proekta_crm_indvigo.md` | Функциональные требования (Markdown) |
 | `Indvigo_CRM_Functional Requirements_v02.docx` | Функциональные требования (DOCX, v02) |
+| `Indvigo_CRM_Functional Requirements_v02.md` | Функциональные требования (Markdown, v02) |
 | `e1cib/data/Functional Requirements_v0.2.docx` | Функциональные требования (DOCX, v0.2, данные 1С) |
+| `e1cib/data/Functional Requirements_v0.2.md` | Функциональные требования (Markdown, v0.2, данные 1С) |
 
 ### 📂 Дорожная карта (`roadmap/`)
 | Файл | Описание |
 |------|----------|
 | `03_roadmap_proekta_crm_indvigo.md` | Роадмап проекта (Markdown) |
 | `Indvigo_CRM_Roadmap_v2.docx` | Роадмап (DOCX, v2) |
+| `Indvigo_CRM_Roadmap_v2.md` | Роадмап (Markdown, v2) |
 | `Roadmap_CRM_v2.docx` | Роадмап (DOCX, v2) |
+| `Roadmap_CRM_v2.md` | Роадмап (Markdown, v2) |
 
 ### 📂 Сырые бизнес-требования (`RAW BR/`)
 | Файл | Описание |
