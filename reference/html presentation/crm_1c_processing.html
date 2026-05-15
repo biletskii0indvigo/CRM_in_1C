@@ -1,0 +1,951 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CRM_МедицинаИнститутДвижения — 1С:Предприятие 8.3</title>
+<style>
+/* =========================================================
+   1C:Предприятие 8.3 — точное воспроизведение UI
+   ========================================================= */
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --win-bg:#F0EFED;
+  --form-bg:#FFFFFF;
+  --panel-bg:#F2F1EF;
+  --nav-bg:#E8E7E5;
+  --toolbar-bg:#F5F4F2;
+  --toolbar-border:#CCCAC6;
+  --border:#BDBBB7;
+  --border-light:#D8D6D2;
+  --sel-bg:#CCE4FF;
+  --sel-border:#5599DD;
+  --hover-bg:#E8F0FB;
+  --active-bg:#1565C0;
+  --active-text:#FFFFFF;
+  --text:#1A1A1A;
+  --text2:#555550;
+  --text3:#888880;
+  --link:#0050A0;
+  --link-hover:#003070;
+  --btn-bg:#FDFDFD;
+  --btn-hover:#EBF1FA;
+  --btn-press:#D0E4F7;
+  --btn-border:#AAAAAA;
+  --red:#C0392B;
+  --amber:#B7770D;
+  --green:#1A7A3A;
+  --blue:#1565C0;
+  --purple:#6A3FAA;
+  --teal:#0C6E56;
+  --tab-active:#FFFFFF;
+  --tab-inactive:#E0DFdd;
+  --tab-border:#C0BEBB;
+  --group-label:#444440;
+  --table-head:#EAE9E7;
+  --table-row-alt:#F8F7F5;
+  --table-border:#D5D3CF;
+  --table-sel:#CCE4FF;
+}
+html,body{height:100%;overflow:hidden;font-family:'Segoe UI',Tahoma,Arial,sans-serif;font-size:12px;background:#6A6A6A;color:var(--text)}
+
+/* ── WINDOW CHROME ── */
+.win{width:100%;height:100%;display:flex;flex-direction:column;background:#6A6A6A}
+.win-titlebar{height:26px;background:linear-gradient(to bottom,#3A6BAA,#2A5090);display:flex;align-items:center;padding:0 8px;gap:6px;flex-shrink:0;user-select:none}
+.win-icon{width:14px;height:14px;background:#FFD700;border-radius:2px;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#8B4513}
+.win-title{font-size:12px;color:#FFFFFF;font-weight:400;flex:1}
+.win-btn{width:20px;height:14px;border-radius:2px;border:0.5px solid rgba(255,255,255,0.3);background:rgba(255,255,255,0.15);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:10px;color:#fff}
+.win-btn:hover{background:rgba(255,255,255,0.3)}
+.win-btn.close:hover{background:#C42B1C}
+.win-body{flex:1;display:flex;flex-direction:column;overflow:hidden;background:var(--win-bg);border:1px solid #2A4A7A}
+
+/* ── 1C APP MENU BAR ── */
+.menubar{height:22px;background:var(--toolbar-bg);border-bottom:1px solid var(--toolbar-border);display:flex;align-items:center;padding:0 4px;gap:0;flex-shrink:0}
+.menu-item{padding:2px 10px;font-size:12px;color:var(--text);cursor:pointer;border-radius:2px}
+.menu-item:hover{background:var(--hover-bg);color:var(--link)}
+
+/* ── 1C MAIN TOOLBAR ── */
+.main-toolbar{height:30px;background:var(--toolbar-bg);border-bottom:1px solid var(--toolbar-border);display:flex;align-items:center;padding:0 4px;gap:2px;flex-shrink:0}
+.tb-btn{height:22px;padding:0 8px;border:1px solid transparent;border-radius:2px;background:transparent;cursor:pointer;font-size:11px;color:var(--text);display:flex;align-items:center;gap:3px;white-space:nowrap}
+.tb-btn:hover{border-color:var(--btn-border);background:var(--btn-hover)}
+.tb-btn:active{background:var(--btn-press);border-color:var(--sel-border)}
+.tb-btn.primary{border-color:var(--btn-border);background:var(--btn-bg)}
+.tb-sep{width:1px;height:18px;background:var(--toolbar-border);margin:0 2px}
+.tb-btn .ico{font-size:14px;line-height:1}
+
+/* ── LAYOUT ── */
+.app-layout{display:flex;flex:1;overflow:hidden}
+.left-nav{width:186px;flex-shrink:0;background:var(--nav-bg);border-right:1px solid var(--border);display:flex;flex-direction:column;overflow:hidden}
+.main-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* ── LEFT NAV ── */
+.nav-section-hd{padding:4px 8px 2px;font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.3px;border-bottom:1px solid var(--border-light);margin-top:4px}
+.nav-item{padding:4px 12px 4px 10px;font-size:12px;color:var(--link);cursor:pointer;display:flex;align-items:center;gap:5px;border-left:2px solid transparent}
+.nav-item:hover{background:var(--hover-bg);color:var(--link-hover)}
+.nav-item.active{background:var(--sel-bg);color:var(--blue);border-left-color:var(--blue);font-weight:500}
+.nav-item .ni-ico{font-size:13px;opacity:.7}
+.nav-cnt{margin-left:auto;background:#E0E0E0;color:#555;border-radius:8px;padding:0 5px;font-size:10px;min-width:18px;text-align:center}
+.nav-cnt.red{background:#FFD5D0;color:#B00}
+
+/* ── TABS ── */
+.tab-bar{display:flex;border-bottom:1px solid var(--tab-border);background:var(--panel-bg);flex-shrink:0;padding:0 4px;padding-top:3px;gap:2px}
+.tab{padding:4px 16px;font-size:12px;cursor:pointer;border:1px solid transparent;border-bottom:none;border-radius:3px 3px 0 0;color:var(--text2);background:var(--tab-inactive)}
+.tab:hover{background:#ECEAE8}
+.tab.active{background:var(--tab-active);border-color:var(--tab-border);border-bottom-color:var(--tab-active);color:var(--text);font-weight:500;position:relative;top:1px}
+
+/* ── FORM COMMAND BAR ── */
+.cmd-bar{height:28px;background:var(--toolbar-bg);border-bottom:1px solid var(--toolbar-border);display:flex;align-items:center;padding:0 4px;gap:1px;flex-shrink:0}
+.cmd-btn{height:22px;padding:0 8px;border:1px solid transparent;border-radius:2px;background:transparent;cursor:pointer;font-size:11px;color:var(--text);display:flex;align-items:center;gap:3px}
+.cmd-btn:hover{border-color:var(--btn-border);background:var(--btn-hover)}
+.cmd-btn.important{border-color:var(--btn-border);background:var(--btn-bg);color:var(--blue);font-weight:500}
+.cmd-sep{width:1px;height:16px;background:var(--toolbar-border);margin:0 2px}
+
+/* ── FORM BODY ── */
+.form-body{flex:1;overflow:auto;background:var(--form-bg);padding:6px}
+.form-screen{display:none}
+.form-screen.active{display:flex;flex-direction:column;gap:6px;height:100%}
+
+/* ── 1C GROUP BOX ── */
+.gbox{border:1px solid var(--border-light);border-radius:2px;background:var(--form-bg)}
+.gbox-hd{padding:3px 8px;background:var(--panel-bg);border-bottom:1px solid var(--border-light);font-size:11px;font-weight:700;color:var(--group-label);display:flex;align-items:center;gap:6px;cursor:pointer;user-select:none}
+.gbox-hd .toggle{font-size:9px;color:var(--text3)}
+.gbox-body{padding:6px 8px}
+
+/* ── FILTER AREA ── */
+.filter-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:4px}
+.filter-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.fld-group{display:flex;flex-direction:column;gap:2px}
+.fld-label{font-size:11px;color:var(--text2);white-space:nowrap}
+.fld-input{height:22px;padding:1px 5px;border:1px solid var(--border);border-radius:1px;font-size:12px;background:#fff;color:var(--text);outline:none;width:100%}
+.fld-input:focus{border-color:var(--sel-border);box-shadow:0 0 0 1px rgba(85,153,221,0.3)}
+.fld-select{height:22px;padding:1px 4px;border:1px solid var(--border);border-radius:1px;font-size:11.5px;background:#fff;color:var(--text);outline:none}
+.fld-select:focus{border-color:var(--sel-border)}
+.btn-find{height:22px;padding:0 12px;border:1px solid var(--btn-border);border-radius:2px;background:var(--btn-bg);font-size:12px;cursor:pointer;color:var(--text)}
+.btn-find:hover{background:var(--btn-hover);border-color:var(--sel-border);color:var(--blue)}
+
+/* ── TAG CHIPS in filter ── */
+.tag-filter-area{display:flex;gap:4px;flex-wrap:wrap;padding:4px 0}
+.tag-chip{display:inline-flex;align-items:center;gap:3px;padding:1px 7px;border:1px solid var(--border);border-radius:10px;font-size:11px;cursor:pointer;background:var(--panel-bg);color:var(--text2);white-space:nowrap;transition:all .1s}
+.tag-chip:hover{border-color:var(--sel-border);color:var(--blue);background:var(--hover-bg)}
+.tag-chip.active{background:var(--sel-bg);border-color:var(--sel-border);color:var(--blue);font-weight:500}
+.tag-chip.active.tc-red{background:#FFE8E5;border-color:#CC5544;color:#8B1A0A}
+.tag-chip.active.tc-amber{background:#FFF3D0;border-color:#CC8800;color:#7A4F00}
+.tag-chip.active.tc-green{background:#DFF2E5;border-color:#2A8A40;color:#0D5020}
+.tag-chip.active.tc-purple{background:#EDE8F8;border-color:#7755BB;color:#4A2888}
+.tag-chip.active.tc-teal{background:#DFF0EC;border-color:#1A8A6A;color:#0A5040}
+.tag-group-sep{width:0;border-left:1px solid var(--border-light);height:16px;margin:0 2px;align-self:center}
+.tag-group-lbl{font-size:10px;color:var(--text3);font-weight:700;align-self:center;white-space:nowrap;margin-right:1px}
+
+/* ── 1C TABLE ── */
+.tbl-wrap{border:1px solid var(--table-border);border-radius:1px;overflow:auto;flex:1}
+table{width:100%;border-collapse:collapse;font-size:12px}
+thead tr{background:var(--table-head);position:sticky;top:0;z-index:2}
+thead th{padding:3px 6px;border:1px solid var(--table-border);font-size:11px;font-weight:700;color:var(--text2);text-align:left;white-space:nowrap;cursor:pointer;user-select:none}
+thead th:hover{background:#DDDBD7}
+thead th.sorted-asc::after{content:' ▲';font-size:9px;color:var(--blue)}
+thead th.sorted-desc::after{content:' ▼';font-size:9px;color:var(--blue)}
+tbody tr{border-bottom:1px solid var(--table-border);cursor:pointer;transition:background .08s}
+tbody tr:nth-child(even){background:var(--table-row-alt)}
+tbody tr:hover{background:var(--hover-bg)}
+tbody tr.selected{background:var(--table-sel) !important}
+tbody tr.selected td{color:var(--blue)}
+tbody tr.overdue{background:#FFF0EE !important}
+tbody tr.overdue td:first-child{border-left:3px solid var(--red)}
+td{padding:2px 6px;border-right:1px solid var(--table-border);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px}
+.td-link{color:var(--link);text-decoration:underline;cursor:pointer}
+.td-link:hover{color:var(--link-hover)}
+
+/* ── PILL TAGS in table ── */
+.pill{display:inline-block;padding:0 5px;border-radius:8px;font-size:10px;font-weight:500;line-height:16px}
+.p-blue{background:#DCECfA;color:#1450A0}
+.p-teal{background:#D8F0E8;color:#0A5A3A}
+.p-amber{background:#FFF0C0;color:#7A5000}
+.p-red{background:#FFE0DB;color:#8A2010}
+.p-purple{background:#EDE8FA;color:#4A2888}
+.p-gray{background:#E8E7E5;color:#555550}
+.p-green{background:#DEF0E0;color:#0D5020}
+
+/* ── STATUS DOT ── */
+.sdot{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.sd-green{background:#28A85A}
+.sd-red{background:#E03020}
+.sd-amber{background:#E08800}
+.sd-blue{background:#1060D0}
+.sd-gray{background:#AAAAAA}
+.sd-purple{background:#7755CC}
+
+/* ── KANBAN (represented as grouped table) ── */
+.kanban-1c{display:grid;grid-template-columns:repeat(6,1fr);gap:0;border:1px solid var(--table-border);border-radius:1px;overflow:auto;flex:1;min-height:0}
+.kcol-1c{border-right:1px solid var(--table-border);display:flex;flex-direction:column;min-width:0}
+.kcol-1c:last-child{border-right:none}
+.kcol-hd-1c{padding:4px 6px;background:var(--table-head);border-bottom:1px solid var(--table-border);font-size:11px;font-weight:700;color:var(--text2);display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:2}
+.kcnt-1c{background:#D8D6D2;color:#444;border-radius:8px;padding:0 5px;font-size:10px;min-width:16px;text-align:center}
+.kcol-body-1c{overflow-y:auto;flex:1;padding:3px}
+.kcard-1c{border:1px solid var(--border-light);border-radius:2px;padding:4px 5px;margin-bottom:3px;cursor:grab;background:var(--form-bg);font-size:11px;transition:border-color .1s,background .1s}
+.kcard-1c:hover{border-color:var(--sel-border);background:var(--hover-bg)}
+.kcard-1c.dragging{opacity:.3;cursor:grabbing}
+.kcard-1c.drag-over-col{border-color:var(--sel-border);background:var(--sel-bg)}
+.kcard-name-1c{font-size:11.5px;font-weight:700;color:var(--link);margin-bottom:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.kcard-meta-1c{font-size:10px;color:var(--text3);margin-bottom:3px}
+.kcard-tags-1c{display:flex;flex-wrap:wrap;gap:2px}
+.kcard-foot-1c{display:flex;align-items:center;gap:3px;margin-top:3px;padding-top:3px;border-top:1px solid var(--border-light)}
+.drop-zone{border:2px dashed var(--sel-border);border-radius:2px;background:var(--sel-bg);margin:2px;min-height:40px;display:none;align-items:center;justify-content:center;font-size:11px;color:var(--blue)}
+
+/* ── MORNING PLANNING (1C style) ── */
+.morning-1c{display:grid;grid-template-columns:1fr 260px;gap:6px;flex:1;min-height:0}
+.pool-1c{border:1px solid var(--border);border-radius:1px;display:flex;flex-direction:column}
+.pool-hd-1c{padding:3px 8px;background:var(--panel-bg);border-bottom:1px solid var(--border-light);font-size:11px;font-weight:700;color:var(--group-label);display:flex;align-items:center;justify-content:space-between}
+.pool-body-1c{padding:5px;display:flex;flex-wrap:wrap;gap:4px;align-content:flex-start;overflow:auto;flex:1}
+.patient-row-chip{display:inline-flex;align-items:center;gap:4px;padding:2px 8px 2px 4px;border:1px solid var(--border);border-radius:2px;cursor:grab;background:var(--form-bg);font-size:11.5px;font-weight:500;color:var(--text);transition:border-color .1s,background .1s;user-select:none}
+.patient-row-chip:hover{border-color:var(--sel-border);background:var(--hover-bg)}
+.patient-row-chip.dragging{opacity:.3}
+.pr-av{width:20px;height:20px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:700;flex-shrink:0}
+.pr-sub{font-size:10px;color:var(--text3)}
+.curators-lanes-1c{display:flex;flex-direction:column;gap:4px}
+.cur-lane-1c{border:1px solid var(--border);border-radius:1px;background:var(--form-bg);transition:border-color .15s,background .15s;min-height:70px}
+.cur-lane-1c.dz{border-color:var(--sel-border);background:var(--sel-bg)}
+.cur-lane-hd-1c{padding:3px 7px;background:var(--panel-bg);border-bottom:1px solid var(--border-light);display:flex;align-items:center;gap:5px;font-size:11px;font-weight:700;color:var(--group-label)}
+.cur-lane-body-1c{padding:4px;display:flex;flex-wrap:wrap;gap:3px;min-height:30px}
+.cur-empty-1c{font-size:10.5px;color:var(--text3);padding:2px 4px}
+
+/* ── TASKS TABLE special cols ── */
+.urgency-bar{display:inline-block;width:4px;height:14px;border-radius:2px;vertical-align:middle;margin-right:4px}
+
+/* ── BOTTOM STATUS BAR ── */
+.statusbar{height:20px;background:var(--toolbar-bg);border-top:1px solid var(--toolbar-border);display:flex;align-items:center;padding:0 8px;gap:12px;flex-shrink:0}
+.sb-item{font-size:11px;color:var(--text2);display:flex;align-items:center;gap:3px}
+.sb-sep{width:1px;height:12px;background:var(--border-light)}
+
+/* ── SCROLLBARS ── */
+::-webkit-scrollbar{width:10px;height:10px}
+::-webkit-scrollbar-track{background:var(--panel-bg)}
+::-webkit-scrollbar-thumb{background:#BCBAB6;border:2px solid var(--panel-bg);border-radius:5px}
+::-webkit-scrollbar-thumb:hover{background:#9A9896}
+
+/* ── TOAST / BALLOON ── */
+.balloons{position:fixed;bottom:24px;right:16px;display:flex;flex-direction:column;gap:4px;z-index:9999}
+.balloon{background:#FFFEF0;border:1px solid #E8C840;border-radius:3px;padding:6px 12px 6px 28px;font-size:12px;color:#3A3000;position:relative;opacity:0;transform:translateX(20px);transition:all .2s;pointer-events:none;box-shadow:0 2px 6px rgba(0,0,0,.15)}
+.balloon::before{content:'ℹ';position:absolute;left:8px;top:6px;font-size:13px;color:#C08800}
+.balloon.show{opacity:1;transform:translateX(0)}
+.balloon.ok{background:#F0FFF4;border-color:#40B860;color:#0A3A18}
+.balloon.ok::before{content:'✓';color:#28A850}
+
+/* ── RADIO GROUP ── */
+.radio-grp{display:flex;gap:12px;align-items:center}
+.radio-item{display:flex;align-items:center;gap:4px;cursor:pointer;font-size:12px}
+.radio-item input[type=radio]{accent-color:var(--blue);width:13px;height:13px}
+
+/* ── COUNTER BADGES ── */
+.stat-panel{display:flex;gap:8px;flex-wrap:wrap}
+.stat-box{border:1px solid var(--border-light);border-radius:2px;padding:4px 10px;background:var(--panel-bg);text-align:center;min-width:80px}
+.stat-n{font-size:18px;font-weight:700;line-height:1.2}
+.stat-l{font-size:10px;color:var(--text3);white-space:nowrap}
+.n-blue{color:var(--blue)}.n-red{color:var(--red)}.n-amber{color:var(--amber)}.n-green{color:var(--green)}
+
+/* ── PROGRESS BAR in table ── */
+.pbar-wrap{width:70px;height:10px;background:#E0DFdd;border-radius:1px;display:inline-block;vertical-align:middle;overflow:hidden}
+.pbar-fill{height:100%;border-radius:1px;background:var(--blue)}
+</style>
+</head>
+<body>
+
+<!-- WINDOW CHROME -->
+<div class="win">
+  <div class="win-titlebar">
+    <div class="win-icon">1С</div>
+    <div class="win-title">CRM_МедицинаИнститутДвижения (Внешняя обработка) — 1С:Предприятие 8.3 (Управляемое приложение)</div>
+    <div class="win-btn">─</div>
+    <div class="win-btn">□</div>
+    <div class="win-btn close">✕</div>
+  </div>
+  <div class="win-body">
+
+    <!-- MENU BAR -->
+    <div class="menubar">
+      <div class="menu-item">Файл</div>
+      <div class="menu-item">Правка</div>
+      <div class="menu-item">Вид</div>
+      <div class="menu-item">Форма</div>
+      <div class="menu-item">Действия</div>
+      <div class="menu-item">Сервис</div>
+      <div class="menu-item">Справка</div>
+    </div>
+
+    <!-- MAIN TOOLBAR -->
+    <div class="main-toolbar">
+      <button class="tb-btn primary" onclick="showToast('Обработка сохранена','ok')">
+        <span class="tb-ico">💾</span> Записать
+      </button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn" onclick="showToast('Синхронизация с 1С:Медицина...')">
+        <span class="tb-ico">🔄</span> Синхронизировать с 1С:Медицина
+      </button>
+      <button class="tb-btn" onclick="showToast('Открыт журнал событий')">
+        <span class="tb-ico">📋</span> Журнал событий
+      </button>
+      <div class="tb-sep"></div>
+      <button class="tb-btn" onclick="showToast('Настройки доступа открыты')">
+        <span class="tb-ico">⚙</span> Настройки
+      </button>
+      <div class="tb-sep"></div>
+      <div style="display:flex;align-items:center;gap:4px;margin-left:auto;font-size:11px;color:var(--text3)">
+        <span class="sdot sd-green"></span>1С:Медицина — подключено&nbsp;&nbsp;
+        <span class="sdot sd-green"></span>БД — онлайн&nbsp;&nbsp;
+        <span style="color:var(--text2)">14.05.2026 09:42</span>
+      </div>
+    </div>
+
+    <!-- APP LAYOUT -->
+    <div class="app-layout" style="flex:1;overflow:hidden">
+
+      <!-- LEFT NAVIGATION -->
+      <div class="left-nav">
+        <div class="nav-section-hd">Основные разделы</div>
+        <div class="nav-item active" onclick="switchNav(this,'planning')">
+          <span class="ni-ico">📅</span>Утреннее планирование
+          <span class="nav-cnt red" id="nav-un">0</span>
+        </div>
+        <div class="nav-item" onclick="switchNav(this,'funnel')">
+          <span class="ni-ico">📊</span>Воронка продаж
+          <span class="nav-cnt" id="nav-total">0</span>
+        </div>
+        <div class="nav-item" onclick="switchNav(this,'tasks')">
+          <span class="ni-ico">✔</span>Задачи кураторов
+          <span class="nav-cnt red" id="nav-ov">0</span>
+        </div>
+        <div class="nav-item" onclick="switchNav(this,'analytics')">
+          <span class="ni-ico">📈</span>Аналитика и KPI
+        </div>
+        <div class="nav-section-hd" style="margin-top:8px">Справочники</div>
+        <div class="nav-item" onclick="showToast('Справочник: Пациенты')">
+          <span class="ni-ico">👤</span>Пациенты
+        </div>
+        <div class="nav-item" onclick="showToast('Справочник: Кураторы')">
+          <span class="ni-ico">👥</span>Кураторы
+        </div>
+        <div class="nav-item" onclick="showToast('Справочник: Типы ведения')">
+          <span class="ni-ico">📁</span>Типы ведения
+        </div>
+        <div class="nav-item" onclick="showToast('Шаблоны сообщений')">
+          <span class="ni-ico">✉</span>Шаблоны сообщений
+        </div>
+        <div class="nav-section-hd" style="margin-top:8px">Документы</div>
+        <div class="nav-item" onclick="showToast('Документы: Ведение пациентов')">
+          <span class="ni-ico">📄</span>Ведение пациентов
+        </div>
+        <div class="nav-item" onclick="showToast('Документы: Задачи')">
+          <span class="ni-ico">📋</span>Задачи
+        </div>
+        <div style="margin-top:auto;border-top:1px solid var(--border-light);padding:6px 10px">
+          <div style="font-size:10.5px;color:var(--text3)">Пользователь:</div>
+          <div style="font-size:11.5px;font-weight:500;color:var(--text)">Аникина С.В. (РОП)</div>
+          <div style="font-size:10px;color:var(--text3);margin-top:1px">Роль: Зав. отделением</div>
+        </div>
+      </div>
+
+      <!-- MAIN FORM AREA -->
+      <div class="main-area">
+
+        <!-- ══════════════════════════════
+             ФОРМА 1: УТРЕННЕЕ ПЛАНИРОВАНИЕ
+             ══════════════════════════════ -->
+        <div id="screen-planning" style="display:flex;flex-direction:column;flex:1;overflow:hidden">
+          <div class="tab-bar">
+            <div class="tab active">Распределение пациентов</div>
+            <div class="tab" onclick="showToast('Вкладка: Статистика утра')">Статистика утра</div>
+          </div>
+          <div class="cmd-bar">
+            <button class="cmd-btn important" onclick="autoAssign()">✦ Авто-распределить</button>
+            <div class="cmd-sep"></div>
+            <button class="cmd-btn" onclick="resetPlanning()">↺ Сбросить</button>
+            <button class="cmd-btn" onclick="showToast('Уведомления отправлены кураторам')">📨 Уведомить кураторов</button>
+            <button class="cmd-btn" onclick="showToast('Отчёт сформирован')">📊 Отчёт по распределению</button>
+            <div class="cmd-sep"></div>
+            <div style="margin-left:auto;display:flex;gap:8px;align-items:center;padding-right:6px">
+              <span style="font-size:11px;color:var(--text3)">Рабочий день: 14.05.2026</span>
+              <span class="sdot sd-green"></span>
+              <span style="font-size:11px;color:var(--text2)">Сессия открыта</span>
+            </div>
+          </div>
+          <div class="form-body" style="padding:6px;display:flex;flex-direction:column;gap:6px">
+
+            <!-- STAT BOXES -->
+            <div class="gbox">
+              <div class="gbox-hd"><span class="toggle">▼</span>Сводка на начало дня</div>
+              <div class="gbox-body">
+                <div class="stat-panel">
+                  <div class="stat-box"><div class="stat-n n-blue" id="sb-total">22</div><div class="stat-l">Всего активных</div></div>
+                  <div class="stat-box"><div class="stat-n n-red" id="sb-unassigned">8</div><div class="stat-l">Без куратора</div></div>
+                  <div class="stat-box"><div class="stat-n n-amber" id="sb-final">4</div><div class="stat-l">Финальных сегодня</div></div>
+                  <div class="stat-box"><div class="stat-n n-green">3</div><div class="stat-l">Кураторов активно</div></div>
+                  <div class="stat-box"><div class="stat-n n-red">2</div><div class="stat-l">Просроч. задач</div></div>
+                  <div class="stat-box"><div class="stat-n n-blue">7</div><div class="stat-l">Авто-задач сегодня</div></div>
+                </div>
+              </div>
+            </div>
+
+            <div class="morning-1c" style="flex:1;min-height:0">
+              <!-- POOL -->
+              <div class="pool-1c">
+                <div class="pool-hd-1c">
+                  <span>Нераспределённые пациенты</span>
+                  <span style="background:#FFE0DB;color:#8A2010;border-radius:8px;padding:0 6px;font-size:10px;font-weight:700" id="pool-cnt-lbl">0</span>
+                </div>
+                <div style="padding:4px 6px 2px;border-bottom:1px solid var(--border-light);font-size:10.5px;color:var(--text3)">
+                  Перетащите пациента на нужного куратора →
+                </div>
+                <div class="pool-body-1c" id="pool-1c"></div>
+              </div>
+
+              <!-- CURATOR LANES -->
+              <div class="curators-lanes-1c" id="clanes-1c"></div>
+            </div>
+
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             ФОРМА 2: ВОРОНКА ПРОДАЖ
+             ══════════════════════════════ -->
+        <div id="screen-funnel" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+          <div class="tab-bar">
+            <div class="tab active">Канбан-доска</div>
+            <div class="tab" onclick="showToast('Список — загружается…')">Список пациентов</div>
+            <div class="tab" onclick="showToast('Реестр сделок — загружается…')">Реестр сделок</div>
+          </div>
+          <div class="cmd-bar">
+            <button class="cmd-btn important" onclick="showToast('Новый пациент создан')">+ Создать пациента</button>
+            <div class="cmd-sep"></div>
+            <button class="cmd-btn" onclick="showToast('Карточка открыта')">📄 Открыть карточку</button>
+            <button class="cmd-btn" onclick="showToast('Задача создана')">✔ Создать задачу</button>
+            <button class="cmd-btn" onclick="showToast('Ведение открыто')">📋 Блок «Ведение»</button>
+            <div class="cmd-sep"></div>
+            <button class="cmd-btn" onclick="showToast('Отчёт по воронке сформирован')">📊 Отчёт</button>
+            <div class="cmd-sep"></div>
+            <button class="cmd-btn" onclick="clearKFilter()">✕ Сбросить фильтры</button>
+          </div>
+
+          <!-- FILTER BAR -->
+          <div class="gbox" style="border-left:none;border-right:none;border-radius:0;border-top:none;flex-shrink:0">
+            <div class="gbox-hd" onclick="toggleFilterBox(this)"><span class="toggle">▼</span>Отбор и поиск по тегам</div>
+            <div class="gbox-body" id="filter-box">
+              <div class="filter-grid" style="margin-bottom:6px">
+                <div class="fld-group">
+                  <div class="fld-label">Пациент (ФИО):</div>
+                  <input class="fld-input" id="k-search" type="text" placeholder="Введите имя..." oninput="applyKFilters()">
+                </div>
+                <div class="fld-group">
+                  <div class="fld-label">Куратор:</div>
+                  <select class="fld-select" id="k-curator" onchange="applyKFilters()" style="width:100%">
+                    <option value="">— Все кураторы —</option>
+                    <option value="0">Аникина С.В.</option>
+                    <option value="1">Романова М.П.</option>
+                    <option value="2">Горбунов В.К.</option>
+                    <option value="none">Без куратора</option>
+                  </select>
+                </div>
+                <div class="fld-group">
+                  <div class="fld-label">Тип пациента:</div>
+                  <select class="fld-select" id="k-type" onchange="applyKFilters()" style="width:100%">
+                    <option value="">— Все типы —</option>
+                    <option>первичный</option>
+                    <option>повторный</option>
+                    <option>реактивированный</option>
+                  </select>
+                </div>
+                <div class="fld-group">
+                  <div class="fld-label">Психотип:</div>
+                  <select class="fld-select" id="k-psy" onchange="applyKFilters()" style="width:100%">
+                    <option value="">— Все —</option>
+                    <option>экономный</option>
+                    <option>тревожный</option>
+                    <option>решительный</option>
+                    <option>исследователь</option>
+                  </select>
+                </div>
+              </div>
+              <div class="tag-filter-area" id="k-tags-area"></div>
+              <div style="margin-top:4px;font-size:10.5px;color:var(--text3)" id="k-result-lbl"></div>
+            </div>
+          </div>
+
+          <!-- KANBAN BOARD -->
+          <div class="kanban-1c" id="kanban-1c"></div>
+        </div>
+
+        <!-- ══════════════════════════════
+             ФОРМА 3: ЗАДАЧИ КУРАТОРОВ
+             ══════════════════════════════ -->
+        <div id="screen-tasks" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+          <div class="tab-bar">
+            <div class="tab active">Все задачи</div>
+            <div class="tab" onclick="showToast('Задачи: Аникина С.В.')">Аникина С.В.</div>
+            <div class="tab" onclick="showToast('Задачи: Романова М.П.')">Романова М.П.</div>
+            <div class="tab" onclick="showToast('Задачи: Горбунов В.К.')">Горбунов В.К.</div>
+          </div>
+          <div class="cmd-bar">
+            <button class="cmd-btn important" onclick="showToast('Создана новая задача')">+ Создать задачу</button>
+            <div class="cmd-sep"></div>
+            <button class="cmd-btn" onclick="showToast('Задача выполнена')">✔ Выполнить</button>
+            <button class="cmd-btn" onclick="showToast('Задача перенесена')">↷ Перенести</button>
+            <button class="cmd-btn" onclick="showToast('Эскалация отправлена РОП')">⚠ Эскалировать</button>
+            <div class="cmd-sep"></div>
+            <button class="cmd-btn" onclick="showToast('Фильтр сброшен')">↺ Все задачи</button>
+            <div class="cmd-sep"></div>
+            <div style="display:flex;align-items:center;gap:6px;margin-left:4px">
+              <span style="font-size:11px;color:var(--text2)">Показать:</span>
+              <div class="radio-grp">
+                <label class="radio-item"><input type="radio" name="taskview" value="all" checked onchange="renderTasksTable()"> Все</label>
+                <label class="radio-item"><input type="radio" name="taskview" value="open" onchange="renderTasksTable()"> Открытые</label>
+                <label class="radio-item"><input type="radio" name="taskview" value="overdue" onchange="renderTasksTable()"> Просроченные</label>
+                <label class="radio-item"><input type="radio" name="taskview" value="done" onchange="renderTasksTable()"> Выполненные</label>
+              </div>
+            </div>
+          </div>
+
+          <!-- TASK FILTER TAGS -->
+          <div style="padding:4px 6px;border-bottom:1px solid var(--border-light);background:var(--panel-bg);display:flex;gap:4px;flex-wrap:wrap;align-items:center;flex-shrink:0">
+            <span style="font-size:10.5px;color:var(--text3)">Фильтр по тегам:</span>
+            <div id="task-tag-filter"></div>
+          </div>
+
+          <div class="tbl-wrap" style="flex:1;min-height:0">
+            <table id="tasks-table">
+              <thead>
+                <tr>
+                  <th style="width:22px"></th>
+                  <th style="width:16px"></th>
+                  <th>Задача</th>
+                  <th>Пациент</th>
+                  <th>Куратор</th>
+                  <th>Тип задачи</th>
+                  <th>Теги</th>
+                  <th>Срок</th>
+                  <th>Приоритет</th>
+                  <th>Статус</th>
+                </tr>
+              </thead>
+              <tbody id="tasks-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- ══════════════════════════════
+             ФОРМА 4: АНАЛИТИКА
+             ══════════════════════════════ -->
+        <div id="screen-analytics" style="display:none;flex-direction:column;flex:1;overflow:hidden">
+          <div class="tab-bar">
+            <div class="tab active">KPI системы</div>
+            <div class="tab" onclick="showToast('Отчёт по кураторам')">Эффективность кураторов</div>
+            <div class="tab" onclick="showToast('Воронка конверсии')">Воронка конверсии</div>
+          </div>
+          <div class="cmd-bar">
+            <button class="cmd-btn" onclick="showToast('Период: Текущий месяц')">📅 Период: Май 2026</button>
+            <div class="cmd-sep"></div>
+            <button class="cmd-btn important" onclick="showToast('Отчёт выведен на печать')">🖨 Печать отчёта</button>
+            <button class="cmd-btn" onclick="showToast('Выгрузка в Excel')">📥 Выгрузить в Excel</button>
+          </div>
+          <div class="form-body" style="display:flex;flex-direction:column;gap:6px">
+            <div class="gbox">
+              <div class="gbox-hd"><span class="toggle">▼</span>KPI системы — целевые показатели (май 2026)</div>
+              <div class="gbox-body">
+                <table style="width:100%;font-size:12px">
+                  <thead><tr style="background:var(--table-head)">
+                    <th style="padding:3px 6px;border:1px solid var(--table-border);text-align:left">Показатель</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">Факт</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">Цель (3 мес)</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">Цель (6 мес)</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">Прогресс</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">Статус</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr><td style="padding:3px 6px;border:1px solid var(--table-border)">% заполнения обязательных полей</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center;font-weight:700;color:var(--green)">97%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">100%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">100%</td><td style="padding:3px 6px;border:1px solid var(--table-border)"><div class="pbar-wrap"><div class="pbar-fill" style="width:97%;background:#28A850"></div></div></td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center"><span class="pill p-green">Норма</span></td></tr>
+                    <tr style="background:var(--table-row-alt)"><td style="padding:3px 6px;border:1px solid var(--table-border)">Конверсия «ведение → возврат»</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center;font-weight:700;color:var(--blue)">44%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">≥40%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">≥55%</td><td style="padding:3px 6px;border:1px solid var(--table-border)"><div class="pbar-wrap"><div class="pbar-fill" style="width:80%"></div></div></td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center"><span class="pill p-blue">Цель 3м ✓</span></td></tr>
+                    <tr><td style="padding:3px 6px;border:1px solid var(--table-border)">No-show по авто-напоминаниям</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center;font-weight:700;color:var(--amber)">14%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">&lt;15%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">&lt;10%</td><td style="padding:3px 6px;border:1px solid var(--table-border)"><div class="pbar-wrap"><div class="pbar-fill" style="width:93%;background:#E08800"></div></div></td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center"><span class="pill p-amber">Граница</span></td></tr>
+                    <tr style="background:var(--table-row-alt)"><td style="padding:3px 6px;border:1px solid var(--table-border)">% «пустых финалок»</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center;font-weight:700;color:var(--green)">0%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">0%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">0%</td><td style="padding:3px 6px;border:1px solid var(--table-border)"><div class="pbar-wrap"><div class="pbar-fill" style="width:100%;background:#28A850"></div></div></td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center"><span class="pill p-green">Цель ✓</span></td></tr>
+                    <tr><td style="padding:3px 6px;border:1px solid var(--table-border)">Конверсия дожима кураторов</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center;font-weight:700;color:var(--green)">29%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">≥25%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">≥35%</td><td style="padding:3px 6px;border:1px solid var(--table-border)"><div class="pbar-wrap"><div class="pbar-fill" style="width:83%;background:#28A850"></div></div></td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center"><span class="pill p-green">Норма</span></td></tr>
+                    <tr style="background:var(--table-row-alt)"><td style="padding:3px 6px;border:1px solid var(--table-border)">Средний чек возврата</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center;font-weight:700;color:var(--blue)">8 450 ₽</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">≥80% от первич.</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">≥95%</td><td style="padding:3px 6px;border:1px solid var(--table-border)"><div class="pbar-wrap"><div class="pbar-fill" style="width:84%"></div></div></td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center"><span class="pill p-blue">Цель 3м ✓</span></td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+            <div class="gbox">
+              <div class="gbox-hd"><span class="toggle">▼</span>Эффективность возврата по врачам</div>
+              <div class="gbox-body">
+                <table style="width:100%;font-size:12px">
+                  <thead><tr style="background:var(--table-head)">
+                    <th style="padding:3px 6px;border:1px solid var(--table-border);text-align:left">Врач</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">Всего финалок</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">С ведением</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">% заполнения</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">Вернулись</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">% возврата</th>
+                    <th style="padding:3px 6px;border:1px solid var(--table-border)">Ср. чек</th>
+                  </tr></thead>
+                  <tbody>
+                    <tr><td style="padding:3px 6px;border:1px solid var(--table-border);font-weight:700">Иванов А.А.</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">54</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">54</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center"><div class="pbar-wrap"><div class="pbar-fill" style="width:100%;background:#28A850"></div></div> 100%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">33</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center;color:var(--green);font-weight:700">62%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:right">9 200 ₽</td></tr>
+                    <tr style="background:var(--table-row-alt)"><td style="padding:3px 6px;border:1px solid var(--table-border);font-weight:700">Петрова С.В.</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">48</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">46</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center"><div class="pbar-wrap"><div class="pbar-fill" style="width:96%"></div></div> 96%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">20</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center;color:var(--blue);font-weight:700">41%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:right">8 100 ₽</td></tr>
+                    <tr><td style="padding:3px 6px;border:1px solid var(--table-border);font-weight:700">Сидоров Д.К.</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">40</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">32</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center"><div class="pbar-wrap"><div class="pbar-fill" style="width:80%;background:#E08800"></div></div> 80%</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center">11</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:center;color:var(--red);font-weight:700">28% ⚠</td><td style="padding:3px 6px;border:1px solid var(--table-border);text-align:right">7 400 ₽</td></tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /main-area -->
+    </div><!-- /app-layout -->
+
+    <!-- STATUS BAR -->
+    <div class="statusbar">
+      <div class="sb-item"><span class="sdot sd-green"></span>1С:Медицина — синхронизировано</div>
+      <div class="sb-sep"></div>
+      <div class="sb-item" id="sb-msg">Обработка готова к работе</div>
+      <div class="sb-sep"></div>
+      <div class="sb-item">Пользователь: Аникина С.В.</div>
+      <div style="margin-left:auto" class="sb-item">Версия обработки: 1.0.4 | База: ИнститутДвижения_Prod</div>
+    </div>
+
+  </div><!-- /win-body -->
+</div><!-- /win -->
+
+<div class="balloons" id="balloons"></div>
+
+<script>
+const C=[
+  {id:0,name:'Аникина С.В.',short:'АС',bg:'#DCECfA',color:'#1050A0',dot:'#2060D0'},
+  {id:1,name:'Романова М.П.',short:'МП',bg:'#D8F0E8',color:'#0A5A3A',dot:'#1A8A60'},
+  {id:2,name:'Горбунов В.К.',short:'ГВ',bg:'#EDE8FA',color:'#4A2888',dot:'#7755CC'},
+];
+const STAGES=[
+  {id:'lead',l:'Лид'},{id:'booked',l:'Записан'},
+  {id:'treatment',l:'В лечении'},{id:'final',l:'Финальная'},
+  {id:'waiting',l:'Ожидание'},{id:'react',l:'Реактивация'},
+];
+const VED=['контр. визит','поддерж. лечение','контр. диагностики','комбин.'];
+const PSY=['экономный','тревожный','решительный','исследователь'];
+const SRC=['сайт','звонок','WhatsApp','рекомендация','реклама'];
+const FMT=['визит','процедура','диагностика'];
+const DZH=['день 0','день 3','день 7','эскалация',null];
+const SW=['lead','lead','lead','booked','booked','treatment','treatment','treatment','final','final','waiting','react'];
+const NAMES=[
+  ['Смирнова Ольга П.','СО'],['Козлов Андрей Н.','КА'],['Власова Ирина М.','ВИ'],
+  ['Петров Игорь С.','ПИ'],['Морозова Татьяна В.','МТ'],['Новиков Сергей Д.','НС'],
+  ['Белова Екатерина Р.','БЕ'],['Громов Дмитрий А.','ГД'],['Захарова Алина К.','ЗА'],
+  ['Орлов Никита Е.','ОН'],['Крылова Анна Л.','КА'],['Фёдоров Евгений Т.','ФЕ'],
+  ['Воронова Светлана О.','ВС'],['Иванченко Роман Б.','ИР'],['Лебедева Оксана Ю.','ЛО'],
+  ['Попов Денис Г.','ПД'],['Антонова Лариса В.','АЛ'],['Соловьёв Павел И.','СП'],
+  ['Кузнецов Артём М.','КА'],['Белов Иван В.','БИ'],['Орлова Надежда С.','ОН'],['Громкова Елена П.','ГЕ'],
+];
+
+let ST={patients:[],tasks:[],drag:null,kAtags:{},currentScreen:'planning'};
+
+function mkD(o=0){const d=new Date(2026,4,14+o);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'})}
+
+function initData(){
+  ST.patients=NAMES.map((n,i)=>({
+    id:'p'+i,name:n[0],ini:n[1],
+    stage:SW[i%SW.length],
+    cid:i<8?null:C[i%3].id,
+    type:['первичный','повторный','реактивированный'][i%3],
+    ved:VED[i%4],geo:i%4===0?'иногородний':'местный',
+    psy:PSY[i%4],src:SRC[i%5],fmt:FMT[i%3],
+    dzh:DZH[i%5],date:mkD(i%15-5),
+  }));
+  ST.tasks=[
+    {id:'t0',cid:0,title:'Позвонить Смирновой О.П.',patient:'Смирнова Ольга П.',meta:'14.05.2026',urg:'high',done:false,type:'Дожим день 0',tags:['день 0','звонок','первичный']},
+    {id:'t1',cid:0,title:'WhatsApp: Козлов А.Н.',patient:'Козлов Андрей Н.',meta:'14.05.2026',urg:'med',done:false,type:'Дожим день 3',tags:['день 3','WhatsApp']},
+    {id:'t2',cid:0,title:'Заполнить блок «Ведение» — Морозова Т.',patient:'Морозова Татьяна В.',meta:'14.05.2026',urg:'med',done:false,type:'Ведение',tags:['контр. визит','финальная']},
+    {id:'t3',cid:0,title:'Подтвердить запись — Белов И.',patient:'Белов Иван В.',meta:'15.05.2026',urg:'low',done:true,type:'Напоминание',tags:['визит','повторный']},
+    {id:'t4',cid:0,title:'ЭСКАЛАЦИЯ РОП: Власова И.М.',patient:'Власова Ирина М.',meta:'13.05.2026 (!)',urg:'overdue',done:false,type:'Эскалация',tags:['день 7','эскалация','иногородний']},
+    {id:'t5',cid:0,title:'Авто-контакт: Воронова С.',patient:'Воронова Светлана О.',meta:'22.05.2026',urg:'low',done:false,type:'Авто-задача',tags:['контр. визит','визит','местный']},
+    {id:'t6',cid:1,title:'Позвонить Петрову И.С.',patient:'Петров Игорь С.',meta:'14.05.2026',urg:'high',done:false,type:'Дожим день 0',tags:['день 0','звонок','тревожный']},
+    {id:'t7',cid:1,title:'Реактивация: Орлов Н.Е.',patient:'Орлов Никита Е.',meta:'14.05.2026',urg:'med',done:false,type:'Реактивация',tags:['реактивированный','реклама']},
+    {id:'t8',cid:1,title:'Заполнить блок «Ведение» — Новиков С.',patient:'Новиков Сергей Д.',meta:'14.05.2026',urg:'med',done:false,type:'Ведение',tags:['поддерж. лечение']},
+    {id:'t9',cid:1,title:'Согласовать план — Лебедева О.',patient:'Лебедева Оксана Ю.',meta:'20.05.2026',urg:'med',done:false,type:'Напоминание',tags:['иногородний']},
+    {id:'t10',cid:2,title:'Позвонить Фёдорову Е.Т.',patient:'Фёдоров Евгений Т.',meta:'13.05.2026 (!)',urg:'overdue',done:false,type:'Дожим день 3',tags:['день 3','звонок','решительный']},
+    {id:'t11',cid:2,title:'Контакт: Лебедева О. — диагностика',patient:'Лебедева Оксана Ю.',meta:'28.05.2026',urg:'low',done:false,type:'Авто-задача',tags:['контр. диагностики','диагностика']},
+    {id:'t12',cid:2,title:'NPS-звонок: Громов Д.',patient:'Громов Дмитрий А.',meta:'14.05.2026',urg:'low',done:true,type:'NPS опрос',tags:['повторный','звонок']},
+  ];
+}
+
+function setSbMsg(msg){document.getElementById('sb-msg').textContent=msg}
+
+function showToast(msg,cls=''){
+  setSbMsg(msg);
+  const w=document.getElementById('balloons');
+  const b=document.createElement('div');b.className='balloon'+(cls?' '+cls:'');b.textContent=msg;
+  w.appendChild(b);requestAnimationFrame(()=>b.classList.add('show'));
+  setTimeout(()=>{b.classList.remove('show');setTimeout(()=>b.remove(),250)},2200);
+}
+
+function toggleFilterBox(hd){
+  const body=hd.nextElementSibling;
+  const tog=hd.querySelector('.toggle');
+  if(body.style.display==='none'){body.style.display='';tog.textContent='▼'}else{body.style.display='none';tog.textContent='►'}
+}
+
+function switchNav(el,screen){
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  el.classList.add('active');
+  ['planning','funnel','tasks','analytics'].forEach(s=>{
+    const el2=document.getElementById('screen-'+s);
+    if(el2)el2.style.display=s===screen?'flex':'none';
+  });
+  ST.currentScreen=screen;
+  setSbMsg('Раздел: '+el.textContent.trim());
+  if(screen==='tasks')renderTasksTable();
+  if(screen==='funnel'){buildKTagRow();renderKanban1C()}
+}
+
+function updateNavCounters(){
+  const un=ST.patients.filter(p=>p.cid===null).length;
+  const ov=ST.tasks.filter(t=>!t.done&&t.urg==='overdue').length;
+  document.getElementById('nav-un').textContent=un;
+  document.getElementById('nav-total').textContent=ST.patients.length;
+  document.getElementById('nav-ov').textContent=ov;
+  document.getElementById('sb-unassigned').textContent=un;
+  document.getElementById('sb-final').textContent=ST.patients.filter(p=>p.stage==='final').length;
+  document.getElementById('pool-cnt-lbl').textContent=un;
+}
+
+/* ── MORNING PLANNING ── */
+function renderPool(){
+  const pool=document.getElementById('pool-1c');
+  const un=ST.patients.filter(p=>p.cid===null);
+  pool.innerHTML='';
+  if(!un.length){pool.innerHTML='<div style="font-size:11.5px;color:var(--text3);display:flex;align-items:center;gap:5px;padding:6px"><span style="color:#28A850">✓</span>Все пациенты распределены</div>';return}
+  un.forEach(p=>{
+    const ch=document.createElement('div');ch.className='patient-row-chip';ch.draggable=true;ch.dataset.pid=p.id;
+    ch.innerHTML=`<div class="pr-av" style="background:#E8E7E5;color:#555">${p.ini}</div><div><div>${p.name}</div><div class="pr-sub">${p.src} · ${p.type}</div></div>`;
+    ch.addEventListener('dragstart',e=>{ST.drag=p.id;e.dataTransfer.setData('text/plain',p.id);setTimeout(()=>ch.classList.add('dragging'),0)});
+    ch.addEventListener('dragend',()=>{ch.classList.remove('dragging');document.querySelectorAll('.cur-lane-1c').forEach(l=>l.classList.remove('dz'))});
+    pool.appendChild(ch);
+  });
+}
+
+function renderCurators(){
+  const col=document.getElementById('clanes-1c');col.innerHTML='';
+  C.forEach(c=>{
+    const asgn=ST.patients.filter(p=>p.cid===c.id);
+    const lane=document.createElement('div');lane.className='cur-lane-1c';
+    lane.innerHTML=`<div class="cur-lane-hd-1c"><div class="pr-av" style="background:${c.bg};color:${c.color};width:20px;height:20px;font-size:8px">${c.short}</div><span>${c.name}</span><span style="margin-left:auto;font-size:10px;color:var(--text3)">${asgn.length} пац.</span></div><div class="cur-lane-body-1c" id="cl${c.id}"></div>`;
+    lane.addEventListener('dragover',e=>{e.preventDefault();lane.classList.add('dz')});
+    lane.addEventListener('dragleave',()=>lane.classList.remove('dz'));
+    lane.addEventListener('drop',e=>{e.preventDefault();lane.classList.remove('dz');dropToCur(e,c.id)});
+    col.appendChild(lane);
+    const body=lane.querySelector('#cl'+c.id);
+    if(!asgn.length){body.innerHTML='<div class="cur-empty-1c">Перетащите сюда</div>';return}
+    asgn.forEach(p=>{
+      const ch=document.createElement('div');ch.className='patient-row-chip';ch.draggable=true;ch.dataset.pid=p.id;
+      ch.style.cssText='font-size:11px;padding:1px 6px 1px 3px';
+      ch.innerHTML=`<div class="pr-av" style="background:${c.bg};color:${c.color};width:16px;height:16px;font-size:7px">${p.ini}</div>${p.name.split(' ')[0]} ${p.name.split(' ')[1]?.charAt(0)||''}. ${p.name.split(' ')[2]?.charAt(0)||''}.`;
+      ch.addEventListener('dragstart',e=>{ST.drag=p.id;e.dataTransfer.setData('text/plain',p.id);setTimeout(()=>ch.classList.add('dragging'),0)});
+      ch.addEventListener('dragend',()=>{ch.classList.remove('dragging');document.querySelectorAll('.cur-lane-1c').forEach(l=>l.classList.remove('dz'))});
+      body.appendChild(ch);
+    });
+  });
+}
+
+function dropToCur(e,cid){
+  const pid=e.dataTransfer.getData('text/plain')||ST.drag;if(!pid)return;
+  const p=ST.patients.find(x=>x.id===pid);if(!p)return;
+  p.cid=cid;
+  const c=C.find(x=>x.id===cid);
+  showToast(`${p.name} → ${c.name}`,null);
+  renderPool();renderCurators();updateNavCounters();
+}
+
+function autoAssign(){
+  const un=ST.patients.filter(p=>p.cid===null);
+  if(!un.length){showToast('Все пациенты уже распределены');return}
+  un.forEach((p,i)=>p.cid=C[i%C.length].id);
+  showToast(`Авто-распределено: ${un.length} пациентов`,'ok');
+  renderPool();renderCurators();updateNavCounters();
+}
+
+function resetPlanning(){
+  ST.patients.forEach((p,i)=>p.cid=i<8?null:C[i%3].id);
+  showToast('Распределение сброшено к исходному');
+  renderPool();renderCurators();updateNavCounters();
+}
+
+/* ── KANBAN 1C ── */
+const K_TAG_GROUPS=[
+  {k:'ved',l:'Ведение:',cls:'tc-teal',tags:['контр. визит','поддерж. лечение','контр. диагностики','комбин.']},
+  {k:'geo',l:'Гео:',cls:'tc-gray',tags:['местный','иногородний']},
+  {k:'psy',l:'Психотип:',cls:'tc-purple',tags:['экономный','тревожный','решительный','исследователь']},
+  {k:'dzh',l:'Дожим:',cls:'tc-red',tags:['день 0','день 3','день 7','эскалация']},
+];
+
+function buildKTagRow(){
+  const area=document.getElementById('k-tags-area');area.innerHTML='';
+  K_TAG_GROUPS.forEach((g,gi)=>{
+    if(gi>0){const d=document.createElement('span');d.className='tag-group-sep';area.appendChild(d)}
+    const lbl=document.createElement('span');lbl.className='tag-group-lbl';lbl.textContent=g.l;area.appendChild(lbl);
+    g.tags.forEach(t=>{
+      const on=(ST.kAtags[g.k]||[]).includes(t);
+      const b=document.createElement('div');b.className='tag-chip'+(on?' active '+g.cls:'');b.textContent=t;
+      b.onclick=()=>{
+        if(!ST.kAtags[g.k])ST.kAtags[g.k]=[];
+        const i=ST.kAtags[g.k].indexOf(t);
+        if(i!==-1)ST.kAtags[g.k].splice(i,1);else ST.kAtags[g.k].push(t);
+        buildKTagRow();renderKanban1C();
+      };
+      area.appendChild(b);
+    });
+  });
+}
+
+function kMatch(p){
+  const s=document.getElementById('k-search')?.value.toLowerCase()||'';
+  const cur=document.getElementById('k-curator')?.value||'';
+  const type=document.getElementById('k-type')?.value||'';
+  const psy=document.getElementById('k-psy')?.value||'';
+  if(s&&![p.name,p.type,p.ved,p.geo,p.psy,p.src,p.fmt,p.dzh||''].join(' ').toLowerCase().includes(s))return false;
+  if(cur==='none'&&p.cid!==null)return false;
+  if(cur&&cur!=='none'&&p.cid!==Number(cur))return false;
+  if(type&&p.type!==type)return false;
+  if(psy&&p.psy!==psy)return false;
+  for(const[k,tags]of Object.entries(ST.kAtags)){
+    if(!tags.length)continue;
+    let m=false;
+    tags.forEach(t=>{if(k==='ved'&&p.ved===t)m=true;if(k==='geo'&&p.geo===t)m=true;if(k==='psy'&&p.psy===t)m=true;if(k==='dzh'&&p.dzh===t)m=true;});
+    if(!m)return false;
+  }
+  return true;
+}
+
+function applyKFilters(){renderKanban1C()}
+
+function renderKanban1C(){
+  const board=document.getElementById('kanban-1c');board.innerHTML='';
+  let vis=0;
+  STAGES.forEach(stage=>{
+    const col=document.createElement('div');col.className='kcol-1c';
+    const pts=ST.patients.filter(p=>p.stage===stage.id);
+    const vpts=pts.filter(kMatch);vis+=vpts.length;
+    col.innerHTML=`<div class="kcol-hd-1c"><span>${stage.l}</span><span class="kcnt-1c">${vpts.length}</span></div>`;
+    const body=document.createElement('div');body.className='kcol-body-1c';body.dataset.stage=stage.id;
+    body.addEventListener('dragover',e=>{e.preventDefault();body.parentElement.classList.add('drag-over-col')});
+    body.addEventListener('dragleave',()=>body.parentElement.classList.remove('drag-over-col'));
+    body.addEventListener('drop',e=>{e.preventDefault();body.parentElement.classList.remove('drag-over-col');dropToStage1C(e,stage.id)});
+
+    pts.forEach(p=>{
+      const visible=kMatch(p);
+      const cur=p.cid!==null?C.find(c=>c.id===p.cid):null;
+      const dzCls=p.dzh?'p-red':'';
+      const card=document.createElement('div');
+      card.className='kcard-1c'+(visible?'':' filtered-out');
+      card.draggable=true;card.dataset.pid=p.id;
+      if(!visible)card.style.display='none';
+      card.innerHTML=`
+        <div class="kcard-name-1c">${p.name}</div>
+        <div class="kcard-meta-1c">${p.src} · ${p.date}</div>
+        <div class="kcard-tags-1c">
+          <span class="pill p-blue">${p.type}</span>
+          <span class="pill p-teal">${p.ved}</span>
+          <span class="pill p-gray">${p.geo}</span>
+          <span class="pill p-purple">${p.psy}</span>
+          <span class="pill p-green">${p.fmt}</span>
+          ${p.dzh?`<span class="pill p-red">${p.dzh}</span>`:''}
+        </div>
+        <div class="kcard-foot-1c">
+          ${cur?`<div class="sdot" style="background:${cur.dot};width:7px;height:7px;display:inline-block;vertical-align:middle;margin-right:3px"></div><span style="font-size:10px;color:var(--text3)">${cur.name}</span>`:'<span style="font-size:10px;color:var(--text3);font-style:italic">без куратора</span>'}
+        </div>`;
+      card.addEventListener('dragstart',e=>{ST.drag=p.id;e.dataTransfer.setData('text/plain',p.id);setTimeout(()=>card.classList.add('dragging'),0)});
+      card.addEventListener('dragend',()=>{card.classList.remove('dragging');document.querySelectorAll('.kcol-1c').forEach(c=>c.classList.remove('drag-over-col'))});
+      body.appendChild(card);
+    });
+    col.appendChild(body);board.appendChild(col);
+  });
+  const lbl=document.getElementById('k-result-lbl');
+  const hasF=Object.values(ST.kAtags).some(a=>a.length)||(document.getElementById('k-search')?.value||'').length>0;
+  lbl.textContent=hasF?`Показано: ${vis} из ${ST.patients.length} пациентов`:'';
+}
+
+function dropToStage1C(e,sid){
+  const pid=e.dataTransfer.getData('text/plain')||ST.drag;if(!pid)return;
+  const p=ST.patients.find(x=>x.id===pid);if(!p||p.stage===sid)return;
+  const ol=STAGES.find(s=>s.id===p.stage)?.l;
+  const nl=STAGES.find(s=>s.id===sid)?.l;
+  p.stage=sid;
+  showToast(`${p.name}: ${ol} → ${nl}`,'ok');
+  renderKanban1C();
+}
+
+function clearKFilter(){
+  ST.kAtags={};
+  if(document.getElementById('k-search'))document.getElementById('k-search').value='';
+  if(document.getElementById('k-curator'))document.getElementById('k-curator').value='';
+  if(document.getElementById('k-type'))document.getElementById('k-type').value='';
+  if(document.getElementById('k-psy'))document.getElementById('k-psy').value='';
+  buildKTagRow();renderKanban1C();
+  showToast('Фильтры сброшены');
+}
+
+/* ── TASKS TABLE ── */
+const TASK_TAGS_ALL=['день 0','день 3','день 7','эскалация','звонок','WhatsApp','иногородний','реактивированный','тревожный','ведение'];
+let taskTagFilter=[];
+
+function buildTaskTagFilter(){
+  const area=document.getElementById('task-tag-filter');area.innerHTML='';
+  TASK_TAGS_ALL.forEach(t=>{
+    const on=taskTagFilter.includes(t);
+    const b=document.createElement('div');b.className='tag-chip'+(on?' active':'');b.textContent=t;
+    b.onclick=()=>{const i=taskTagFilter.indexOf(t);if(i!==-1)taskTagFilter.splice(i,1);else taskTagFilter.push(t);buildTaskTagFilter();renderTasksTable()};
+    area.appendChild(b);
+  });
+}
+
+function renderTasksTable(){
+  const view=document.querySelector('input[name="taskview"]:checked')?.value||'all';
+  const tbody=document.getElementById('tasks-tbody');tbody.innerHTML='';
+  let tasks=ST.tasks.filter(t=>{
+    if(view==='open')return!t.done;
+    if(view==='overdue')return!t.done&&t.urg==='overdue';
+    if(view==='done')return t.done;
+    return true;
+  });
+  if(taskTagFilter.length){tasks=tasks.filter(t=>taskTagFilter.some(tg=>t.tags.includes(tg)))}
+  tasks.forEach(t=>{
+    const cur=C.find(c=>c.id===t.cid);
+    const urgColor={high:'#E03020',med:'#E08800',low:'#28A850',overdue:'#E03020'}[t.urg]||'#888';
+    const urgLabel={high:'Высокий',med:'Средний',low:'Низкий',overdue:'ПРОСРОЧЕНО'}[t.urg]||'—';
+    const statusLabel=t.done?'Выполнено':t.urg==='overdue'?'Просрочено':'Активна';
+    const statusCls=t.done?'p-green':t.urg==='overdue'?'p-red':t.urg==='high'?'p-amber':'p-blue';
+    const tagsH=t.tags.map(tg=>`<span class="pill p-gray">${tg}</span>`).join(' ');
+    const row=document.createElement('tr');
+    if(t.urg==='overdue'&&!t.done)row.className='overdue';
+    if(t.done)row.style.opacity='.55';
+    row.innerHTML=`
+      <td style="text-align:center;padding:2px 4px">
+        <input type="checkbox" ${t.done?'checked':''} onchange="toggleTaskCheck('${t.id}',this)" style="accent-color:var(--blue);cursor:pointer">
+      </td>
+      <td style="padding:2px 4px"><div class="urgency-bar" style="background:${urgColor}"></div></td>
+      <td><span class="${t.done?'':'td-link'}" onclick="showToast('Задача открыта: ${t.title}')">${t.title}</span></td>
+      <td><span class="td-link" onclick="showToast('Открыта карточка: ${t.patient}')">${t.patient}</span></td>
+      <td>${cur?`<span class="sdot" style="background:${cur.dot};display:inline-block;vertical-align:middle;margin-right:3px;width:7px;height:7px"></span>${cur.name}`:'-'}</td>
+      <td><span class="pill p-gray">${t.type}</span></td>
+      <td style="max-width:160px">${tagsH}</td>
+      <td style="color:${t.urg==='overdue'?'var(--red)':'inherit'};font-weight:${t.urg==='overdue'?'700':'400'}">${t.meta}</td>
+      <td>${urgLabel}</td>
+      <td><span class="pill ${statusCls}">${statusLabel}</span></td>`;
+    tbody.appendChild(row);
+  });
+}
+
+function toggleTaskCheck(id,cb){
+  const t=ST.tasks.find(x=>x.id===id);if(!t)return;
+  t.done=cb.checked;
+  showToast(t.done?'Задача выполнена ✓':'Задача возобновлена');
+  updateNavCounters();renderTasksTable();
+}
+
+initData();
+renderPool();renderCurators();updateNavCounters();
+buildKTagRow();
+buildTaskTagFilter();
+</script>
+</body>
+</html>

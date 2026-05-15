@@ -1,0 +1,584 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--c50:#E6F1FB;--c100:#B5D4F4;--c200:#85B7EB;--c400:#378ADD;--c600:#185FA5;--c800:#0C447C;--t50:#E1F5EE;--t100:#9FE1CB;--t400:#1D9E75;--t600:#0F6E56;--g50:#F1EFE8;--g100:#D3D1C7;--g400:#888780;--g600:#5F5E5A;--a50:#FAEEDA;--a400:#BA7517;--r50:#FCEBEB;--r400:#E24B4A;--r600:#A32D2D;--p50:#EEEDFE;--p400:#7F77DD;--p600:#534AB7}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--color-background-tertiary,#f5f5f3);color:var(--color-text-primary,#1a1a18);font-size:13px}
+.app{display:flex;height:calc(100vh - 0px);min-height:600px}
+.sidebar{width:200px;flex-shrink:0;background:var(--color-background-primary,#fff);border-right:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));display:flex;flex-direction:column;padding:16px 0}
+.logo{padding:0 16px 16px;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));margin-bottom:8px}
+.logo-mark{font-size:13px;font-weight:500;color:var(--c800,#0C447C);letter-spacing:-0.3px}
+.logo-sub{font-size:11px;color:var(--color-text-secondary,#888);margin-top:2px}
+.nav-section{padding:8px 0 4px;font-size:10px;font-weight:500;color:var(--color-text-tertiary,#aaa);letter-spacing:0.5px;text-transform:uppercase;padding-left:16px}
+.nav-item{display:flex;align-items:center;gap:8px;padding:7px 16px;cursor:pointer;font-size:12.5px;color:var(--color-text-secondary,#555);border-left:2px solid transparent;transition:all 0.15s}
+.nav-item:hover{background:var(--color-background-secondary,#f8f8f8);color:var(--color-text-primary,#1a1a18)}
+.nav-item.active{background:var(--c50,#E6F1FB);color:var(--c600,#185FA5);border-left-color:var(--c400,#378ADD);font-weight:500}
+.nav-item i{font-size:15px}
+.main{flex:1;overflow:auto;display:flex;flex-direction:column}
+.topbar{height:48px;background:var(--color-background-primary,#fff);border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));display:flex;align-items:center;padding:0 20px;gap:12px;flex-shrink:0}
+.topbar-title{font-size:14px;font-weight:500;flex:1}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:500}
+.badge-info{background:var(--c50,#E6F1FB);color:var(--c600,#185FA5)}
+.badge-success{background:var(--t50,#E1F5EE);color:var(--t600,#0F6E56)}
+.badge-warn{background:var(--a50,#FAEEDA);color:var(--a400,#BA7517)}
+.badge-danger{background:var(--r50,#FCEBEB);color:var(--r600,#A32D2D)}
+.badge-purple{background:var(--p50,#EEEDFE);color:var(--p600,#534AB7)}
+.content{flex:1;padding:20px;overflow:auto}
+.screen{display:none}
+.screen.active{display:block}
+
+.metrics-row{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px}
+.metric-card{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));border-radius:10px;padding:14px 16px}
+.metric-label{font-size:11px;color:var(--color-text-secondary,#777);margin-bottom:6px}
+.metric-value{font-size:22px;font-weight:500}
+.metric-delta{font-size:11px;margin-top:4px}
+.delta-up{color:var(--t400,#1D9E75)}
+.delta-down{color:var(--r400,#E24B4A)}
+
+.section-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.section-title{font-size:13px;font-weight:500}
+
+.kanban-board{display:grid;grid-template-columns:repeat(6,1fr);gap:10px}
+.kanban-col{background:var(--color-background-secondary,#f8f8f8);border-radius:10px;padding:10px}
+.kanban-col-header{font-size:11px;font-weight:500;color:var(--color-text-secondary,#666);margin-bottom:8px;display:flex;align-items:center;justify-content:space-between}
+.kanban-card{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));border-radius:8px;padding:9px 10px;margin-bottom:6px;cursor:pointer;transition:border-color 0.15s}
+.kanban-card:hover{border-color:var(--c200,#85B7EB)}
+.kanban-card-name{font-size:12px;font-weight:500;margin-bottom:4px}
+.kanban-card-meta{font-size:11px;color:var(--color-text-secondary,#777)}
+.kanban-col-count{background:var(--g100,#D3D1C7);color:var(--g600,#5F5E5A);border-radius:100px;padding:1px 6px;font-size:10px}
+
+.patient-layout{display:grid;grid-template-columns:1fr 340px;gap:16px}
+.patient-card{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));border-radius:10px;padding:16px}
+.patient-header{display:flex;align-items:center;gap:12px;margin-bottom:16px;padding-bottom:16px;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12))}
+.avatar{width:44px;height:44px;border-radius:50%;background:var(--c50,#E6F1FB);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:500;color:var(--c600,#185FA5);flex-shrink:0}
+.patient-name{font-size:14px;font-weight:500}
+.patient-meta{font-size:12px;color:var(--color-text-secondary,#777);margin-top:2px}
+.field-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:10px}
+.field-group{display:flex;flex-direction:column;gap:4px}
+.field-label{font-size:11px;color:var(--color-text-secondary,#777);font-weight:500}
+.field-value{font-size:12.5px;color:var(--color-text-primary,#1a1a18)}
+.timeline{margin-top:4px}
+.timeline-item{display:flex;gap:10px;padding:8px 0;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12))}
+.timeline-item:last-child{border-bottom:none}
+.tl-dot{width:8px;height:8px;border-radius:50%;margin-top:4px;flex-shrink:0}
+.tl-text{font-size:12px}
+.tl-meta{font-size:11px;color:var(--color-text-secondary,#777);margin-top:2px}
+
+.vedenie-block{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));border-radius:10px;padding:16px}
+.vedenie-title{font-size:12px;font-weight:500;margin-bottom:12px;display:flex;align-items:center;gap:6px}
+.form-field{margin-bottom:10px}
+.form-label{font-size:11px;font-weight:500;color:var(--color-text-secondary,#777);margin-bottom:4px}
+.form-select,.form-input{width:100%;padding:6px 10px;border:0.5px solid var(--color-border-secondary,rgba(0,0,0,0.25));border-radius:6px;font-size:12.5px;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a18);outline:none}
+.form-select:focus,.form-input:focus{border-color:var(--c400,#378ADD)}
+.form-textarea{width:100%;padding:6px 10px;border:0.5px solid var(--color-border-secondary,rgba(0,0,0,0.25));border-radius:6px;font-size:12.5px;resize:none;background:var(--color-background-primary,#fff);color:var(--color-text-primary,#1a1a18);outline:none;height:64px}
+.form-textarea:focus{border-color:var(--c400,#378ADD)}
+.auto-task-box{background:var(--t50,#E1F5EE);border:0.5px solid var(--t100,#9FE1CB);border-radius:8px;padding:10px 12px;margin-top:12px}
+.auto-task-label{font-size:11px;color:var(--t600,#0F6E56);font-weight:500;margin-bottom:4px}
+.auto-task-value{font-size:12.5px;color:var(--t600,#0F6E56)}
+.btn-primary{background:var(--c400,#378ADD);color:#fff;border:none;padding:8px 16px;border-radius:8px;font-size:12.5px;font-weight:500;cursor:pointer;width:100%;margin-top:12px}
+.btn-primary:hover{background:var(--c600,#185FA5)}
+.btn-primary:disabled{background:var(--g100,#D3D1C7);color:var(--g400,#888);cursor:not-allowed}
+.validation-error{background:var(--r50,#FCEBEB);border:0.5px solid var(--r400,#E24B4A);border-radius:6px;padding:8px 10px;margin-top:8px;font-size:11.5px;color:var(--r600,#A32D2D)}
+
+.analytics-grid{display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px}
+.chart-card{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));border-radius:10px;padding:16px}
+.chart-title{font-size:12px;font-weight:500;margin-bottom:12px;color:var(--color-text-secondary,#666)}
+.bar-chart{display:flex;flex-direction:column;gap:8px}
+.bar-row{display:flex;align-items:center;gap:8px}
+.bar-name{font-size:11px;color:var(--color-text-secondary,#777);width:80px;flex-shrink:0;text-align:right}
+.bar-track{flex:1;height:18px;background:var(--color-background-secondary,#f5f5f3);border-radius:4px;overflow:hidden}
+.bar-fill{height:100%;border-radius:4px;transition:width 0.5s ease}
+.bar-pct{font-size:11px;font-weight:500;width:34px}
+
+.funnel-chart{display:flex;flex-direction:column;gap:6px}
+.funnel-row{display:flex;align-items:center;gap:8px}
+.funnel-stage{font-size:11px;color:var(--color-text-secondary,#777);width:90px;flex-shrink:0;text-align:right}
+.funnel-bar{height:24px;border-radius:4px;display:flex;align-items:center;padding:0 8px;font-size:11px;font-weight:500;color:#fff;min-width:40px;transition:width 0.5s}
+
+.doctor-table{width:100%;border-collapse:collapse}
+.doctor-table th{font-size:11px;font-weight:500;color:var(--color-text-secondary,#777);text-align:left;padding:6px 8px;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12))}
+.doctor-table td{font-size:12px;padding:7px 8px;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.08))}
+.progress-mini{height:6px;background:var(--color-background-secondary,#f0f0ee);border-radius:3px;overflow:hidden;width:80px}
+.progress-fill{height:100%;border-radius:3px}
+
+.tasks-list{display:flex;flex-direction:column;gap:8px}
+.task-item{background:var(--color-background-primary,#fff);border:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));border-radius:8px;padding:10px 12px;display:flex;align-items:center;gap:10px;cursor:pointer}
+.task-item:hover{border-color:var(--c200,#85B7EB)}
+.task-check{width:16px;height:16px;border-radius:4px;border:1.5px solid var(--color-border-secondary,rgba(0,0,0,0.25));flex-shrink:0}
+.task-check.done{background:var(--t400,#1D9E75);border-color:var(--t400,#1D9E75)}
+.task-body{flex:1}
+.task-title{font-size:12.5px;font-weight:500}
+.task-meta{font-size:11px;color:var(--color-text-tertiary,#aaa);margin-top:2px}
+.task-badge-wrap{display:flex;align-items:center;gap:6px}
+.urgency-dot{width:8px;height:8px;border-radius:50%}
+.urgency-high{background:var(--r400,#E24B4A)}
+.urgency-med{background:var(--a400,#BA7517)}
+.urgency-low{background:var(--t400,#1D9E75)}
+
+.user-chip{display:flex;align-items:center;gap:6px;padding:4px 10px;border-radius:100px;background:var(--color-background-secondary,#f5f5f3);border:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12));font-size:12px;cursor:pointer}
+.user-dot{width:24px;height:24px;border-radius:50%;background:var(--p50,#EEEDFE);display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;color:var(--p600,#534AB7)}
+
+@media(max-width:680px){.kanban-board{grid-template-columns:repeat(3,1fr)}.metrics-row{grid-template-columns:repeat(2,1fr)}.patient-layout{grid-template-columns:1fr}.analytics-grid{grid-template-columns:1fr}}
+</style>
+
+<h2 class="sr-only">Интерактивный прототип CRM-модуля в 1С:Медицина — Институт Движения</h2>
+
+<div class="app">
+  <div class="sidebar">
+    <div class="logo">
+      <div class="logo-mark"><i class="ti ti-activity-heartbeat" aria-hidden="true"></i> CRM Медицина</div>
+      <div class="logo-sub">Институт Движения</div>
+    </div>
+    <div class="nav-section">Главное</div>
+    <div class="nav-item active" onclick="showScreen('dashboard',this)"><i class="ti ti-layout-dashboard" aria-hidden="true"></i>Дашборд</div>
+    <div class="nav-item" onclick="showScreen('kanban',this)"><i class="ti ti-columns" aria-hidden="true"></i>Воронки</div>
+    <div class="nav-item" onclick="showScreen('patient',this)"><i class="ti ti-user-circle" aria-hidden="true"></i>Карточка</div>
+    <div class="nav-item" onclick="showScreen('tasks',this)"><i class="ti ti-checklist" aria-hidden="true"></i>Задачи куратора</div>
+    <div class="nav-section">Аналитика</div>
+    <div class="nav-item" onclick="showScreen('analytics',this)"><i class="ti ti-chart-bar" aria-hidden="true"></i>Отчётность</div>
+    <div class="nav-item" onclick="showScreen('kpi',this)"><i class="ti ti-target" aria-hidden="true"></i>KPI</div>
+    <div style="margin-top:auto;padding:12px 16px;border-top:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.12))">
+      <div class="user-chip"><div class="user-dot">АС</div>Аникина С.В.</div>
+    </div>
+  </div>
+
+  <div class="main">
+    <div class="topbar">
+      <span class="topbar-title" id="screen-title">Дашборд</span>
+      <span class="badge badge-success"><i class="ti ti-circle-check" aria-hidden="true" style="font-size:12px;margin-right:3px"></i>1С онлайн</span>
+      <span class="badge badge-info">13 мая 2026</span>
+      <i class="ti ti-bell" aria-hidden="true" style="font-size:17px;color:var(--g400);cursor:pointer"></i>
+    </div>
+
+    <div class="content">
+
+      <!-- DASHBOARD -->
+      <div class="screen active" id="screen-dashboard">
+        <div class="metrics-row">
+          <div class="metric-card">
+            <div class="metric-label"><i class="ti ti-users" aria-hidden="true"></i> Активных пациентов</div>
+            <div class="metric-value" style="color:var(--c600)">347</div>
+            <div class="metric-delta delta-up"><i class="ti ti-trending-up" aria-hidden="true"></i> +18 за неделю</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label"><i class="ti ti-refresh" aria-hidden="true"></i> Конверсия возврата</div>
+            <div class="metric-value" style="color:var(--t400)">44%</div>
+            <div class="metric-delta delta-up"><i class="ti ti-trending-up" aria-hidden="true"></i> Цель 55% за 6 мес</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label"><i class="ti ti-clock-exclamation" aria-hidden="true"></i> Задач просрочено</div>
+            <div class="metric-value" style="color:var(--r400)">7</div>
+            <div class="metric-delta delta-down"><i class="ti ti-alert-triangle" aria-hidden="true"></i> Требуют эскалации</div>
+          </div>
+          <div class="metric-card">
+            <div class="metric-label"><i class="ti ti-currency-rubel" aria-hidden="true"></i> Ср. чек возврата</div>
+            <div class="metric-value" style="color:var(--p400)">8 450 ₽</div>
+            <div class="metric-delta delta-up"><i class="ti ti-trending-up" aria-hidden="true"></i> +6% к плану</div>
+          </div>
+        </div>
+
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;margin-bottom:16px">
+          <div class="patient-card">
+            <div class="section-header"><span class="section-title">Сценарии «Дожима» сегодня</span><span class="badge badge-warn">12 активных</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.08))">
+                <div><div style="font-size:12.5px;font-weight:500">Смирнова Ольга П.</div><div style="font-size:11px;color:var(--color-text-secondary)">День 0 · Не записалась</div></div>
+                <span class="badge badge-danger">Позвонить</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.08))">
+                <div><div style="font-size:12.5px;font-weight:500">Козлов Андрей Н.</div><div style="font-size:11px;color:var(--color-text-secondary)">День 3 · WhatsApp</div></div>
+                <span class="badge badge-warn">Сообщение</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.08))">
+                <div><div style="font-size:12.5px;font-weight:500">Власова Ирина М.</div><div style="font-size:11px;color:var(--color-text-secondary)">День 7 · Эскалация РОП</div></div>
+                <span class="badge badge-purple">РОП</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0">
+                <div><div style="font-size:12.5px;font-weight:500">Петров Игорь С.</div><div style="font-size:11px;color:var(--color-text-secondary)">День 0 · Пауза на консультации</div></div>
+                <span class="badge badge-danger">Позвонить</span>
+              </div>
+            </div>
+          </div>
+          <div class="patient-card">
+            <div class="section-header"><span class="section-title">Финальные консультации</span><span class="badge badge-info">Сегодня</span></div>
+            <div style="display:flex;flex-direction:column;gap:6px">
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.08))">
+                <div><div style="font-size:12.5px;font-weight:500">Морозова Татьяна</div><div style="font-size:11px;color:var(--color-text-secondary)">10:00 · д-р Иванов А.А.</div></div>
+                <span class="badge badge-success">Ведение назначено</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.08))">
+                <div><div style="font-size:12.5px;font-weight:500">Новиков Сергей</div><div style="font-size:11px;color:var(--color-text-secondary)">12:30 · д-р Петрова С.В.</div></div>
+                <span class="badge badge-warn">Ожидает заполнения</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0;border-bottom:0.5px solid var(--color-border-tertiary,rgba(0,0,0,0.08))">
+                <div><div style="font-size:12.5px;font-weight:500">Белова Екатерина</div><div style="font-size:11px;color:var(--color-text-secondary)">14:15 · д-р Иванов А.А.</div></div>
+                <span class="badge badge-info">Записана</span>
+              </div>
+              <div style="display:flex;justify-content:space-between;align-items:center;padding:7px 0">
+                <div><div style="font-size:12.5px;font-weight:500">Громов Дмитрий</div><div style="font-size:11px;color:var(--color-text-secondary)">16:00 · д-р Сидоров Д.К.</div></div>
+                <span class="badge badge-success">Ведение назначено</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="patient-card">
+          <div class="section-header"><span class="section-title">% заполнения ведения по врачам</span><span class="badge badge-success">Сегодня 97%</span></div>
+          <div class="bar-chart">
+            <div class="bar-row"><div class="bar-name">Иванов А.А.</div><div class="bar-track"><div class="bar-fill" style="width:92%;background:var(--t400)"></div></div><div class="bar-pct" style="color:var(--t400)">92%</div></div>
+            <div class="bar-row"><div class="bar-name">Петрова С.В.</div><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--c400)"></div></div><div class="bar-pct" style="color:var(--c400)">85%</div></div>
+            <div class="bar-row"><div class="bar-name">Сидоров Д.К.</div><div class="bar-track"><div class="bar-fill" style="width:61%;background:var(--a400)"></div></div><div class="bar-pct" style="color:var(--a400)">61%</div></div>
+            <div class="bar-row"><div class="bar-name">Орлова Н.В.</div><div class="bar-track"><div class="bar-fill" style="width:97%;background:var(--t400)"></div></div><div class="bar-pct" style="color:var(--t400)">97%</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- KANBAN -->
+      <div class="screen" id="screen-kanban">
+        <div class="section-header" style="margin-bottom:12px">
+          <span class="section-title">Воронка пациентов</span>
+          <span class="badge badge-info">78 активных сделок</span>
+        </div>
+        <div class="kanban-board">
+          <div class="kanban-col">
+            <div class="kanban-col-header">Лид<span class="kanban-col-count">14</span></div>
+            <div class="kanban-card"><div class="kanban-card-name">Захарова А.И.</div><div class="kanban-card-meta">Сайт · 12 мая</div></div>
+            <div class="kanban-card"><div class="kanban-card-name">Громов П.С.</div><div class="kanban-card-meta">Звонок · 13 мая</div></div>
+            <div class="kanban-card" style="border-left:2px solid var(--a400)"><div class="kanban-card-name">Лебедева О.Н.</div><div class="kanban-card-meta">WhatsApp · 11 мая</div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header">Записан<span class="kanban-col-count">18</span></div>
+            <div class="kanban-card"><div class="kanban-card-name">Белов И.А.</div><div class="kanban-card-meta">15 мая 10:00</div></div>
+            <div class="kanban-card"><div class="kanban-card-name">Новикова М.К.</div><div class="kanban-card-meta">16 мая 12:30</div></div>
+            <div class="kanban-card"><div class="kanban-card-name">Попов Д.В.</div><div class="kanban-card-meta">14 мая 09:00</div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header">В лечении<span class="kanban-col-count">22</span></div>
+            <div class="kanban-card" style="border-left:2px solid var(--c400)"><div class="kanban-card-name">Морозова Т.П.</div><div class="kanban-card-meta">Курс 3/10 · Куратор: АС</div></div>
+            <div class="kanban-card" style="border-left:2px solid var(--c400)"><div class="kanban-card-name">Кузнецов А.В.</div><div class="kanban-card-meta">Курс 7/10 · Куратор: МР</div></div>
+            <div class="kanban-card" style="border-left:2px solid var(--a400)"><div class="kanban-card-name">Фёдорова Е.С.</div><div class="kanban-card-meta">Частичная оплата</div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header">Финальная<span class="kanban-col-count">9</span></div>
+            <div class="kanban-card" onclick="showScreen('patient',document.querySelectorAll('.nav-item')[2])" style="border-left:2px solid var(--t400);cursor:pointer">
+              <div class="kanban-card-name">Смирнов К.Р. <span style="font-size:10px;color:var(--c600)">→ карточка</span></div>
+              <div class="kanban-card-meta" style="color:var(--r600)">⚠ Поля не заполнены</div>
+            </div>
+            <div class="kanban-card" style="border-left:2px solid var(--t400)"><div class="kanban-card-name">Антонова Л.В.</div><div class="kanban-card-meta" style="color:var(--t600)">✓ Ведение назначено</div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header">Ожидание<span class="kanban-col-count">11</span></div>
+            <div class="kanban-card"><div class="kanban-card-name">Воронов А.С.</div><div class="kanban-card-meta">Контакт: 22 июн</div></div>
+            <div class="kanban-card"><div class="kanban-card-name">Ильина Н.В.</div><div class="kanban-card-meta">Контакт: 10 июл</div></div>
+            <div class="kanban-card"><div class="kanban-card-name">Соловьёв П.И.</div><div class="kanban-card-meta">Контакт: 1 авг</div></div>
+          </div>
+          <div class="kanban-col">
+            <div class="kanban-col-header">Реактивация<span class="kanban-col-count">4</span></div>
+            <div class="kanban-card" style="border-left:2px solid var(--p400)"><div class="kanban-card-name">Орлов Н.П.</div><div class="kanban-card-meta">180+ дней · Реклама</div></div>
+            <div class="kanban-card" style="border-left:2px solid var(--p400)"><div class="kanban-card-name">Крылова А.Д.</div><div class="kanban-card-meta">240 дней · Обзвон</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PATIENT CARD -->
+      <div class="screen" id="screen-patient">
+        <div class="patient-layout">
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="patient-card">
+              <div class="patient-header">
+                <div class="avatar">СК</div>
+                <div>
+                  <div class="patient-name">Смирнов Кирилл Романович</div>
+                  <div class="patient-meta">ID: 10482 · Дата рождения: 14.03.1985 · +7 916 555-12-34</div>
+                </div>
+                <div style="margin-left:auto;display:flex;gap:6px">
+                  <span class="badge badge-warn">Повторный в лечении</span>
+                  <span class="badge badge-info">Местный</span>
+                </div>
+              </div>
+              <div class="field-row">
+                <div class="field-group"><div class="field-label">Источник</div><div class="field-value">Рекомендация</div></div>
+                <div class="field-group"><div class="field-label">Психотип</div><div class="field-value">Тревожный</div></div>
+                <div class="field-group"><div class="field-label">Врач</div><div class="field-value">Иванов А.А.</div></div>
+                <div class="field-group"><div class="field-label">Куратор</div><div class="field-value">Аникина С.В.</div></div>
+                <div class="field-group"><div class="field-label">Текущий этап</div><div class="field-value" style="color:var(--c600);font-weight:500">Финальная консультация</div></div>
+                <div class="field-group"><div class="field-label">Сумма курса</div><div class="field-value">42 000 ₽</div></div>
+              </div>
+            </div>
+            <div class="patient-card">
+              <div class="section-title" style="margin-bottom:10px">История взаимодействий</div>
+              <div class="timeline">
+                <div class="timeline-item"><div class="tl-dot" style="background:var(--t400)"></div><div><div class="tl-text">Завершён сеанс 10/10 — Лечение завершено</div><div class="tl-meta">13 мая 2026 · Иванов А.А.</div></div></div>
+                <div class="timeline-item"><div class="tl-dot" style="background:var(--c400)"></div><div><div class="tl-text">Промежуточная консультация</div><div class="tl-meta">2 мая 2026 · Иванов А.А. — Прогресс хороший</div></div></div>
+                <div class="timeline-item"><div class="tl-dot" style="background:var(--c400)"></div><div><div class="tl-text">Старт курса лечения — полная оплата</div><div class="tl-meta">1 апреля 2026 · 42 000 ₽</div></div></div>
+                <div class="timeline-item"><div class="tl-dot" style="background:var(--g400)"></div><div><div class="tl-text">Первичный приём — план лечения назначен</div><div class="tl-meta">25 марта 2026 · Иванов А.А.</div></div></div>
+              </div>
+            </div>
+          </div>
+
+          <div style="display:flex;flex-direction:column;gap:12px">
+            <div class="vedenie-block">
+              <div class="vedenie-title" style="color:var(--c600)"><i class="ti ti-clipboard-list" aria-hidden="true"></i>Блок «Ведение» — Финальная консультация</div>
+              <div class="validation-error" id="vedenie-error" style="display:none"><i class="ti ti-alert-circle" aria-hidden="true"></i> Не заполнены обязательные поля. Закрытие этапа заблокировано.</div>
+
+              <div class="form-field">
+                <div class="form-label">Тип ведения <span style="color:var(--r400)">*</span></div>
+                <select class="form-select" id="tip-vedenia" onchange="updateVedenie()">
+                  <option value="">— Выберите —</option>
+                  <option value="контрольный_визит">Контрольный визит</option>
+                  <option value="поддерживающее_лечение">Поддерживающее лечение</option>
+                  <option value="контроль_диагностики">Контроль диагностики</option>
+                  <option value="комбинированное">Комбинированное</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <div class="form-label">Подтип <span style="color:var(--r400)">*</span></div>
+                <select class="form-select" id="podtip-vedenia" onchange="updateVedenie()">
+                  <option value="">— Выберите тип выше —</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <div class="form-label">Дата следующего контакта <span style="color:var(--r400)">*</span></div>
+                <input class="form-input" type="date" id="data-kontakta" onchange="updateVedenie()" min="2026-05-14">
+              </div>
+              <div class="form-field">
+                <div class="form-label">Формат контакта <span style="color:var(--r400)">*</span></div>
+                <select class="form-select" id="format-kontakta" onchange="updateVedenie()">
+                  <option value="">— Выберите —</option>
+                  <option value="визит">Визит</option>
+                  <option value="процедура">Процедура</option>
+                  <option value="диагностика">Диагностика</option>
+                </select>
+              </div>
+              <div class="form-field">
+                <div class="form-label">Комментарий для пациента <span style="color:var(--r400)">*</span></div>
+                <textarea class="form-textarea" id="komment" placeholder="До 280 символов. Объясните пациенту простыми словами, зачем нужен повторный контакт..." onkeyup="updateVedenie()"></textarea>
+                <div style="font-size:10px;color:var(--color-text-secondary);text-align:right;margin-top:2px" id="char-count">0 / 280</div>
+              </div>
+
+              <div class="auto-task-box" id="auto-task-box" style="display:none">
+                <div class="auto-task-label"><i class="ti ti-robot" aria-hidden="true"></i> Авто-задача куратору будет создана</div>
+                <div class="auto-task-value" id="auto-task-date">За 7 дней до контакта</div>
+              </div>
+
+              <button class="btn-primary" id="btn-close" onclick="validateAndClose()" disabled>
+                <i class="ti ti-lock" aria-hidden="true"></i> Закрыть этап
+              </button>
+            </div>
+
+            <div class="patient-card">
+              <div class="form-label" style="margin-bottom:8px">Ответственный куратор</div>
+              <div style="display:flex;align-items:center;gap:8px">
+                <div class="avatar" style="width:32px;height:32px;font-size:11px">АС</div>
+                <div><div style="font-size:12.5px;font-weight:500">Аникина Светлана В.</div><div style="font-size:11px;color:var(--color-text-secondary)">Авто-подстановка из сделки</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TASKS -->
+      <div class="screen" id="screen-tasks">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div>
+            <div class="section-header" style="margin-bottom:10px"><span class="section-title">Задачи на сегодня</span><span class="badge badge-danger">3 просрочено</span></div>
+            <div class="tasks-list">
+              <div class="task-item">
+                <div class="task-check"></div>
+                <div class="task-body">
+                  <div class="task-title">Позвонить Смирновой О.П.</div>
+                  <div class="task-meta">День 0 дожима · Сегодня до 14:00</div>
+                </div>
+                <div class="task-badge-wrap"><div class="urgency-dot urgency-high"></div><span class="badge badge-danger">Срочно</span></div>
+              </div>
+              <div class="task-item">
+                <div class="task-check"></div>
+                <div class="task-body">
+                  <div class="task-title">Связаться с Козловым А.Н. (WhatsApp)</div>
+                  <div class="task-meta">День 3 дожима · Шаблон: day3_sms</div>
+                </div>
+                <div class="task-badge-wrap"><div class="urgency-dot urgency-med"></div><span class="badge badge-warn">Сегодня</span></div>
+              </div>
+              <div class="task-item">
+                <div class="task-check done"></div>
+                <div class="task-body" style="opacity:0.55">
+                  <div class="task-title">Напомнить Воронову А.С. о визите 15 мая</div>
+                  <div class="task-meta">Авто-задача · Выполнено 13 мая 09:45</div>
+                </div>
+                <div class="task-badge-wrap"><span class="badge badge-success">Готово</span></div>
+              </div>
+              <div class="task-item" style="border-color:var(--r400)">
+                <div class="task-check"></div>
+                <div class="task-body">
+                  <div class="task-title">Эскалация: Власова И.М. → РОП</div>
+                  <div class="task-meta">День 7 · Просрочено на 1 день</div>
+                </div>
+                <div class="task-badge-wrap"><div class="urgency-dot urgency-high"></div><span class="badge badge-danger">Просрочено</span></div>
+              </div>
+              <div class="task-item">
+                <div class="task-check"></div>
+                <div class="task-body">
+                  <div class="task-title">Заполнить блок «Ведение» — Новиков С.</div>
+                  <div class="task-meta">Финальная консультация · 12:30</div>
+                </div>
+                <div class="task-badge-wrap"><div class="urgency-dot urgency-med"></div><span class="badge badge-warn">До вечера</span></div>
+              </div>
+            </div>
+          </div>
+          <div>
+            <div class="section-header" style="margin-bottom:10px"><span class="section-title">Авто-задачи на неделю</span><span class="badge badge-info">7 запланировано</span></div>
+            <div class="tasks-list">
+              <div class="task-item"><div class="task-check"></div><div class="task-body"><div class="task-title">Контакт: Воронов А.С.</div><div class="task-meta">22 мая · За 7 дн. до визита 29 мая</div></div><span class="badge badge-info">Визит</span></div>
+              <div class="task-item"><div class="task-check"></div><div class="task-body"><div class="task-title">Контакт: Ильина Н.В.</div><div class="task-meta">24 мая · За 7 дн. до процедуры 31 мая</div></div><span class="badge badge-purple">Процедура</span></div>
+              <div class="task-item"><div class="task-check"></div><div class="task-body"><div class="task-title">Контакт: Орлов Н.П. (реактивация)</div><div class="task-meta">25 мая · Сегмент 180+ дней</div></div><span class="badge badge-warn">Реактивация</span></div>
+            </div>
+            <div style="margin-top:16px">
+              <div class="section-title" style="margin-bottom:10px">Выполнение задач куратора</div>
+              <div class="bar-chart">
+                <div class="bar-row"><div class="bar-name">Аникина С.В.</div><div class="bar-track"><div class="bar-fill" style="width:94%;background:var(--t400)"></div></div><div class="bar-pct" style="color:var(--t400)">94%</div></div>
+                <div class="bar-row"><div class="bar-name">Романова М.П.</div><div class="bar-track"><div class="bar-fill" style="width:87%;background:var(--c400)"></div></div><div class="bar-pct" style="color:var(--c400)">87%</div></div>
+                <div class="bar-row"><div class="bar-name">Горбунов В.К.</div><div class="bar-track"><div class="bar-fill" style="width:72%;background:var(--a400)"></div></div><div class="bar-pct" style="color:var(--a400)">72%</div></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ANALYTICS -->
+      <div class="screen" id="screen-analytics">
+        <div class="analytics-grid">
+          <div class="chart-card">
+            <div class="chart-title">Воронка конверсии (май 2026)</div>
+            <div class="funnel-chart">
+              <div class="funnel-row"><div class="funnel-stage">Лиды</div><div class="funnel-bar" style="width:100%;background:var(--c400)">142</div></div>
+              <div class="funnel-row"><div class="funnel-stage">Записи</div><div class="funnel-bar" style="width:82%;background:var(--c600)">116</div></div>
+              <div class="funnel-row"><div class="funnel-stage">Первичный приём</div><div class="funnel-bar" style="width:65%;background:var(--t400)">92</div></div>
+              <div class="funnel-row"><div class="funnel-stage">С планом лечения</div><div class="funnel-bar" style="width:55%;background:var(--t600)">78</div></div>
+              <div class="funnel-row"><div class="funnel-stage">Ведение назначено</div><div class="funnel-bar" style="width:51%;background:var(--p400)">72</div></div>
+              <div class="funnel-row"><div class="funnel-stage">Вернулись</div><div class="funnel-bar" style="width:30%;background:var(--p600)">44%</div></div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Типы ведения (распределение)</div>
+            <div class="bar-chart">
+              <div class="bar-row"><div class="bar-name">Контр. визит</div><div class="bar-track"><div class="bar-fill" style="width:52%;background:var(--c400)"></div></div><div class="bar-pct" style="color:var(--c400)">52%</div></div>
+              <div class="bar-row"><div class="bar-name">Поддерж. лечение</div><div class="bar-track"><div class="bar-fill" style="width:28%;background:var(--t400)"></div></div><div class="bar-pct" style="color:var(--t400)">28%</div></div>
+              <div class="bar-row"><div class="bar-name">Диагностика</div><div class="bar-track"><div class="bar-fill" style="width:13%;background:var(--p400)"></div></div><div class="bar-pct" style="color:var(--p400)">13%</div></div>
+              <div class="bar-row"><div class="bar-name">Комбинированное</div><div class="bar-track"><div class="bar-fill" style="width:7%;background:var(--g400)"></div></div><div class="bar-pct" style="color:var(--g400)">7%</div></div>
+            </div>
+          </div>
+        </div>
+        <div class="patient-card">
+          <div class="section-title" style="margin-bottom:12px">Эффективность возврата по врачам</div>
+          <table class="doctor-table">
+            <thead><tr><th>Врач</th><th>Финалок</th><th>С ведением</th><th>Вернулись</th><th>% возврата</th><th>Ср. чек</th></tr></thead>
+            <tbody>
+              <tr><td><strong>Иванов А.А.</strong></td><td>54</td><td>54 (100%)</td><td>33</td><td><div style="display:flex;align-items:center;gap:6px"><div class="progress-mini"><div class="progress-fill" style="width:62%;background:var(--t400)"></div></div><span style="color:var(--t400);font-weight:500">62%</span></div></td><td>9 200 ₽</td></tr>
+              <tr><td><strong>Петрова С.В.</strong></td><td>48</td><td>46 (96%)</td><td>20</td><td><div style="display:flex;align-items:center;gap:6px"><div class="progress-mini"><div class="progress-fill" style="width:41%;background:var(--c400)"></div></div><span style="color:var(--c400);font-weight:500">41%</span></div></td><td>8 100 ₽</td></tr>
+              <tr><td><strong>Сидоров Д.К.</strong></td><td>40</td><td>32 (80%)</td><td>11</td><td><div style="display:flex;align-items:center;gap:6px"><div class="progress-mini"><div class="progress-fill" style="width:28%;background:var(--a400)"></div></div><span style="color:var(--a400);font-weight:500">28%</span></div><span class="badge badge-danger" style="font-size:10px">⚠ ниже плана</span></div></td><td>7 400 ₽</td></tr>
+              <tr><td><strong>Орлова Н.В.</strong></td><td>22</td><td>22 (100%)</td><td>10</td><td><div style="display:flex;align-items:center;gap:6px"><div class="progress-mini"><div class="progress-fill" style="width:45%;background:var(--c400)"></div></div><span style="color:var(--c400);font-weight:500">45%</span></div></td><td>8 750 ₽</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- KPI -->
+      <div class="screen" id="screen-kpi">
+        <div class="metrics-row">
+          <div class="metric-card"><div class="metric-label">% заполнения ведения</div><div class="metric-value" style="color:var(--t400)">97%</div><div class="metric-delta delta-up">Цель 100% · близко</div></div>
+          <div class="metric-card"><div class="metric-label">Конверсия ведение → возврат</div><div class="metric-value" style="color:var(--c600)">44%</div><div class="metric-delta">Цель 3 мес: 40% <span style="color:var(--t400)">✓</span></div></div>
+          <div class="metric-card"><div class="metric-label">No-show (авто-напоминания)</div><div class="metric-value" style="color:var(--a400)">14%</div><div class="metric-delta">Цель <15% <span style="color:var(--t400)">✓</span></div></div>
+          <div class="metric-card"><div class="metric-label">% пустых финалок</div><div class="metric-value" style="color:var(--t400)">0%</div><div class="metric-delta delta-up">Цель 0% <span style="color:var(--t400)">✓</span></div></div>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div class="chart-card">
+            <div class="chart-title">KPI системы — прогресс к целям (3 мес)</div>
+            <div class="bar-chart">
+              <div class="bar-row"><div class="bar-name" style="width:100px">Заполнение полей</div><div class="bar-track"><div class="bar-fill" style="width:97%;background:var(--t400)"></div></div><div class="bar-pct" style="color:var(--t400)">97%</div></div>
+              <div class="bar-row"><div class="bar-name" style="width:100px">Конв. возврата</div><div class="bar-track"><div class="bar-fill" style="width:80%;background:var(--c400)"></div></div><div class="bar-pct" style="color:var(--c400)">44%</div></div>
+              <div class="bar-row"><div class="bar-name" style="width:100px">LTV реактивац.</div><div class="bar-track"><div class="bar-fill" style="width:55%;background:var(--p400)"></div></div><div class="bar-pct" style="color:var(--p400)">33%</div></div>
+              <div class="bar-row"><div class="bar-name" style="width:100px">Ср. чек возврата</div><div class="bar-track"><div class="bar-fill" style="width:84%;background:var(--a400)"></div></div><div class="bar-pct" style="color:var(--a400)">84%</div></div>
+            </div>
+          </div>
+          <div class="chart-card">
+            <div class="chart-title">Работа кураторов (неделя)</div>
+            <div class="bar-chart">
+              <div class="bar-row"><div class="bar-name" style="width:100px">Конв. дожима</div><div class="bar-track"><div class="bar-fill" style="width:58%;background:var(--t400)"></div></div><div class="bar-pct" style="color:var(--t400)">29%</div></div>
+              <div class="bar-row"><div class="bar-name" style="width:100px">Задачи вовремя</div><div class="bar-track"><div class="bar-fill" style="width:91%;background:var(--c400)"></div></div><div class="bar-pct" style="color:var(--c400)">91%</div></div>
+              <div class="bar-row"><div class="bar-name" style="width:100px">Ср. срок возврата</div><div class="bar-track"><div class="bar-fill" style="width:60%;background:var(--a400)"></div></div><div class="bar-pct" style="color:var(--a400)">8 дн</div></div>
+              <div class="bar-row"><div class="bar-name" style="width:100px">NPS кураторов</div><div class="bar-track"><div class="bar-fill" style="width:85%;background:var(--p400)"></div></div><div class="bar-pct" style="color:var(--p400)">8.5</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+const screens = {
+  'dashboard':'Дашборд — Институт Движения',
+  'kanban':'Воронки пациентов',
+  'patient':'Карточка пациента — Смирнов К.Р.',
+  'tasks':'Задачи куратора',
+  'analytics':'Аналитика и отчётность',
+  'kpi':'KPI системы'
+};
+
+function showScreen(id, el){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  document.querySelectorAll('.nav-item').forEach(n=>n.classList.remove('active'));
+  document.getElementById('screen-'+id).classList.add('active');
+  if(el) el.classList.add('active');
+  document.getElementById('screen-title').textContent = screens[id]||id;
+}
+
+const subtypes={
+  'контрольный_визит':['3 месяца','6 месяцев','12 месяцев'],
+  'поддерживающее_лечение':['Массаж','ЛФК','Физиотерапия'],
+  'контроль_диагностики':['МРТ','Анализы'],
+  'комбинированное':['Визит + процедура','Диагностика + консультация']
+};
+
+function updateVedenie(){
+  const tip=document.getElementById('tip-vedenia').value;
+  const podtipSel=document.getElementById('podtip-vedenia');
+  if(tip && subtypes[tip]){
+    podtipSel.innerHTML='<option value="">— Выберите —</option>'+subtypes[tip].map(s=>`<option>${s}</option>`).join('');
+  }
+  const komment=document.getElementById('komment').value;
+  document.getElementById('char-count').textContent=komment.length+' / 280';
+  const data=document.getElementById('data-kontakta').value;
+  if(data){
+    const d=new Date(data);
+    const task=new Date(d);task.setDate(task.getDate()-7);
+    document.getElementById('auto-task-date').textContent='Авто-задача: '+task.toLocaleDateString('ru-RU',{day:'2-digit',month:'long',year:'numeric'});
+    document.getElementById('auto-task-box').style.display='block';
+  }
+  const allFilled=tip && podtipSel.value && data && document.getElementById('format-kontakta').value && komment.trim().length>0;
+  document.getElementById('btn-close').disabled=!allFilled;
+  if(!allFilled){
+    document.getElementById('btn-close').innerHTML='<i class="ti ti-lock"></i> Закрыть этап — заполните поля';
+  } else {
+    document.getElementById('btn-close').innerHTML='<i class="ti ti-check"></i> Закрыть этап';
+  }
+}
+
+function validateAndClose(){
+  const tip=document.getElementById('tip-vedenia').value;
+  const podtip=document.getElementById('podtip-vedenia').value;
+  const data=document.getElementById('data-kontakta').value;
+  const format=document.getElementById('format-kontakta').value;
+  const komment=document.getElementById('komment').value.trim();
+  if(!tip||!podtip||!data||!format||!komment){
+    document.getElementById('vedenie-error').style.display='block';
+    return;
+  }
+  document.getElementById('vedenie-error').style.display='none';
+  const btn=document.getElementById('btn-close');
+  btn.innerHTML='<i class="ti ti-circle-check"></i> Ведение назначено! Сделка создана.';
+  btn.style.background='var(--t400)';
+  btn.disabled=true;
+  document.getElementById('auto-task-box').style.borderColor='var(--t400)';
+}
+</script>

@@ -1,0 +1,635 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>CRM Медицина — Институт Движения</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f1;--sf:#fff;--b1:rgba(0,0,0,0.09);--b2:rgba(0,0,0,0.18);
+  --t1:#1a1917;--t2:#6b6a67;--t3:#9c9b98;--r:8px;--rl:12px;
+  --cbl:#E6F1FB;--cb:#185FA5;--cbm:#378ADD;
+  --ctl:#E1F5EE;--ct:#0F6E56;--ctm:#1D9E75;
+  --cpl:#EEEDFE;--cp:#534AB7;--cpm:#7F77DD;
+  --cal:#FAEEDA;--ca:#854F0B;--cam:#BA7517;
+  --crl:#FCEBEB;--cr:#A32D2D;--crm:#E24B4A;
+  --cgl:#EAF3DE;--cg:#3B6D11;--cgm:#639922;
+  --czl:#F1EFE8;--cz:#5F5E5A;--czm:#888780;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--t1);font-size:13px;min-height:100vh}
+.app{display:flex;flex-direction:column;height:100vh;overflow:hidden}
+
+/* TOP */
+.topbar{background:var(--sf);border-bottom:0.5px solid var(--b1);display:flex;align-items:center;padding:0 16px;height:46px;gap:10px;flex-shrink:0;z-index:50}
+.logo{font-size:13px;font-weight:500;color:var(--cb);display:flex;align-items:center;gap:5px}
+.sp{flex:1}
+.rbtn{padding:4px 10px;border-radius:100px;border:0.5px solid var(--b2);background:transparent;font-size:12px;cursor:pointer;color:var(--t2);display:flex;align-items:center;gap:4px;transition:all .15s}
+.rbtn.active{background:var(--cbl);color:var(--cb);border-color:var(--cbm);font-weight:500}
+.sync{font-size:11px;color:var(--t3);display:flex;align-items:center;gap:4px}
+.sdot{width:6px;height:6px;border-radius:50%;background:var(--ctm)}
+
+/* STATS */
+.sbar{background:var(--sf);border-bottom:0.5px solid var(--b1);display:flex;align-items:center;gap:16px;padding:7px 16px;flex-shrink:0;flex-wrap:wrap}
+.sv{display:flex;align-items:center;gap:4px;font-size:12px;color:var(--t2)}
+.sn{font-size:14px;font-weight:500;color:var(--t1)}
+.sn.red{color:var(--crm)}.sn.amber{color:var(--cam)}.sn.green{color:var(--ctm)}
+.sbtn{padding:4px 10px;border-radius:var(--r);border:0.5px solid var(--b2);background:transparent;cursor:pointer;font-size:12px;color:var(--t2);display:flex;align-items:center;gap:3px;transition:background .12s}
+.sbtn:hover{background:var(--czl)}
+
+/* SEARCH */
+.sbar2{background:var(--sf);border-bottom:0.5px solid var(--b1);padding:9px 16px;flex-shrink:0}
+.srow{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:7px}
+.sinput-w{position:relative;flex:1;min-width:180px}
+.sinput-w i{position:absolute;left:8px;top:50%;transform:translateY(-50%);font-size:15px;color:var(--t3)}
+.sinput{width:100%;padding:6px 10px 6px 30px;border:0.5px solid var(--b2);border-radius:var(--r);font-size:12.5px;background:var(--sf);color:var(--t1);outline:none}
+.sinput:focus{border-color:var(--cbm)}
+.tg-row{display:flex;gap:5px;flex-wrap:wrap;align-items:center}
+.tg-lbl{font-size:10.5px;color:var(--t3);white-space:nowrap}
+.tg-div{width:0.5px;height:14px;background:var(--b2);margin:0 1px}
+.tag{padding:2px 8px;border-radius:100px;border:0.5px solid var(--b2);background:transparent;font-size:11px;cursor:pointer;color:var(--t2);transition:all .12s;white-space:nowrap}
+.tag:hover{border-color:var(--cbm);color:var(--cb)}
+.tag.on{font-weight:500}
+.tag.on.g-type{background:var(--cbl);color:var(--cb);border-color:var(--cbm)}
+.tag.on.g-ved{background:var(--ctl);color:var(--ct);border-color:var(--ctm)}
+.tag.on.g-geo{background:var(--czl);color:var(--cz);border-color:var(--czm)}
+.tag.on.g-psy{background:var(--cpl);color:var(--cp);border-color:var(--cpm)}
+.tag.on.g-src{background:var(--cal);color:var(--ca);border-color:var(--cam)}
+.tag.on.g-fmt{background:var(--cgl);color:var(--cg);border-color:var(--cgm)}
+.tag.on.g-urg{background:var(--crl);color:var(--cr);border-color:var(--crm)}
+.tag.on.g-cur{background:var(--cpl);color:var(--cp);border-color:var(--cpm)}
+.atag{display:inline-flex;align-items:center;gap:3px;padding:2px 7px;border-radius:100px;background:var(--cbl);color:var(--cb);font-size:10.5px;font-weight:500;cursor:pointer}
+.atag i{font-size:11px}
+.rcnt{font-size:11px;color:var(--t3);margin-left:auto}
+
+/* BADGE */
+.bd{display:inline-flex;align-items:center;padding:2px 7px;border-radius:100px;font-size:11px;font-weight:500}
+.bd-r{background:var(--crl);color:var(--cr)}
+.bd-a{background:var(--cal);color:var(--ca)}
+.bd-b{background:var(--cbl);color:var(--cb)}
+.bd-t{background:var(--ctl);color:var(--ct)}
+
+/* BODY */
+.body-area{display:flex;flex:1;overflow:hidden}
+
+/* TASK SIDEBAR */
+.tsk-side{width:268px;flex-shrink:0;border-right:0.5px solid var(--b1);background:var(--sf);display:flex;flex-direction:column;overflow:hidden}
+.tsk-side.gone{display:none}
+.tsk-hd{padding:10px 12px 8px;border-bottom:0.5px solid var(--b1);display:flex;align-items:center;gap:7px;flex-shrink:0}
+.tsk-title{font-size:11.5px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--t2);flex:1}
+.tsk-body{overflow-y:auto;flex:1;padding:6px 8px}
+.tsec{margin-bottom:12px}
+.tsec-lbl{font-size:10px;font-weight:500;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;padding:3px 4px 5px;border-bottom:0.5px solid var(--b1);margin-bottom:4px}
+.ti-row{display:flex;align-items:flex-start;gap:6px;padding:6px 5px;border-radius:var(--r);cursor:pointer;border:0.5px solid transparent;margin-bottom:3px;transition:background .1s}
+.ti-row:hover{background:var(--czl)}
+.ti-row.ov{border-color:var(--crm);background:var(--crl)}
+.ti-row.done{opacity:.45}
+.tu{width:3px;border-radius:2px;flex-shrink:0;align-self:stretch}
+.u-h{background:var(--crm)}.u-m{background:var(--cam)}.u-l{background:var(--ctm)}.u-o{background:var(--crm)}
+.tchk{width:14px;height:14px;border-radius:3px;border:1.5px solid var(--b2);flex-shrink:0;margin-top:1px;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:all .12s}
+.tchk.on{background:var(--ctm);border-color:var(--ctm)}
+.tchk.on i{font-size:9px;color:#fff}
+.tbdy{flex:1}
+.tt{font-size:11.5px;font-weight:500;line-height:1.3}
+.tm{font-size:10.5px;color:var(--t3);margin-top:1px}
+.ttags{display:flex;gap:3px;flex-wrap:wrap;margin-top:3px}
+.tmb{font-size:9.5px;padding:1px 5px;border-radius:3px;background:var(--czl);color:var(--cz);font-weight:500}
+.tadd{width:100%;padding:5px;border-radius:var(--r);border:0.5px dashed var(--b2);background:transparent;font-size:11px;cursor:pointer;color:var(--t3);margin-top:3px;display:flex;align-items:center;justify-content:center;gap:3px}
+.tadd:hover{border-color:var(--cbm);color:var(--cb)}
+.cur-sw{padding:7px 8px;border-top:0.5px solid var(--b1);flex-shrink:0}
+.cur-sw-lbl{font-size:10px;color:var(--t3);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.cur-tab{padding:4px 8px;border-radius:var(--r);font-size:11.5px;cursor:pointer;transition:background .1s;color:var(--t2);display:flex;align-items:center;gap:5px;margin-bottom:2px}
+.cur-tab:hover{background:var(--czl)}
+.cur-tab.on[data-c="0"]{background:var(--cbl);color:var(--cb);font-weight:500}
+.cur-tab.on[data-c="1"]{background:var(--ctl);color:var(--ct);font-weight:500}
+.cur-tab.on[data-c="2"]{background:var(--cpl);color:var(--cp);font-weight:500}
+.cdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+
+/* RIGHT */
+.right{flex:1;display:flex;flex-direction:column;overflow:hidden}
+
+/* MORNING */
+.morn{padding:12px 16px;border-bottom:0.5px solid var(--b1);flex-shrink:0}
+.morn.gone{display:none}
+.sec-bar{display:flex;align-items:center;gap:7px;margin-bottom:8px}
+.sec-lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--t2)}
+.mlayout{display:grid;grid-template-columns:1fr 285px;gap:10px}
+.pool{background:var(--czl);border:0.5px solid var(--b2);border-radius:var(--rl);padding:10px}
+.pool-hd{display:flex;align-items:center;justify-content:space-between;margin-bottom:7px}
+.pool-label{font-size:12px;font-weight:500}
+.pchips{display:flex;flex-wrap:wrap;gap:4px;min-height:36px}
+.pch{display:inline-flex;align-items:center;gap:4px;padding:3px 8px 3px 4px;background:var(--sf);border:0.5px solid var(--b2);border-radius:var(--r);cursor:grab;font-size:11.5px;font-weight:500;user-select:none;transition:border-color .12s}
+.pch:hover{border-color:var(--cbm)}
+.pch.dragging{opacity:.3}
+.av{border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:500;flex-shrink:0}
+.psub{font-size:9.5px;color:var(--t3)}
+.pool-empty{font-size:11.5px;color:var(--t3);display:flex;align-items:center;gap:5px;padding:4px 0}
+.clanes{display:flex;flex-direction:column;gap:5px}
+.clane{background:var(--sf);border:0.5px solid var(--b1);border-radius:var(--rl);padding:9px;transition:border-color .15s,background .15s}
+.clane.do{border-color:var(--cbm);background:var(--cbl)}
+.clane-hd{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.clane-chips{display:flex;flex-wrap:wrap;gap:3px;min-height:20px}
+.cempty{font-size:10.5px;color:var(--t3)}
+
+/* KANBAN */
+.kboard-area{flex:1;display:flex;flex-direction:column;overflow:hidden}
+.kb-top{padding:9px 16px 7px;border-bottom:0.5px solid var(--b1);display:flex;align-items:center;gap:8px;flex-shrink:0;flex-wrap:wrap}
+.kb-lbl{font-size:11px;font-weight:500;text-transform:uppercase;letter-spacing:.4px;color:var(--t2)}
+.kb-scroll{overflow:auto;flex:1;padding:10px 16px 16px}
+.kb-board{display:grid;grid-template-columns:repeat(6,minmax(156px,1fr));gap:7px;min-width:980px}
+.kcol{display:flex;flex-direction:column;gap:5px}
+.kcol-hd{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--sf);border:0.5px solid var(--b1);border-radius:var(--r)}
+.kclbl{font-size:11px;font-weight:500;color:var(--t2)}
+.kccnt{font-size:10px;background:var(--czl);color:var(--cz);padding:1px 6px;border-radius:100px;font-weight:500}
+.kbody{display:flex;flex-direction:column;gap:4px;min-height:50px;border-radius:var(--r);padding:2px;transition:background .1s,outline .1s}
+.kbody.do{background:var(--cbl);outline:1.5px dashed var(--cbm)}
+.kempty{font-size:10.5px;color:var(--t3);text-align:center;padding:8px 2px}
+.kcard{background:var(--sf);border:0.5px solid var(--b1);border-radius:var(--r);padding:7px 8px;cursor:grab;user-select:none;transition:border-color .12s,opacity .15s}
+.kcard:hover{border-color:var(--cbm)}
+.kcard.dragging{opacity:.3}
+.kcard.fout{display:none}
+.kc-top{display:flex;align-items:center;gap:4px;margin-bottom:3px}
+.kc-name{font-size:11px;font-weight:500;flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kc-date{font-size:10px;color:var(--t3);margin-bottom:3px}
+.kc-tags{display:flex;flex-wrap:wrap;gap:2px;margin-bottom:3px}
+.kt{font-size:9.5px;padding:1px 5px;border-radius:3px;font-weight:500;white-space:nowrap}
+.kt-type{background:var(--cbl);color:var(--cb)}
+.kt-ved{background:var(--ctl);color:var(--ct)}
+.kt-geo{background:var(--czl);color:var(--cz)}
+.kt-psy{background:var(--cpl);color:var(--cp)}
+.kt-src{background:var(--cal);color:var(--ca)}
+.kt-fmt{background:var(--cgl);color:var(--cg)}
+.kt-dzh{background:var(--crl);color:var(--cr)}
+.kc-foot{display:flex;align-items:center;gap:3px}
+.kc-cdot{width:5px;height:5px;border-radius:50%}
+.kc-clbl{font-size:9.5px;color:var(--t3)}
+
+/* TOAST */
+.toasts{position:fixed;bottom:16px;right:16px;display:flex;flex-direction:column;gap:4px;z-index:999}
+.toast{background:#1a1917;color:#fff;padding:7px 12px;border-radius:var(--r);font-size:12px;font-weight:500;opacity:0;transform:translateY(5px);transition:all .2s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+::-webkit-scrollbar{width:3px;height:3px}
+::-webkit-scrollbar-thumb{background:var(--b2);border-radius:3px}
+</style>
+</head>
+<body>
+<div class="app">
+
+<div class="topbar">
+  <div class="logo"><i class="ti ti-activity-heartbeat" aria-hidden="true"></i>CRM Медицина</div>
+  <span style="font-size:11px;color:var(--t3)">Институт Движения</span>
+  <div class="sp"></div>
+  <div style="display:flex;gap:4px" id="rbtns">
+    <button class="rbtn active" onclick="setRole('rop',this)"><i class="ti ti-shield" style="font-size:12px" aria-hidden="true"></i>РОП</button>
+    <button class="rbtn" onclick="setRole('curator',this)"><i class="ti ti-user" style="font-size:12px" aria-hidden="true"></i>Куратор</button>
+    <button class="rbtn" onclick="setRole('admin',this)"><i class="ti ti-clipboard" style="font-size:12px" aria-hidden="true"></i>Администратор</button>
+  </div>
+  <div class="sync"><div class="sdot"></div>14 мая 2026 · 1С онлайн</div>
+</div>
+
+<div class="sbar">
+  <div class="sv"><span class="sn" id="st-tot">0</span>пациентов</div>
+  <div class="sv"><span class="sn red" id="st-un">0</span>без куратора</div>
+  <div class="sv"><span class="sn amber" id="st-fin">0</span>финальных</div>
+  <div class="sv"><span class="sn green" id="st-done">0</span>задач выполнено</div>
+  <div class="sv"><span class="sn red" id="st-ov">0</span>просрочено</div>
+  <div style="margin-left:auto;display:flex;gap:5px">
+    <button class="sbtn" onclick="autoAssign()"><i class="ti ti-wand" aria-hidden="true"></i>Авто-распределение</button>
+    <button class="sbtn" onclick="resetAll()"><i class="ti ti-refresh" aria-hidden="true"></i>Сбросить</button>
+  </div>
+</div>
+
+<div class="sbar2">
+  <div class="srow">
+    <div class="sinput-w">
+      <i class="ti ti-search" aria-hidden="true"></i>
+      <input class="sinput" id="sinput" type="text" placeholder="Поиск по имени, тегу, дате, источнику…" oninput="onSearch()">
+    </div>
+    <button class="sbtn" onclick="clearFilters()"><i class="ti ti-x" aria-hidden="true"></i>Сбросить фильтры</button>
+    <span class="rcnt" id="rcnt"></span>
+  </div>
+  <div class="tg-row" id="tg-row"></div>
+  <div style="display:flex;gap:4px;flex-wrap:wrap;margin-top:5px;align-items:center" id="atags"></div>
+</div>
+
+<div class="body-area">
+
+  <div class="tsk-side" id="tsk-side">
+    <div class="tsk-hd">
+      <i class="ti ti-checklist" style="font-size:15px;color:var(--cam)" aria-hidden="true"></i>
+      <span class="tsk-title">Задачи на сегодня</span>
+      <span class="bd bd-r" id="ov-badge">0</span>
+    </div>
+    <div class="tsk-body" id="tsk-body"></div>
+    <div class="cur-sw" id="cur-sw"></div>
+  </div>
+
+  <div class="right">
+    <div class="morn" id="morn">
+      <div class="sec-bar">
+        <i class="ti ti-sun" style="font-size:14px;color:var(--cam)" aria-hidden="true"></i>
+        <span class="sec-lbl">Утреннее планирование</span>
+        <span class="bd bd-a" id="un-badge">0 не распределено</span>
+        <span style="font-size:11px;color:var(--t3)">Перетащите к куратору</span>
+      </div>
+      <div class="mlayout">
+        <div class="pool">
+          <div class="pool-hd">
+            <span class="pool-label">Нераспределённые пациенты</span>
+            <span class="bd bd-r" id="pool-cnt">0</span>
+          </div>
+          <div class="pchips" id="pool"></div>
+        </div>
+        <div class="clanes" id="clanes"></div>
+      </div>
+    </div>
+
+    <div class="kboard-area">
+      <div class="kb-top">
+        <i class="ti ti-columns" style="font-size:14px;color:var(--cbm)" aria-hidden="true"></i>
+        <span class="kb-lbl">Воронка продаж</span>
+        <span class="bd bd-b" id="vis-cnt">0</span>
+      </div>
+      <div class="kb-scroll">
+        <div class="kb-board" id="kboard"></div>
+      </div>
+    </div>
+  </div>
+
+</div>
+</div>
+<div class="toasts" id="toasts"></div>
+
+<script>
+const C=[
+  {id:0,name:'Аникина С.В.',short:'АС',bg:'#E6F1FB',color:'#185FA5',dot:'#378ADD'},
+  {id:1,name:'Романова М.П.',short:'МП',bg:'#E1F5EE',color:'#0F6E56',dot:'#1D9E75'},
+  {id:2,name:'Горбунов В.К.',short:'ГВ',bg:'#EEEDFE',color:'#534AB7',dot:'#7F77DD'},
+];
+const STAGES=[
+  {id:'lead',l:'Лид'},{id:'booked',l:'Записан'},
+  {id:'treatment',l:'В лечении'},{id:'final',l:'Финальная'},
+  {id:'waiting',l:'Ожидание'},{id:'react',l:'Реактивация'},
+];
+const TGROUPS=[
+  {k:'type',l:'Тип',cls:'g-type',tags:['первичный','повторный','реактивированный']},
+  {k:'ved',l:'Ведение',cls:'g-ved',tags:['контр. визит','поддерж. лечение','контр. диагностики','комбин.']},
+  {k:'geo',l:'География',cls:'g-geo',tags:['местный','иногородний']},
+  {k:'psy',l:'Психотип',cls:'g-psy',tags:['экономный','тревожный','решительный','исследователь']},
+  {k:'src',l:'Источник',cls:'g-src',tags:['сайт','звонок','WhatsApp','рекомендация','реклама']},
+  {k:'fmt',l:'Формат',cls:'g-fmt',tags:['визит','процедура','диагностика']},
+  {k:'urg',l:'Дожим',cls:'g-urg',tags:['день 0','день 3','день 7','эскалация']},
+  {k:'cur',l:'Куратор',cls:'g-cur',tags:['Аникина','Романова','Горбунов','без куратора']},
+];
+const VED=['контр. визит','поддерж. лечение','контр. диагностики','комбин.'];
+const PSY=['экономный','тревожный','решительный','исследователь'];
+const SRC=['сайт','звонок','WhatsApp','рекомендация','реклама'];
+const FMT=['визит','процедура','диагностика'];
+const DZH=['день 0','день 3','день 7','эскалация',null];
+const NAMES=[
+  ['Смирнова Ольга','СО'],['Козлов Андрей','КА'],['Власова Ирина','ВИ'],
+  ['Петров Игорь','ПИ'],['Морозова Татьяна','МТ'],['Новиков Сергей','НС'],
+  ['Белова Екатерина','БЕ'],['Громов Дмитрий','ГД'],['Захарова Алина','ЗА'],
+  ['Орлов Никита','ОН'],['Крылова Анна','КА'],['Фёдоров Евгений','ФЕ'],
+  ['Воронова Светлана','ВС'],['Иванченко Роман','ИР'],['Лебедева Оксана','ЛО'],
+  ['Попов Денис','ПД'],['Антонова Лариса','АЛ'],['Соловьёв Павел','СП'],
+  ['Кузнецов Артём','КА'],['Белов Иван','БИ'],['Орлова Надежда','ОН'],['Громкова Елена','ГЕ'],
+];
+const SW=['lead','lead','lead','booked','booked','treatment','treatment','treatment','final','final','waiting','react'];
+
+let ST={
+  patients:[],tasks:[],
+  atags:{},search:'',
+  role:'rop',curView:0,
+  drag:null,
+};
+
+function mkD(off=0){const d=new Date(2026,4,14+off);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'})}
+
+function initData(){
+  ST.patients=NAMES.map((n,i)=>({
+    id:'p'+i,name:n[0],ini:n[1],
+    stage:SW[i%SW.length],
+    cid:i<8?null:C[i%3].id,
+    type:['первичный','повторный','реактивированный'][i%3],
+    ved:VED[i%4],geo:i%4===0?'иногородний':'местный',
+    psy:PSY[i%4],src:SRC[i%5],fmt:FMT[i%3],
+    dzh:DZH[i%5],date:mkD(i%15-5),
+  }));
+
+  ST.tasks=[
+    {id:'t0',cid:0,title:'Позвонить Смирновой О.',meta:'День 0 дожима · сразу',urg:'high',done:false,tags:['день 0','звонок','первичный']},
+    {id:'t1',cid:0,title:'WhatsApp: Козлову А.',meta:'День 3 · шаблон day3_sms',urg:'med',done:false,tags:['день 3','WhatsApp']},
+    {id:'t2',cid:0,title:'Заполнить ведение — Морозова Т.',meta:'Финальная · контр. визит · до вечера',urg:'med',done:false,tags:['контр. визит','финальная']},
+    {id:'t3',cid:0,title:'Подтвердить запись Белову И.',meta:'15 мая 10:00 · визит',urg:'low',done:true,tags:['визит','повторный']},
+    {id:'t4',cid:0,title:'Эскалация РОП: Власова И.',meta:'День 7 · просрочено!',urg:'overdue',done:false,tags:['день 7','эскалация','иногородний']},
+    {id:'t5',cid:0,title:'Авто-контакт: Воронова С.',meta:'22 мая · контр. визит',urg:'low',done:false,tags:['контр. визит','визит','местный']},
+    {id:'t6',cid:1,title:'Позвонить Петрову И.',meta:'День 0 · не записался после финалки',urg:'high',done:false,tags:['день 0','звонок','тревожный']},
+    {id:'t7',cid:1,title:'Авто-контакт: Воронова С.',meta:'22 мая · авто-задача',urg:'low',done:false,tags:['контр. визит','визит']},
+    {id:'t8',cid:1,title:'Реактивация: Орлов Н.',meta:'180+ дней · реклама',urg:'med',done:false,tags:['реактивированный','реклама']},
+    {id:'t9',cid:1,title:'Заполнить ведение — Новиков С.',meta:'Финальная · 12:30',urg:'med',done:false,tags:['поддерж. лечение']},
+    {id:'t10',cid:1,title:'Согласовать план: иногородняя Лебедева',meta:'Выезд 20 мая',urg:'med',done:false,tags:['иногородний']},
+    {id:'t11',cid:2,title:'Позвонить Фёдорову Е.',meta:'День 3 · не отвечает',urg:'overdue',done:false,tags:['день 3','звонок','решительный']},
+    {id:'t12',cid:2,title:'Контакт: Лебедева О.',meta:'Диагностика 28 мая · авто',urg:'low',done:false,tags:['контр. диагностики','диагностика']},
+    {id:'t13',cid:2,title:'Согласовать план Антоновой Л.',meta:'Иногородняя · 20 мая',urg:'med',done:false,tags:['иногородний']},
+    {id:'t14',cid:2,title:'NPS-звонок: Громов Д.',meta:'Завершил курс · опрос',urg:'low',done:true,tags:['повторный','звонок']},
+  ];
+}
+
+function toast(msg){
+  const w=document.getElementById('toasts');
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  w.appendChild(t);requestAnimationFrame(()=>t.classList.add('show'));
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),250)},2100);
+}
+
+function setRole(role,btn){
+  ST.role=role;
+  document.querySelectorAll('#rbtns .rbtn').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  document.getElementById('morn').classList.toggle('gone',role==='curator');
+  document.getElementById('tsk-side').classList.toggle('gone',role==='admin');
+  renderAll();
+  toast({rop:'Вид: РОП / Зав. отделением',curator:'Вид: Куратор',admin:'Вид: Администратор'}[role]);
+}
+
+function buildTagRow(){
+  const row=document.getElementById('tg-row');row.innerHTML='';
+  TGROUPS.forEach((g,gi)=>{
+    if(gi>0){const d=document.createElement('div');d.className='tg-div';row.appendChild(d)}
+    const lbl=document.createElement('span');lbl.className='tg-lbl';lbl.textContent=g.l+':';row.appendChild(lbl);
+    g.tags.forEach(t=>{
+      const on=(ST.atags[g.k]||[]).includes(t);
+      const b=document.createElement('button');
+      b.className='tag'+(on?' on '+g.cls:'');b.textContent=t;
+      b.onclick=()=>toggleTag(g.k,t,g.cls);
+      row.appendChild(b);
+    });
+  });
+  renderActiveTagsRow();
+}
+
+function toggleTag(k,t,cls){
+  if(!ST.atags[k])ST.atags[k]=[];
+  const i=ST.atags[k].indexOf(t);
+  if(i!==-1)ST.atags[k].splice(i,1);else ST.atags[k].push(t);
+  buildTagRow();renderKanban();renderRCount();
+}
+
+function renderActiveTagsRow(){
+  const el=document.getElementById('atags');el.innerHTML='';
+  const all=[];
+  Object.entries(ST.atags).forEach(([k,tags])=>tags.forEach(t=>all.push({k,t})));
+  if(!all.length){el.style.display='none';return}
+  el.style.display='flex';
+  const lbl=document.createElement('span');lbl.style.cssText='font-size:10.5px;color:var(--t3)';lbl.textContent='Фильтры:';el.appendChild(lbl);
+  all.forEach(({k,t})=>{
+    const ch=document.createElement('div');ch.className='atag';
+    ch.innerHTML=t+'<i class="ti ti-x" aria-hidden="true"></i>';
+    ch.onclick=()=>{const i=ST.atags[k].indexOf(t);if(i!==-1)ST.atags[k].splice(i,1);buildTagRow();renderKanban();renderRCount()};
+    el.appendChild(ch);
+  });
+}
+
+function clearFilters(){
+  ST.atags={};ST.search='';document.getElementById('sinput').value='';
+  buildTagRow();renderKanban();renderRCount();
+}
+
+function onSearch(){ST.search=document.getElementById('sinput').value.toLowerCase();renderKanban();renderRCount()}
+
+function pMatch(p){
+  if(ST.search){
+    const s=[p.name,p.type,p.ved,p.geo,p.psy,p.src,p.fmt,p.dzh||'',p.date].join(' ').toLowerCase();
+    if(!s.includes(ST.search))return false;
+  }
+  for(const[k,tags]of Object.entries(ST.atags)){
+    if(!tags.length)continue;
+    let m=false;
+    tags.forEach(t=>{
+      if(k==='type'&&p.type===t)m=true;
+      if(k==='ved'&&p.ved===t)m=true;
+      if(k==='geo'&&p.geo===t)m=true;
+      if(k==='psy'&&p.psy===t)m=true;
+      if(k==='src'&&p.src.toLowerCase()===t.toLowerCase())m=true;
+      if(k==='fmt'&&p.fmt===t)m=true;
+      if(k==='urg'&&p.dzh===t)m=true;
+      if(k==='cur'){
+        if(t==='без куратора'&&p.cid===null)m=true;
+        if(t==='Аникина'&&p.cid===0)m=true;
+        if(t==='Романова'&&p.cid===1)m=true;
+        if(t==='Горбунов'&&p.cid===2)m=true;
+      }
+    });
+    if(!m)return false;
+  }
+  return true;
+}
+
+function renderRCount(){
+  const v=ST.patients.filter(pMatch).length;
+  const has=ST.search||Object.values(ST.atags).some(a=>a.length);
+  document.getElementById('rcnt').textContent=has?`Найдено: ${v} из ${ST.patients.length}`:'';
+}
+
+function updateStats(){
+  const un=ST.patients.filter(p=>p.cid===null).length;
+  const fin=ST.patients.filter(p=>p.stage==='final').length;
+  const done=ST.tasks.filter(t=>t.done).length;
+  const ov=ST.tasks.filter(t=>!t.done&&t.urg==='overdue').length;
+  document.getElementById('st-tot').textContent=ST.patients.length;
+  document.getElementById('st-un').textContent=un;
+  document.getElementById('st-fin').textContent=fin;
+  document.getElementById('st-done').textContent=done+'/'+ST.tasks.length;
+  document.getElementById('st-ov').textContent=ov;
+  document.getElementById('un-badge').textContent=un+' не распределено';
+  document.getElementById('pool-cnt').textContent=un;
+}
+
+function renderTasks(){
+  const body=document.getElementById('tsk-body');
+  const isRop=ST.role==='rop';
+  const tasks=isRop?ST.tasks:ST.tasks.filter(t=>t.cid===ST.curView);
+  const overdue=tasks.filter(t=>!t.done&&t.urg==='overdue');
+  const high=tasks.filter(t=>!t.done&&t.urg==='high');
+  const med=tasks.filter(t=>!t.done&&t.urg==='med');
+  const low=tasks.filter(t=>!t.done&&t.urg==='low');
+  const done=tasks.filter(t=>t.done);
+  document.getElementById('ov-badge').textContent=overdue.length+' просрочено';
+  body.innerHTML='';
+
+  [[overdue,'Просрочено','ov'],[high,'Срочно — сегодня',''],[med,'На сегодня',''],[low,'Запланировано',''],[done,'Выполнено','done']].forEach(([items,lbl,extra])=>{
+    if(!items.length)return;
+    const sec=document.createElement('div');sec.className='tsec';
+    sec.innerHTML=`<div class="tsec-lbl">${lbl} (${items.length})</div>`;
+    items.forEach(task=>{
+      const uc={high:'u-h',med:'u-m',low:'u-l',overdue:'u-o'}[task.urg]||'u-l';
+      const cur=C.find(c=>c.id===task.cid);
+      const tagsH=task.tags.map(t=>`<span class="tmb">${t}</span>`).join('');
+      const curBadge=(isRop&&cur)?`<div style="display:flex;align-items:center;gap:3px;margin-top:2px"><div style="width:5px;height:5px;border-radius:50%;background:${cur.dot}"></div><span style="font-size:9.5px;color:var(--t3)">${cur.name}</span></div>`:'';
+      const row=document.createElement('div');
+      row.className='ti-row'+(extra==='ov'?' ov':'')+(extra==='done'?' done':'');
+      row.innerHTML=`<div class="tu ${uc}"></div><div class="tchk${task.done?' on':''}" onclick="toggleTask('${task.id}',event)">${task.done?'<i class="ti ti-check" aria-hidden="true"></i>':''}</div><div class="tbdy"><div class="tt">${task.title}</div><div class="tm">${task.meta}</div><div class="ttags">${tagsH}</div>${curBadge}</div>`;
+      sec.appendChild(row);
+    });
+    const add=document.createElement('button');add.className='tadd';
+    add.innerHTML='<i class="ti ti-plus" aria-hidden="true"></i>Добавить задачу';
+    add.onclick=()=>toast('Новая задача создана');
+    sec.appendChild(add);
+    body.appendChild(sec);
+  });
+
+  const sw=document.getElementById('cur-sw');
+  if(isRop){
+    sw.style.display='block';
+    sw.innerHTML='<div class="cur-sw-lbl">Куратор</div>';
+    C.forEach(c=>{
+      const cnt=ST.tasks.filter(t=>t.cid===c.id&&!t.done).length;
+      const ovc=ST.tasks.filter(t=>t.cid===c.id&&!t.done&&t.urg==='overdue').length;
+      const tab=document.createElement('div');
+      tab.className='cur-tab'+(ST.curView===c.id?' on':'');
+      tab.dataset.c=c.id;
+      tab.innerHTML=`<div class="cdot" style="background:${c.dot}"></div>${c.name}<span style="margin-left:auto;font-size:9.5px;color:var(--t3)">${cnt}${ovc?`<span style="color:var(--crm)"> ${ovc}!</span>`:''}</span>`;
+      tab.onclick=()=>{ST.curView=c.id;renderTasks()};
+      sw.appendChild(tab);
+    });
+  } else {sw.style.display='none'}
+}
+
+function toggleTask(id,e){
+  e.stopPropagation();
+  const t=ST.tasks.find(x=>x.id===id);if(!t)return;
+  t.done=!t.done;
+  toast(t.done?'Задача выполнена ✓':'Задача возобновлена');
+  updateStats();renderTasks();
+}
+
+function renderPool(){
+  const pool=document.getElementById('pool');
+  const un=ST.patients.filter(p=>p.cid===null);
+  pool.innerHTML='';
+  if(!un.length){pool.innerHTML='<div class="pool-empty"><i class="ti ti-circle-check" style="font-size:14px;color:var(--ctm)" aria-hidden="true"></i>Все распределены</div>';return}
+  un.forEach(p=>{
+    const ch=document.createElement('div');
+    ch.className='pch';ch.draggable=true;ch.dataset.pid=p.id;
+    ch.innerHTML=`<div class="av" style="width:18px;height:18px;background:var(--czl);color:var(--cz);font-size:8px">${p.ini}</div><div><div>${p.name.split(' ')[0]} ${p.name.split(' ')[1]?.charAt(0)||''}.</div><div class="psub">${p.src}</div></div>`;
+    ch.addEventListener('dragstart',e=>drag(e,p.id));
+    ch.addEventListener('dragend',dragEnd);
+    pool.appendChild(ch);
+  });
+}
+
+function renderCurators(){
+  const col=document.getElementById('clanes');col.innerHTML='';
+  C.forEach(c=>{
+    const asgn=ST.patients.filter(p=>p.cid===c.id);
+    const lane=document.createElement('div');lane.className='clane';
+    lane.innerHTML=`<div class="clane-hd"><div class="av" style="width:24px;height:24px;background:${c.bg};color:${c.color};font-size:9px">${c.short}</div><span style="font-size:12px;font-weight:500;flex:1">${c.name}</span><span style="font-size:10px;color:var(--t3)">${asgn.length}</span></div><div class="clane-chips" id="cc${c.id}"></div>`;
+    lane.addEventListener('dragover',e=>{e.preventDefault();lane.classList.add('do')});
+    lane.addEventListener('dragleave',()=>lane.classList.remove('do'));
+    lane.addEventListener('drop',e=>{e.preventDefault();lane.classList.remove('do');dropToCur(e,c.id)});
+    col.appendChild(lane);
+    const chips=lane.querySelector('#cc'+c.id);
+    if(!asgn.length){chips.innerHTML='<div class="cempty">Перетащите сюда</div>';return}
+    asgn.forEach(p=>{
+      const ch=document.createElement('div');
+      ch.className='pch';ch.draggable=true;ch.dataset.pid=p.id;
+      ch.style.cssText='font-size:10.5px;padding:2px 6px 2px 3px';
+      ch.innerHTML=`<div class="av" style="width:16px;height:16px;background:${c.bg};color:${c.color};font-size:7.5px">${p.ini}</div>${p.name.split(' ')[0]}`;
+      ch.addEventListener('dragstart',e=>drag(e,p.id));
+      ch.addEventListener('dragend',dragEnd);
+      chips.appendChild(ch);
+    });
+  });
+}
+
+function renderKanban(){
+  const board=document.getElementById('kboard');board.innerHTML='';
+  let vis=0;
+  STAGES.forEach(stage=>{
+    const col=document.createElement('div');col.className='kcol';
+    const pts=ST.patients.filter(p=>p.stage===stage.id);
+    const vpts=pts.filter(pMatch);vis+=vpts.length;
+    col.innerHTML=`<div class="kcol-hd"><span class="kclbl">${stage.l}</span><span class="kccnt">${vpts.length}</span></div>`;
+    const body=document.createElement('div');body.className='kbody';body.dataset.stage=stage.id;
+    body.addEventListener('dragover',e=>{e.preventDefault();body.classList.add('do')});
+    body.addEventListener('dragleave',()=>body.classList.remove('do'));
+    body.addEventListener('drop',e=>{e.preventDefault();body.classList.remove('do');dropToStage(e,stage.id)});
+    if(!pts.length)body.innerHTML='<div class="kempty"><i class="ti ti-drag-drop" aria-hidden="true"></i></div>';
+    pts.forEach(p=>{
+      const visible=pMatch(p);
+      const cur=p.cid!==null?C.find(c=>c.id===p.cid):null;
+      const card=document.createElement('div');
+      card.className='kcard'+(visible?'':' fout');
+      card.draggable=true;card.dataset.pid=p.id;
+      const dzh=p.dzh?`<span class="kt kt-dzh">${p.dzh}</span>`:'';
+      card.innerHTML=`
+        <div class="kc-top">
+          <div class="av" style="width:16px;height:16px;background:${cur?cur.bg:'#F1EFE8'};color:${cur?cur.color:'#5F5E5A'};font-size:7px">${p.ini}</div>
+          <span class="kc-name">${p.name}</span>
+        </div>
+        <div class="kc-date">${p.src} · ${p.date}</div>
+        <div class="kc-tags">
+          <span class="kt kt-type">${p.type}</span>
+          <span class="kt kt-ved">${p.ved}</span>
+          <span class="kt kt-geo">${p.geo}</span>
+          <span class="kt kt-psy">${p.psy}</span>
+          <span class="kt kt-fmt">${p.fmt}</span>
+          ${dzh}
+        </div>
+        <div class="kc-foot">${cur?`<div class="kc-cdot" style="background:${cur.dot}"></div><span class="kc-clbl">${cur.name}</span>`:'<span class="kc-clbl" style="font-style:italic">без куратора</span>'}</div>`;
+      card.addEventListener('dragstart',e=>drag(e,p.id));
+      card.addEventListener('dragend',dragEnd);
+      body.appendChild(card);
+    });
+    col.appendChild(body);board.appendChild(col);
+  });
+  document.getElementById('vis-cnt').textContent=vis+' карточек';
+}
+
+function drag(e,pid){
+  ST.drag=pid;e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',pid);
+  setTimeout(()=>document.querySelectorAll(`[data-pid="${pid}"]`).forEach(el=>el.classList.add('dragging')),0);
+}
+function dragEnd(){
+  document.querySelectorAll('.dragging').forEach(el=>el.classList.remove('dragging'));
+  document.querySelectorAll('.do').forEach(el=>el.classList.remove('do'));
+}
+function dropToCur(e,cid){
+  const pid=e.dataTransfer.getData('text/plain')||ST.drag;if(!pid)return;
+  const p=ST.patients.find(x=>x.id===pid);if(!p)return;
+  p.cid=cid;
+  const c=C.find(x=>x.id===cid);
+  toast(`${p.name.split(' ')[0]} → ${c.name}`);
+  renderAll();
+}
+function dropToStage(e,sid){
+  const pid=e.dataTransfer.getData('text/plain')||ST.drag;if(!pid)return;
+  const p=ST.patients.find(x=>x.id===pid);if(!p||p.stage===sid)return;
+  const ol=STAGES.find(s=>s.id===p.stage)?.l;
+  const nl=STAGES.find(s=>s.id===sid)?.l;
+  p.stage=sid;
+  toast(`${p.name.split(' ')[0]}: ${ol} → ${nl}`);
+  renderAll();
+}
+
+function autoAssign(){
+  const un=ST.patients.filter(p=>p.cid===null);
+  if(!un.length){toast('Все уже распределены');return}
+  un.forEach((p,i)=>p.cid=C[i%C.length].id);
+  toast(`Авто-распределено: ${un.length}`);renderAll();
+}
+function resetAll(){
+  ST.patients.forEach((p,i)=>p.cid=i<8?null:C[i%3].id);
+  clearFilters();toast('Данные сброшены');renderAll();
+}
+
+function renderAll(){
+  updateStats();renderPool();renderCurators();renderKanban();renderTasks();buildTagRow();renderRCount();
+}
+
+initData();renderAll();
+</script>
+</body>
+</html>

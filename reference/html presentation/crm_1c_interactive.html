@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM Медицина — Институт Движения</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{
+  --bg:#f5f4f1;--surface:#fff;--border:rgba(0,0,0,0.1);--border-md:rgba(0,0,0,0.18);
+  --text:#1a1917;--text2:#6b6a67;--text3:#9c9b98;
+  --radius:8px;--radius-lg:12px;
+  --c-blue-bg:#E6F1FB;--c-blue:#185FA5;--c-blue-mid:#378ADD;
+  --c-teal-bg:#E1F5EE;--c-teal:#0F6E56;--c-teal-mid:#1D9E75;
+  --c-purple-bg:#EEEDFE;--c-purple:#534AB7;--c-purple-mid:#7F77DD;
+  --c-amber-bg:#FAEEDA;--c-amber:#854F0B;--c-amber-mid:#BA7517;
+  --c-red-bg:#FCEBEB;--c-red:#A32D2D;--c-red-mid:#E24B4A;
+  --c-green-bg:#EAF3DE;--c-green:#3B6D11;--c-green-mid:#639922;
+  --c-gray-bg:#F1EFE8;--c-gray:#5F5E5A;--c-gray-mid:#888780;
+}
+body{font-family:'Segoe UI',system-ui,sans-serif;background:var(--bg);color:var(--text);font-size:13px;min-height:100vh}
+
+/* TOPBAR */
+.topbar{background:var(--surface);border-bottom:0.5px solid var(--border);display:flex;align-items:center;padding:0 20px;height:48px;gap:14px;position:sticky;top:0;z-index:100}
+.logo{font-size:13px;font-weight:500;color:var(--c-blue);display:flex;align-items:center;gap:6px}
+.logo i{font-size:17px}
+.topbar-sep{flex:1}
+.role-btn{padding:5px 12px;border-radius:100px;border:0.5px solid var(--border-md);background:transparent;font-size:12px;cursor:pointer;color:var(--text2);transition:all .15s}
+.role-btn.active{background:var(--c-blue-bg);color:var(--c-blue);border-color:var(--c-blue-mid)}
+.date-chip{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:4px}
+.sync-dot{width:7px;height:7px;border-radius:50%;background:var(--c-teal-mid)}
+
+/* SECTION HEADERS */
+.section-wrap{padding:16px 20px}
+.section-bar{display:flex;align-items:center;gap:10px;margin-bottom:12px}
+.section-label{font-size:12px;font-weight:500;color:var(--text2);text-transform:uppercase;letter-spacing:.4px}
+.badge{display:inline-flex;align-items:center;padding:2px 8px;border-radius:100px;font-size:11px;font-weight:500}
+.badge-blue{background:var(--c-blue-bg);color:var(--c-blue)}
+.badge-teal{background:var(--c-teal-bg);color:var(--c-teal)}
+.badge-amber{background:var(--c-amber-bg);color:var(--c-amber)}
+.badge-red{background:var(--c-red-bg);color:var(--c-red)}
+.badge-gray{background:var(--c-gray-bg);color:var(--c-gray)}
+.badge-purple{background:var(--c-purple-bg);color:var(--c-purple)}
+.badge-green{background:var(--c-green-bg);color:var(--c-green)}
+
+/* MORNING PLANNING */
+.morning-layout{display:grid;grid-template-columns:1fr 320px;gap:14px;align-items:start}
+.pool-card{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:14px}
+.pool-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.pool-chips{display:flex;flex-wrap:wrap;gap:6px;min-height:44px}
+.patient-chip{display:inline-flex;align-items:center;gap:6px;padding:5px 10px 5px 6px;background:var(--c-gray-bg);border:0.5px solid var(--border-md);border-radius:var(--radius);cursor:grab;font-size:12px;font-weight:500;color:var(--text);transition:border-color .15s;user-select:none}
+.patient-chip:hover{border-color:var(--c-blue-mid)}
+.patient-chip.dragging{opacity:.4;cursor:grabbing}
+.chip-avatar{width:22px;height:22px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:500}
+.chip-source{font-size:10px;color:var(--text3)}
+.pool-empty{font-size:12px;color:var(--text3);display:flex;align-items:center;gap:6px;padding:8px 0}
+
+/* CURATOR LANES */
+.curators-panel{display:flex;flex-direction:column;gap:8px}
+.curator-lane{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius-lg);padding:12px;transition:border-color .2s,background .2s}
+.curator-lane.drag-over{border-color:var(--c-blue-mid);background:var(--c-blue-bg)}
+.curator-head{display:flex;align-items:center;gap:8px;margin-bottom:8px}
+.curator-avatar{width:28px;height:28px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:500;flex-shrink:0}
+.curator-name{font-size:12.5px;font-weight:500}
+.curator-count{font-size:11px;color:var(--text3);margin-left:auto}
+.curator-chips{display:flex;flex-wrap:wrap;gap:5px;min-height:28px}
+.curator-empty{font-size:11px;color:var(--text3);padding:4px 0}
+
+/* DIVIDER */
+.divider{height:0.5px;background:var(--border);margin:0 20px}
+
+/* KANBAN */
+.kanban-header{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.filter-pills{display:flex;gap:6px;flex-wrap:wrap}
+.filter-pill{padding:4px 10px;border-radius:100px;border:0.5px solid var(--border-md);background:transparent;font-size:11.5px;cursor:pointer;color:var(--text2);transition:all .15s}
+.filter-pill.active{font-weight:500}
+.filter-pill[data-curator="all"].active{background:var(--c-gray-bg);color:var(--c-gray);border-color:var(--c-gray-mid)}
+.filter-pill[data-curator="0"].active{background:var(--c-blue-bg);color:var(--c-blue);border-color:var(--c-blue-mid)}
+.filter-pill[data-curator="1"].active{background:var(--c-teal-bg);color:var(--c-teal);border-color:var(--c-teal-mid)}
+.filter-pill[data-curator="2"].active{background:var(--c-purple-bg);color:var(--c-purple);border-color:var(--c-purple-mid)}
+
+.kanban-scroll{overflow-x:auto;padding:0 20px 20px}
+.kanban-board{display:grid;grid-template-columns:repeat(6,minmax(168px,1fr));gap:10px;min-width:1060px}
+.kanban-col{display:flex;flex-direction:column;gap:8px}
+.col-header{display:flex;align-items:center;justify-content:space-between;padding:8px 10px;background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);position:sticky;top:0}
+.col-title{font-size:11.5px;font-weight:500;color:var(--text2)}
+.col-count{font-size:11px;background:var(--c-gray-bg);color:var(--c-gray);padding:1px 7px;border-radius:100px;font-weight:500}
+.col-body{display:flex;flex-direction:column;gap:6px;min-height:80px;border-radius:var(--radius);padding:4px;transition:background .15s}
+.col-body.drag-over{background:var(--c-blue-bg);outline:1.5px dashed var(--c-blue-mid)}
+
+/* KANBAN CARDS */
+.kcard{background:var(--surface);border:0.5px solid var(--border);border-radius:var(--radius);padding:9px 10px;cursor:grab;transition:border-color .15s,opacity .15s;user-select:none}
+.kcard:hover{border-color:var(--c-blue-mid)}
+.kcard.dragging{opacity:.35;cursor:grabbing}
+.kcard-top{display:flex;align-items:center;gap:6px;margin-bottom:5px}
+.kcard-avatar{width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:8px;font-weight:500;flex-shrink:0}
+.kcard-name{font-size:12px;font-weight:500;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kcard-meta{font-size:11px;color:var(--text3);margin-bottom:4px}
+.kcard-bottom{display:flex;align-items:center;gap:5px;flex-wrap:wrap}
+.kcard-tag{font-size:10px;padding:1px 6px;border-radius:4px;font-weight:500}
+.kcard-curator-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.kcard-curator-name{font-size:10px;color:var(--text3)}
+.kcard.hidden{display:none}
+
+/* DROP PLACEHOLDER */
+.drop-placeholder{border:1.5px dashed var(--c-blue-mid);border-radius:var(--radius);height:48px;background:var(--c-blue-bg);display:flex;align-items:center;justify-content:center;font-size:11px;color:var(--c-blue)}
+
+/* STATS BAR */
+.stats-bar{display:flex;gap:10px;padding:12px 20px;border-bottom:0.5px solid var(--border);background:var(--surface);flex-wrap:wrap}
+.stat-item{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--text2)}
+.stat-num{font-size:14px;font-weight:500;color:var(--text)}
+
+/* TOAST */
+.toast-wrap{position:absolute;bottom:20px;right:20px;display:flex;flex-direction:column;gap:6px;z-index:200}
+.toast{background:var(--text);color:#fff;padding:8px 14px;border-radius:var(--radius);font-size:12px;font-weight:500;opacity:0;transform:translateY(8px);transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateY(0)}
+
+/* SCROLLBAR */
+::-webkit-scrollbar{width:4px;height:4px}
+::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:var(--border-md);border-radius:4px}
+
+@media(max-width:780px){.morning-layout{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+
+<div class="topbar">
+  <div class="logo"><i class="ti ti-activity-heartbeat" aria-hidden="true"></i>CRM Медицина</div>
+  <span style="font-size:11px;color:var(--text3)">Институт Движения</span>
+  <div class="topbar-sep"></div>
+  <div class="filter-pills" id="role-pills">
+    <button class="role-btn active" onclick="setRole('rop')"><i class="ti ti-shield" style="font-size:13px" aria-hidden="true"></i> РОП / Зав. отделением</button>
+    <button class="role-btn" onclick="setRole('curator')"><i class="ti ti-user" style="font-size:13px" aria-hidden="true"></i> Куратор</button>
+    <button class="role-btn" onclick="setRole('admin')"><i class="ti ti-clipboard" style="font-size:13px" aria-hidden="true"></i> Администратор</button>
+  </div>
+  <div class="date-chip"><div class="sync-dot"></div>14 мая 2026 · 1С онлайн</div>
+</div>
+
+<div class="stats-bar" id="stats-bar">
+  <div class="stat-item"><span class="stat-num" id="st-total">0</span>всего активных</div>
+  <div class="stat-item" style="color:var(--c-red)"><i class="ti ti-alert-triangle" style="font-size:14px" aria-hidden="true"></i><span class="stat-num" id="st-unassigned" style="color:var(--c-red)">0</span>без куратора</div>
+  <div class="stat-item"><span class="stat-num" id="st-final">0</span>финальных сегодня</div>
+  <div class="stat-item"><span class="stat-num" id="st-tasks">7</span>задач на сегодня</div>
+  <div style="margin-left:auto;display:flex;gap:8px;align-items:center">
+    <button onclick="autoAssign()" style="padding:5px 12px;border-radius:var(--radius);border:0.5px solid var(--border-md);background:transparent;cursor:pointer;font-size:12px;color:var(--text2)"><i class="ti ti-wand" aria-hidden="true"></i> Авто-распределение</button>
+    <button onclick="resetAll()" style="padding:5px 12px;border-radius:var(--radius);border:0.5px solid var(--border-md);background:transparent;cursor:pointer;font-size:12px;color:var(--text2)"><i class="ti ti-refresh" aria-hidden="true"></i> Сбросить</button>
+  </div>
+</div>
+
+<!-- MORNING PLANNING -->
+<div class="section-wrap" id="morning-section">
+  <div class="section-bar">
+    <i class="ti ti-sun" style="font-size:16px;color:var(--c-amber-mid)" aria-hidden="true"></i>
+    <span class="section-label">Утреннее планирование</span>
+    <span class="badge badge-amber" id="badge-unassigned">0 не распределено</span>
+    <span style="font-size:11px;color:var(--text3);margin-left:4px">Перетащите пациентов к кураторам</span>
+  </div>
+  <div class="morning-layout">
+    <div class="pool-card">
+      <div class="pool-header">
+        <span style="font-size:12.5px;font-weight:500">Нераспределённые пациенты</span>
+        <span class="badge badge-red" id="pool-count-badge">0</span>
+      </div>
+      <div class="pool-chips" id="patient-pool"></div>
+    </div>
+    <div class="curators-panel" id="curators-panel"></div>
+  </div>
+</div>
+
+<div class="divider"></div>
+
+<!-- KANBAN -->
+<div class="section-wrap" style="padding-bottom:8px">
+  <div class="kanban-header">
+    <i class="ti ti-columns" style="font-size:16px;color:var(--c-blue-mid)" aria-hidden="true"></i>
+    <span class="section-label">Воронка продаж</span>
+    <div class="filter-pills" id="kanban-filter">
+      <button class="filter-pill active" data-curator="all" onclick="setFilter('all',this)">Все</button>
+      <button class="filter-pill" data-curator="0" onclick="setFilter(0,this)">Аникина С.В.</button>
+      <button class="filter-pill" data-curator="1" onclick="setFilter(1,this)">Романова М.П.</button>
+      <button class="filter-pill" data-curator="2" onclick="setFilter(2,this)">Горбунов В.К.</button>
+      <button class="filter-pill" data-curator="none" onclick="setFilter('none',this)">Без куратора</button>
+    </div>
+  </div>
+</div>
+
+<div class="kanban-scroll">
+  <div class="kanban-board" id="kanban-board"></div>
+</div>
+
+<div class="toast-wrap" id="toasts"></div>
+
+<script>
+const CURATORS = [
+  {id:0,name:'Аникина С.В.',initials:'АС',bg:'#E6F1FB',color:'#185FA5',dot:'#378ADD'},
+  {id:1,name:'Романова М.П.',initials:'МП',bg:'#E1F5EE',color:'#0F6E56',dot:'#1D9E75'},
+  {id:2,name:'Горбунов В.К.',initials:'ГВ',bg:'#EEEDFE',color:'#534AB7',dot:'#7F77DD'},
+];
+
+const STAGES = [
+  {id:'lead',label:'Лид',col:'badge-gray'},
+  {id:'booked',label:'Записан',col:'badge-blue'},
+  {id:'treatment',label:'В лечении',col:'badge-blue'},
+  {id:'final',label:'Финальная',col:'badge-teal'},
+  {id:'waiting',label:'Ожидание',col:'badge-purple'},
+  {id:'react',label:'Реактивация',col:'badge-amber'},
+];
+
+const SOURCES = ['Сайт','Звонок','WhatsApp','Рекомендация','Реклама'];
+const TYPES = ['первичный','повторный','реактивированный'];
+
+let state = {
+  patients: [],
+  draggingId: null,
+  draggingFrom: null,
+  filterCurator: 'all',
+  currentRole: 'rop',
+};
+
+function initPatients(){
+  const names=[
+    ['Смирнова Ольга','СО'],['Козлов Андрей','КА'],['Власова Ирина','ВИ'],
+    ['Петров Игорь','ПИ'],['Морозова Татьяна','МТ'],['Новиков Сергей','НС'],
+    ['Белова Екатерина','БЕ'],['Громов Дмитрий','ГД'],['Захарова Алина','ЗА'],
+    ['Орлов Никита','ОН'],['Крылова Анна','КА'],['Фёдоров Евгений','ФЕ'],
+    ['Воронова Светлана','ВС'],['Иванченко Роман','ИР'],['Лебедева Оксана','ЛО'],
+    ['Попов Денис','ПД'],['Антонова Лариса','АЛ'],['Соловьёв Павел','СП'],
+    ['Кузнецов Артём','КА'],['Белов Иван','БИ'],
+  ];
+  const stageWeights=['lead','lead','lead','booked','booked','treatment','treatment','treatment','treatment','final','final','waiting','waiting','react'];
+  state.patients = names.map((n,i)=>({
+    id:'p'+i,
+    name:n[0],
+    initials:n[1],
+    source:SOURCES[i%SOURCES.length],
+    stage:stageWeights[i%stageWeights.length],
+    curatorId:i<8?null:CURATORS[i%3].id,
+    type:TYPES[i%3],
+    date:randomDate(),
+  }));
+}
+
+function randomDate(){
+  const d=new Date(2026,4,14);d.setDate(d.getDate()+Math.floor(Math.random()*30)-5);
+  return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'short'});
+}
+
+function showToast(msg){
+  const wrap=document.getElementById('toasts');
+  const t=document.createElement('div');t.className='toast';t.textContent=msg;
+  wrap.appendChild(t);requestAnimationFrame(()=>{t.classList.add('show')});
+  setTimeout(()=>{t.classList.remove('show');setTimeout(()=>t.remove(),300)},2200);
+}
+
+function updateStats(){
+  const unassigned=state.patients.filter(p=>p.curatorId===null).length;
+  const finals=state.patients.filter(p=>p.stage==='final').length;
+  document.getElementById('st-total').textContent=state.patients.length;
+  document.getElementById('st-unassigned').textContent=unassigned;
+  document.getElementById('st-final').textContent=finals;
+  document.getElementById('badge-unassigned').textContent=unassigned+' не распределено';
+  document.getElementById('pool-count-badge').textContent=unassigned;
+}
+
+function renderPool(){
+  const pool=document.getElementById('patient-pool');
+  const unassigned=state.patients.filter(p=>p.curatorId===null);
+  pool.innerHTML='';
+  if(!unassigned.length){
+    pool.innerHTML='<div class="pool-empty"><i class="ti ti-circle-check" style="font-size:16px;color:#1D9E75" aria-hidden="true"></i>Все пациенты распределены</div>';
+    return;
+  }
+  unassigned.forEach(p=>{
+    const chip=document.createElement('div');
+    chip.className='patient-chip';
+    chip.draggable=true;
+    chip.dataset.pid=p.id;
+    chip.dataset.from='pool';
+    chip.innerHTML=`<div class="chip-avatar" style="background:#F1EFE8;color:#5F5E5A">${p.initials}</div><div><div>${p.name.split(' ')[0]} ${p.name.split(' ')[1]?.charAt(0)||''}.</div><div class="chip-source">${p.source}</div></div>`;
+    chip.addEventListener('dragstart',e=>{onDragStart(e,p.id,'pool')});
+    chip.addEventListener('dragend',onDragEnd);
+    pool.appendChild(chip);
+  });
+}
+
+function renderCurators(){
+  const panel=document.getElementById('curators-panel');
+  panel.innerHTML='';
+  CURATORS.forEach(c=>{
+    const assigned=state.patients.filter(p=>p.curatorId===c.id);
+    const lane=document.createElement('div');
+    lane.className='curator-lane';
+    lane.dataset.curatorId=c.id;
+    const chipsHtml=assigned.length?assigned.map(p=>`
+      <div class="patient-chip" draggable="true" data-pid="${p.id}" data-from="curator-${c.id}"
+           style="font-size:11px;padding:3px 8px 3px 5px"
+           onmousedown="attachChipDrag(event,'${p.id}','curator-${c.id}')">
+        <div class="chip-avatar" style="background:${c.bg};color:${c.color}">${p.initials}</div>
+        <div>${p.name.split(' ')[0]} ${p.name.split(' ')[1]?.charAt(0)||''}.</div>
+      </div>`).join('')
+      :'<div class="curator-empty"><i class="ti ti-drag-drop" style="font-size:13px" aria-hidden="true"></i> Перетащите пациентов сюда</div>';
+    lane.innerHTML=`
+      <div class="curator-head">
+        <div class="curator-avatar" style="background:${c.bg};color:${c.color}">${c.initials}</div>
+        <div>
+          <div class="curator-name">${c.name}</div>
+          <div style="font-size:10px;color:var(--text3)">Куратор</div>
+        </div>
+        <span class="curator-count">${assigned.length} пац.</span>
+      </div>
+      <div class="curator-chips" id="curator-chips-${c.id}">${chipsHtml}</div>`;
+    lane.addEventListener('dragover',e=>{e.preventDefault();lane.classList.add('drag-over')});
+    lane.addEventListener('dragleave',()=>lane.classList.remove('drag-over'));
+    lane.addEventListener('drop',e=>{e.preventDefault();lane.classList.remove('drag-over');onDropToCurator(e,c.id)});
+    panel.appendChild(lane);
+    lane.querySelectorAll('[data-pid]').forEach(chip=>{
+      chip.addEventListener('dragstart',ev=>onDragStart(ev,chip.dataset.pid,chip.dataset.from));
+      chip.addEventListener('dragend',onDragEnd);
+    });
+  });
+}
+
+function renderKanban(){
+  const board=document.getElementById('kanban-board');
+  board.innerHTML='';
+  STAGES.forEach(stage=>{
+    const col=document.createElement('div');col.className='kanban-col';
+    const patients=state.patients.filter(p=>p.stage===stage.id);
+    const visible=state.filterCurator==='all'?patients
+      :state.filterCurator==='none'?patients.filter(p=>p.curatorId===null)
+      :patients.filter(p=>p.curatorId===Number(state.filterCurator));
+    col.innerHTML=`
+      <div class="col-header">
+        <span class="col-title">${stage.label}</span>
+        <span class="col-count">${visible.length}</span>
+      </div>`;
+    const body=document.createElement('div');
+    body.className='col-body';body.dataset.stage=stage.id;
+    body.addEventListener('dragover',e=>{e.preventDefault();body.classList.add('drag-over')});
+    body.addEventListener('dragleave',()=>body.classList.remove('drag-over'));
+    body.addEventListener('drop',e=>{e.preventDefault();body.classList.remove('drag-over');onDropToStage(e,stage.id)});
+    if(!visible.length){
+      body.innerHTML='<div style="font-size:11px;color:var(--text3);padding:8px 4px;text-align:center"><i class="ti ti-drag-drop" aria-hidden="true"></i></div>';
+    }
+    patients.forEach(p=>{
+      const curator=p.curatorId!==null?CURATORS.find(c=>c.id===p.curatorId):null;
+      const isHidden=state.filterCurator!=='all'&&
+        (state.filterCurator==='none'?p.curatorId!==null:p.curatorId!==Number(state.filterCurator));
+      const urgency=stage.id==='final'?'badge-teal':stage.id==='react'?'badge-amber':stage.id==='waiting'?'badge-purple':'badge-gray';
+      const card=document.createElement('div');
+      card.className='kcard'+(isHidden?' hidden':'');
+      card.draggable=true;card.dataset.pid=p.id;card.dataset.from='kanban';
+      card.innerHTML=`
+        <div class="kcard-top">
+          <div class="kcard-avatar" style="background:${curator?curator.bg:'#F1EFE8'};color:${curator?curator.color:'#5F5E5A'}">${p.initials}</div>
+          <span class="kcard-name">${p.name}</span>
+        </div>
+        <div class="kcard-meta">${p.source} · ${p.date}</div>
+        <div class="kcard-bottom">
+          <span class="kcard-tag badge ${urgency}">${p.type}</span>
+          ${curator?`<div class="kcard-curator-dot" style="background:${curator.dot}"></div><span class="kcard-curator-name">${curator.name.split(' ')[0]}</span>`:'<span class="kcard-tag" style="background:#F1EFE8;color:#888;font-size:10px;padding:1px 6px;border-radius:4px">без куратора</span>'}
+        </div>`;
+      card.addEventListener('dragstart',e=>onDragStart(e,p.id,'kanban'));
+      card.addEventListener('dragend',onDragEnd);
+      body.appendChild(card);
+    });
+    col.appendChild(body);board.appendChild(col);
+  });
+}
+
+function onDragStart(e,pid,from){
+  state.draggingId=pid;state.draggingFrom=from;
+  e.dataTransfer.effectAllowed='move';e.dataTransfer.setData('text/plain',pid);
+  setTimeout(()=>document.querySelectorAll(`[data-pid="${pid}"]`).forEach(el=>el.classList.add('dragging')),0);
+}
+function onDragEnd(){
+  document.querySelectorAll('.dragging').forEach(el=>el.classList.remove('dragging'));
+  document.querySelectorAll('.drag-over').forEach(el=>el.classList.remove('drag-over'));
+}
+function attachChipDrag(e,pid,from){
+  const chip=e.currentTarget;chip.dataset.pid=pid;chip.dataset.from=from;
+}
+
+function onDropToCurator(e,curatorId){
+  const pid=e.dataTransfer.getData('text/plain')||state.draggingId;
+  if(!pid)return;
+  const p=state.patients.find(x=>x.id===pid);
+  if(!p)return;
+  const oldCurator=p.curatorId;
+  p.curatorId=curatorId;
+  const c=CURATORS.find(x=>x.id===curatorId);
+  showToast(`${p.name.split(' ')[0]} → ${c.name}`);
+  renderAll();
+}
+
+function onDropToStage(e,stageId){
+  const pid=e.dataTransfer.getData('text/plain')||state.draggingId;
+  if(!pid)return;
+  const p=state.patients.find(x=>x.id===pid);
+  if(!p)return;
+  if(p.stage===stageId)return;
+  const oldStage=STAGES.find(s=>s.id===p.stage)?.label;
+  const newStage=STAGES.find(s=>s.id===stageId)?.label;
+  p.stage=stageId;
+  showToast(`${p.name.split(' ')[0]}: ${oldStage} → ${newStage}`);
+  renderAll();
+}
+
+function renderAll(){updateStats();renderPool();renderCurators();renderKanban()}
+
+function setFilter(val,btn){
+  state.filterCurator=String(val);
+  document.querySelectorAll('#kanban-filter .filter-pill').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  renderKanban();
+}
+
+function setRole(role){
+  state.currentRole=role;
+  document.querySelectorAll('.role-btn').forEach(b=>b.classList.remove('active'));
+  event.currentTarget.classList.add('active');
+  const morningSection=document.getElementById('morning-section');
+  morningSection.style.display=role==='curator'?'none':'block';
+  showToast('Вид: '+{rop:'РОП / Зав. отделением',curator:'Куратор',admin:'Администратор'}[role]);
+}
+
+function autoAssign(){
+  const unassigned=state.patients.filter(p=>p.curatorId===null);
+  if(!unassigned.length){showToast('Все пациенты уже распределены');return}
+  unassigned.forEach((p,i)=>{p.curatorId=CURATORS[i%CURATORS.length].id});
+  showToast(`Авто-распределено: ${unassigned.length} пациентов`);
+  renderAll();
+}
+
+function resetAll(){
+  state.patients.forEach((p,i)=>{p.curatorId=i<8?null:CURATORS[i%3].id});
+  state.filterCurator='all';
+  document.querySelectorAll('#kanban-filter .filter-pill').forEach(b=>b.classList.remove('active'));
+  document.querySelector('#kanban-filter [data-curator="all"]').classList.add('active');
+  showToast('Данные сброшены');
+  renderAll();
+}
+
+initPatients();renderAll();
+</script>
+</body>
+</html>
