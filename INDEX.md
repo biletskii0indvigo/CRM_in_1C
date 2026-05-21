@@ -1,7 +1,7 @@
 # Пакет документов по проекту CRM Индвиго
 
-**Версия:** v0.7  
-**Последнее обновление:** 2026-05-18
+**Версия:** v0.8  
+**Последнее обновление:** 2026-05-20
 
 ---
 
@@ -13,10 +13,6 @@
 | `README.md` | Основная информация о проекте |
 | `INDEX.md` | Индекс структуры репозитория |
 | `.gitignore` | Настройки игнорирования Git |
-| `GAP_ANALYSIS_README_vs_MoM_FR_BR.md` | Анализ разрывов между README, MoM, FR, BR |
-| `GAP_ANALYSIS_EXECUTIVE_SUMMARY.md` | Резюме GAP-анализа для руководства |
-| `PROJECT LIFECYCLE FRAMEWORK — IT PROJECT.md` | Фреймворк жизненного цикла IT-проекта |
-| `figma_blueprint_crm_1_c_medicine_module_v_1.md` | Blueprint CRM для медицины (Figma) |
 
 ### 📂 Протоколы встреч (`MoM/`)
 Документация по встречам с Заказчиком:
@@ -26,8 +22,8 @@
 |------|----------|
 | `Indvigo_CRM_Meeting_Analysis.docx` | Анализ встреч (DOCX) |
 | `Indvigo_CRM_Meeting_Analysis.md` | Анализ встреч (Markdown) |
-| `Summary_Meet_1_и_2.docx` | Сводное резюме встреч 1 и 2 (DOCX) |
-| `Summary_Meet_1_и_2.md` | Сводное резюме встреч 1 и 2 (Markdown) |
+| `Summary_Meet_1_and_2.docx` | Сводное резюме встреч 1 и 2 (DOCX) |
+| `Summary_Meet_1_and_2.md` | Сводное резюме встреч 1 и 2 (Markdown) |
 
 #### Встреча 0 (2026 апрель 14)
 - `Meet 0 _ 2026 April 14 (with SH)/`
@@ -45,14 +41,14 @@
     - `01_predvaritelnyy_protokol_vstrechi_1_indvigo_crm.md` — предварительный протокол
     - `02_perechen_zadach_vstrechi_1_indvigo_crm.md` — перечень задач
     - `03_transkribaciya_vstrechi_1_indvigo_crm.md` — транскрибация
-  - `video_2026-04-28_160328_indvigo-crm-1Meet.pdf` — видеозапись встречи
+  - `video_2026-04-28_160328_indvigo-crm-1Meet.pdf` — видеозапись встречи (PDF)
 
 #### Встреча 2 (2026 апрель 30)
 - `Meet 2 _ 2026 April 30 (with SH)/`
   - `02_resume_vstrechi_2_indvigo_crm.md` — резюме встречи
   - `Indvigo_CRM_Summary_Meet2.docx` — резюме встречи (DOCX)
   - `Indvigo_CRM_Summary_Meet2.md` — резюме встречи (Markdown)
-  - `Voice-260430_152844-discussion-crm.pdf` — аудиозапись обсуждения
+  - `Voice-260430_152844-discussion-crm.pdf` — аудиозапись обсуждения (PDF)
 
 #### Встреча 3 (2026 май 05)
 - `Meet 3 _ 2026 May 05 (with SH)/`
@@ -70,8 +66,18 @@
 
 #### Встреча 6 (2026 май 14)
 - `Meet 6 _ 2026 May 14 (with SH)/`
-  - `голос-260514_142026-опрос-коп.docx` — опрос/обсуждение (DOCX)
-  - `голос-260514_142026-опрос-коп.md` — опрос/обсуждение (Markdown)
+  - `voice-260514_142026-qa-CDoS.docx` — опрос/обсуждение (DOCX)
+  - `voice-260514_142026-qa-CDoS.md` — опрос/обсуждение (Markdown)
+
+#### Встреча 7 (2026 май 19)
+- `Meet 7 _ 2026 May 19 (with SH)/`
+  - `05201.docx` — материалы встречи (DOCX)
+  - `05201.md` — материалы встречи (Markdown)
+
+#### Встреча 8 (2026 май 20)
+- `Meet 8 _ 2026 May 20 (with SH)/`
+  - `video_2026-05-20_150904_индвигоmeet8-_-may-20.docx` — материалы встречи (DOCX)
+  - `video_2026-05-20_150904_индвигоmeet8-_-may-20.md` — материалы встречи (Markdown)
 
 ### 📂 Функциональные требования (`FR from Business Stakeholder/`)
 | Файл | Описание |
@@ -100,7 +106,24 @@
 ### 📂 Финансовые документы (`finance docs/`)
 | Файл | Описание |
 |------|----------|
-| `Budget.xlsx` | Бюджет проекта |
+| `Budget.xlsx` | Бюджет проекта (Excel) |
+| `finance_budget_analysis.md` | Анализ бюджета (Markdown) |
+
+### 📂 Анализ разрывов (`gap/`)
+| Файл | Описание |
+|------|----------|
+| `GAP_ANALYSIS_EXECUTIVE_SUMMARY.md` | Резюме GAP-анализа для руководства |
+| `GAP_ANALYSIS_README_vs_MoM_FR_BR.md` | Анализ разрывов между README, MoM, FR, BR |
+
+### 📂 Манифест проекта (`project manifest/`)
+| Файл | Описание |
+|------|----------|
+| `PROJECT LIFECYCLE FRAMEWORK — IT PROJECT.md` | Фреймворк жизненного цикла IT-проекта |
+
+### 📂 Blueprint (`blueprint (forms and screen)/`)
+| Файл | Описание |
+|------|----------|
+| `figma_blueprint_crm_1_c_medicine_module_v_1.md` | Blueprint CRM для медицины (Figma) |
 
 ### 📂 Справочные материалы (`reference/`)
 
@@ -146,18 +169,56 @@
 | Файл | Описание |
 |------|----------|
 | `crm_1c_interactive.html` | Интерактивная презентация 1С CRM |
+| `crm_1c_interactive (1).html` | Интерактивная презентация 1С CRM (копия) |
 | `crm_1c_meditsina_figma_prototype.html` | Прототип Figma для 1С Медицина |
 | `crm_1c_processing.html` | Обработка 1С CRM |
-| `Демо.html` | Демонстрационная презентация |
-| `Реферер.html` | Реферальная программа |
+| `Demo.html` | Демонстрационная презентация |
+| `Reference.html` | Реферальная программа |
 | `gemini-code-1778660249911.html` | Код Gemini |
 
 ### 📂 Демо приложение (`demo app/`)
+
+#### Версия 1 (`version 1/`)
 | Файл | Описание |
 |------|----------|
 | `CRM Институт Движения.html` | HTML-демо интерфейса CRM |
 | `app.js` | JavaScript логика демо приложения |
 | `data.js` | Данные для демо приложения |
+
+#### Версия 2 (`version 2/`)
+| Файл | Описание |
+|------|----------|
+| `CRM Институт Движения.html` | HTML-демо интерфейса CRM v2 |
+| `app.js` | JavaScript логика демо приложения v2 |
+| `data.js` | Данные для демо приложения v2 |
+| `delta1.js` | Delta 1 изменения |
+| `delta3.js` | Delta 3 изменения |
+| `screens_phase2.js` | Скрины фазы 2 |
+| `docs/` | Документация версии 2 (см. ниже) |
+| `uploads/` | Медиафайлы (видео, изображения) |
+
+##### Документация версии 2 (`demo app/version 2/docs/`)
+| Файл | Описание |
+|------|----------|
+| `INDEX.md` | Навигационный документ версии 2 |
+| `TECHNICAL_SPECIFICATION.md` | Техническая спецификация |
+| `FUNCTIONAL_REQUIREMENTS.md` | Функциональные требования |
+| `DATA_MODEL.md` | Модель данных |
+| `INTEGRATIONS.md` | Интеграции |
+| `NON_FUNCTIONAL_REQUIREMENTS.md` | Нефункциональные требования |
+| `WORK_ESTIMATION.md` | Оценка трудозатрат |
+| `TEST_CASES.md` | Тест-кейсы |
+| `OPEN_QUESTIONS.md` | Открытые вопросы |
+| `REQUIREMENTS_TRACEABILITY_MATRIX.md` | Матрица трассировки требований |
+| `CHANGELOG.md` | История изменений |
+| `GAP_ANALYSIS_EXECUTIVE_SUMMARY.md` | Резюме GAP-анализа |
+| `GAP_ANALYSIS_README_vs_MoM_FR_BR.md` | Анализ разрывов |
+| `DELTA1_GAP_CLOSURE.md` | Закрытие разрывов Delta 1 |
+| `DELTA2_TEST_GAP_REPORT.md` | Отчёт по тестированию Delta 2 |
+| `DELTA3_GAP_CLOSURE.md` | Закрытие разрывов Delta 3 |
+| `DELTA4_TASK_BP_REVIEW.md` | Обзор бизнес-процессов Delta 4 |
+| `figma_blueprint_crm_1_c_medicine_module_v_1.md` | Blueprint Figma |
+| `figma_blueprint_v2.md` | Blueprint v2 |
 
 ---
 
@@ -168,14 +229,14 @@
 | Файл | Описание |
 |------|----------|
 | [docs/INDEX.md](./docs/INDEX.md) | Навигационный документ, карта документации |
-| [docs/TECHNICAL_SPECIFICATION.md](./docs/TECHNICAL_SPECIFICATION.md) | Полная техническая спецификация (18 разделов) |
-| [docs/FUNCTIONAL_REQUIREMENTS.md](./docs/FUNCTIONAL_REQUIREMENTS.md) | 23 функциональных требования (FR-001—FR-023) |
+| [docs/TECHNICAL_SPECIFICATION.md](./docs/TECHNICAL_SPECIFICATION.md) | Полная техническая спецификация |
+| [docs/FUNCTIONAL_REQUIREMENTS.md](./docs/FUNCTIONAL_REQUIREMENTS.md) | Функциональные требования |
 | [docs/DATA_MODEL.md](./docs/DATA_MODEL.md) | Модель данных: метаданные 1С, объекты расширения |
 | [docs/INTEGRATIONS.md](./docs/INTEGRATIONS.md) | Интеграции: 1С:Медицина, WhatsApp, Telegram, телефония |
 | [docs/NON_FUNCTIONAL_REQUIREMENTS.md](./docs/NON_FUNCTIONAL_REQUIREMENTS.md) | НФТ: производительность, безопасность, масштабируемость |
 | [docs/WORK_ESTIMATION.md](./docs/WORK_ESTIMATION.md) | Оценка трудозатрат по фазам и ролям |
-| [docs/TEST_CASES.md](./docs/TEST_CASES.md) | 30 приёмочных тест-кейсов (BDD-формат) |
-| [docs/OPEN_QUESTIONS.md](./docs/OPEN_QUESTIONS.md) | 20 открытых вопросов (OQ-001—OQ-020) |
+| [docs/TEST_CASES.md](./docs/TEST_CASES.md) | Приёмочные тест-кейсы (BDD-формат) |
+| [docs/OPEN_QUESTIONS.md](./docs/OPEN_QUESTIONS.md) | Открытые вопросы |
 | [docs/REQUIREMENTS_TRACEABILITY_MATRIX.md](./docs/REQUIREMENTS_TRACEABILITY_MATRIX.md) | Матрица трассировки FR ↔ источники ↔ TC |
 | [docs/CHANGELOG.md](./docs/CHANGELOG.md) | История изменений документации |
 
