@@ -1,9 +1,23 @@
 # Пакет документов по проекту CRM Индвиго
 
-**Версия:** v0.9
+**Версия:** v0.10
 **Последнее обновление:** 2026-05-21
 
+> **Изменения v0.10 vs v0.9:**
+> - Добавлен **`PROBLEM_ANALYSIS.md`** — критический разбор проблемных мест проекта и предложение по приземлению до реализуемого MVP.
+> - Добавлены **`INDEX.md` в каждую подпапку** (`MoM/`, `FR from Business Stakeholder/`, `RAW BR/`, `roadmap/`, `gap/`, `blueprint (forms and screen)/`, `demo app/`, `finance docs/`, `project manifest/`, `reference/`).
+>
 > **Изменения v0.9 vs v0.8:** Добавлен файл `MoM/Summary_Meet_0_to_8.md` (консолидированная сводка); обновлены ссылки и версии для GAP-анализа (v1.1), Roadmap (v3.1), README (v0.2.0), docs/TS и docs/INDEX (v0.2.0).
+
+---
+
+## ⚠️ Прочитать в первую очередь
+
+| Документ | Назначение |
+|----------|-----------|
+| [`PROBLEM_ANALYSIS.md`](./PROBLEM_ANALYSIS.md) | **Критический разбор:** что не так в текущем пакете, какие нестыковки, какой реалистичный MVP, что делать дальше |
+| [`MoM/Summary_Meet_0_to_8.md`](./MoM/Summary_Meet_0_to_8.md) | Доказательная сводка всех 9 встреч с заказчиком |
+| [`gap/GAP_ANALYSIS_EXECUTIVE_SUMMARY.md`](./gap/GAP_ANALYSIS_EXECUTIVE_SUMMARY.md) | GAP-анализ — 68 расхождений между документами |
 
 ---
 
@@ -14,7 +28,27 @@
 |------|----------|
 | `README.md` | Основная информация о проекте |
 | `INDEX.md` | Индекс структуры репозитория |
+| **`PROBLEM_ANALYSIS.md`** 🆕 | **Критический анализ проблем + предложение по реализуемому MVP** |
 | `.gitignore` | Настройки игнорирования Git |
+
+### Локальные INDEX-файлы по подпапкам
+
+Каждая подпапка имеет свой `INDEX.md` с описанием состава, проблем и рекомендаций:
+
+| Папка | Локальный индекс |
+|-------|-----------------|
+| `MoM/` | [`MoM/INDEX.md`](./MoM/INDEX.md) |
+| `FR from Business Stakeholder/` | [`FR from Business Stakeholder/INDEX.md`](./FR%20from%20Business%20Stakeholder/INDEX.md) |
+| `RAW BR/` | [`RAW BR/INDEX.md`](./RAW%20BR/INDEX.md) |
+| `roadmap/` | [`roadmap/INDEX.md`](./roadmap/INDEX.md) |
+| `gap/` | [`gap/INDEX.md`](./gap/INDEX.md) |
+| `blueprint (forms and screen)/` | [`blueprint (forms and screen)/INDEX.md`](./blueprint%20(forms%20and%20screen)/INDEX.md) |
+| `demo app/` | [`demo app/INDEX.md`](./demo%20app/INDEX.md) |
+| `finance docs/` | [`finance docs/INDEX.md`](./finance%20docs/INDEX.md) |
+| `project manifest/` | [`project manifest/INDEX.md`](./project%20manifest/INDEX.md) |
+| `reference/` | [`reference/INDEX.md`](./reference/INDEX.md) |
+| `docs/` | [`docs/INDEX.md`](./docs/INDEX.md) (был ранее) |
+| `params/` | [`params/INDEX.md`](./params/INDEX.md) (был ранее) |
 
 ### 📂 Протоколы встреч (`MoM/`)
 Документация по встречам с Заказчиком:
