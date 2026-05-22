@@ -1,11 +1,20 @@
 # Пакет документов по проекту CRM Индвиго
 
-**Версия:** v0.10
+**Версия:** v0.11
 **Последнее обновление:** 2026-05-21
 
+> **Изменения v0.11 vs v0.10 (приземление по `PROBLEM_ANALYSIS.md` §6):**
+> - 📂 `RAW BR/` → переименована в **`backlog/`** (это идеи, не требования MVP).
+> - 📂 `blueprint (forms and screen)/` → перенесена в **`concept/figma_mockup/`** + добавлен `DISCLAIMER.md` (не 1С-формы).
+> - 📂 `reference/1С CRM/` → переименована в **`reference/1С CRM ПРОФ (другой продукт)/`** + `DISCLAIMER.md` (другой продукт фирмы 1С).
+> - 📂 `roadmap/` — `Indvigo_CRM_Roadmap_v2.*`, `Roadmap_CRM_v2.*`, `03_roadmap_proekta_crm_indvigo.md` перенесены в **`roadmap/archive/`**.
+> - 📂 `demo app/version 2/docs/` → переименована в **`docs_archive_v0.1.0/`** + `ARCHIVE_NOTE.md`.
+> - 📝 Добавлены `STATUS_DISCLAIMER.md` в `docs/`, `params/`, `finance docs/`, `gap/`.
+> - 🆕 Добавлен **`DISCOVERY_PLAN.md`** — подробный план обследования 1С:Медицина.Поликлиника.
+>
 > **Изменения v0.10 vs v0.9:**
 > - Добавлен **`PROBLEM_ANALYSIS.md`** — критический разбор проблемных мест проекта и предложение по приземлению до реализуемого MVP.
-> - Добавлены **`INDEX.md` в каждую подпапку** (`MoM/`, `FR from Business Stakeholder/`, `RAW BR/`, `roadmap/`, `gap/`, `blueprint (forms and screen)/`, `demo app/`, `finance docs/`, `project manifest/`, `reference/`).
+> - Добавлены **`INDEX.md` в каждую подпапку**.
 >
 > **Изменения v0.9 vs v0.8:** Добавлен файл `MoM/Summary_Meet_0_to_8.md` (консолидированная сводка); обновлены ссылки и версии для GAP-анализа (v1.1), Roadmap (v3.1), README (v0.2.0), docs/TS и docs/INDEX (v0.2.0).
 
@@ -35,20 +44,20 @@
 
 Каждая подпапка имеет свой `INDEX.md` с описанием состава, проблем и рекомендаций:
 
-| Папка | Локальный индекс |
-|-------|-----------------|
-| `MoM/` | [`MoM/INDEX.md`](./MoM/INDEX.md) |
-| `FR from Business Stakeholder/` | [`FR from Business Stakeholder/INDEX.md`](./FR%20from%20Business%20Stakeholder/INDEX.md) |
-| `RAW BR/` | [`RAW BR/INDEX.md`](./RAW%20BR/INDEX.md) |
-| `roadmap/` | [`roadmap/INDEX.md`](./roadmap/INDEX.md) |
-| `gap/` | [`gap/INDEX.md`](./gap/INDEX.md) |
-| `blueprint (forms and screen)/` | [`blueprint (forms and screen)/INDEX.md`](./blueprint%20(forms%20and%20screen)/INDEX.md) |
-| `demo app/` | [`demo app/INDEX.md`](./demo%20app/INDEX.md) |
-| `finance docs/` | [`finance docs/INDEX.md`](./finance%20docs/INDEX.md) |
-| `project manifest/` | [`project manifest/INDEX.md`](./project%20manifest/INDEX.md) |
-| `reference/` | [`reference/INDEX.md`](./reference/INDEX.md) |
-| `docs/` | [`docs/INDEX.md`](./docs/INDEX.md) (был ранее) |
-| `params/` | [`params/INDEX.md`](./params/INDEX.md) (был ранее) |
+| Папка | Локальный индекс | Статус |
+|-------|-----------------|--------|
+| `MoM/` | [`MoM/INDEX.md`](./MoM/INDEX.md) | ✅ Канон (факты) |
+| `FR from Business Stakeholder/` | [`FR from Business Stakeholder/INDEX.md`](./FR%20from%20Business%20Stakeholder/INDEX.md) | ⚠️ Гипотезы |
+| `backlog/` 🔄 | [`backlog/INDEX.md`](./backlog/INDEX.md) + [`DISCLAIMER`](./backlog/DISCLAIMER.md) | 📦 Идеи (бывш. `RAW BR/`) |
+| `roadmap/` | [`roadmap/INDEX.md`](./roadmap/INDEX.md) | v3 актуален, v2 → `roadmap/archive/` |
+| `gap/` | [`gap/INDEX.md`](./gap/INDEX.md) + [`STATUS`](./gap/STATUS_DISCLAIMER.md) | ✅ Ценный артефакт, ждёт v1.2 |
+| `concept/figma_mockup/` 🔄 | [`INDEX`](./concept/figma_mockup/INDEX.md) + [`DISCLAIMER`](./concept/figma_mockup/DISCLAIMER.md) | ⚠️ Не 1С-формы (бывш. `blueprint (forms and screen)/`) |
+| `demo app/` | [`demo app/INDEX.md`](./demo%20app/INDEX.md) | Концепт-прототип |
+| `finance docs/` | [`finance docs/INDEX.md`](./finance%20docs/INDEX.md) + [`STATUS`](./finance%20docs/STATUS_DISCLAIMER.md) | 🔴 Требует пересчёта |
+| `project manifest/` | [`project manifest/INDEX.md`](./project%20manifest/INDEX.md) | Методология |
+| `reference/` | [`reference/INDEX.md`](./reference/INDEX.md) | См. `reference/1С CRM ПРОФ (другой продукт)/DISCLAIMER.md` |
+| `docs/` | [`docs/INDEX.md`](./docs/INDEX.md) + [`STATUS`](./docs/STATUS_DISCLAIMER.md) | ⚠️ «Первоначальная фиксация», не утв. ТЗ |
+| `params/` | [`params/INDEX.md`](./params/INDEX.md) + [`STATUS`](./params/STATUS_DISCLAIMER.md) | 📦 Расширенный бэклог |
 
 ### 📂 Протоколы встреч (`MoM/`)
 Документация по встречам с Заказчиком:
@@ -126,18 +135,19 @@
 | `e1cib/data/Functional Requirements_v0.2.md` | Функциональные требования (Markdown, v0.2, данные 1С) |
 
 ### 📂 Дорожная карта (`roadmap/`)
-| Файл | Описание |
-|------|----------|
-| `03_roadmap_proekta_crm_indvigo.md` | Роадмап проекта (Markdown) |
-| `Indvigo_CRM_Roadmap_v2.docx` | Роадмап (DOCX, v2) |
-| `Indvigo_CRM_Roadmap_v2.md` | Роадмап (Markdown, v2) |
-| `Indvigo_CRM_Roadmap_v3.md` | Роадмап (Markdown, v3) |
-| `Roadmap_CRM_v2.docx` | Роадмап (DOCX, v2) |
-| `Roadmap_CRM_v2.md` | Роадмап (Markdown, v2) |
+| Файл | Описание | Статус |
+|------|----------|--------|
+| `Indvigo_CRM_Roadmap_v3.md` | Роадмап (Markdown, v3) | ✅ Актуальный |
+| `archive/03_roadmap_proekta_crm_indvigo.md` | Роадмап проекта (Markdown) | 🗄️ Архив |
+| `archive/Indvigo_CRM_Roadmap_v2.docx` | Роадмап (DOCX, v2) | 🗄️ Архив |
+| `archive/Indvigo_CRM_Roadmap_v2.md` | Роадмап (Markdown, v2) | 🗄️ Архив |
+| `archive/Roadmap_CRM_v2.docx` | Роадмап (DOCX, v2) | 🗄️ Архив |
+| `archive/Roadmap_CRM_v2.md` | Роадмап (Markdown, v2) | 🗄️ Архив |
 
-### 📂 Сырые бизнес-требования (`RAW BR/`)
+### 📂 Бэклог идей (`backlog/`) 🔄 *бывшая `RAW BR/`*
 | Файл | Описание |
 |------|----------|
+| `DISCLAIMER.md` 🆕 | Дисклеймер: идеи, не требования MVP |
 | `Medical_CRM_Strategy_Checklist_RU.md` | Чек-лист стратегии медицинской CRM |
 
 ### 📂 Финансовые документы (`finance docs/`)
@@ -157,14 +167,19 @@
 |------|----------|
 | `PROJECT LIFECYCLE FRAMEWORK — IT PROJECT.md` | Фреймворк жизненного цикла IT-проекта |
 
-### 📂 Blueprint (`blueprint (forms and screen)/`)
+### 📂 Концепт-макеты (`concept/figma_mockup/`) 🔄 *бывшая `blueprint (forms and screen)/`*
 | Файл | Описание |
 |------|----------|
+| `DISCLAIMER.md` 🆕 | Дисклеймер: это НЕ формы 1С, только концепт |
 | `figma_blueprint_crm_1_c_medicine_module_v_1.md` | Blueprint CRM для медицины (Figma) |
+
+> 📌 Будущая папка `blueprint_1c/` — для реальных скриншотов управляемых форм 1С (после Discovery).
 
 ### 📂 Справочные материалы (`reference/`)
 
-#### 1С CRM — Управление обращениями и заявками клиентов (управление лидами)
+> ⚠️ Папка `reference/1С CRM/` переименована в **`reference/1С CRM ПРОФ (другой продукт)/`** — это документация ДРУГОГО продукта (1С:CRM ПРОФ ≠ 1С:Медицина.Поликлиника). См. `DISCLAIMER.md` в этой папке.
+
+#### 1С CRM ПРОФ — Управление обращениями и заявками клиентов (управление лидами)
 - `ч.0 Оглавление.pdf`
 - `ч.1 Форму обратной связи на сайте в решении 1С_CRM.pdf`
 - `ч.2 Как настроить интеграцию 1C_CRM с Живосайтом для общения с клиентами на сайте.pdf`
@@ -231,10 +246,10 @@
 | `delta1.js` | Delta 1 изменения |
 | `delta3.js` | Delta 3 изменения |
 | `screens_phase2.js` | Скрины фазы 2 |
-| `docs/` | Документация версии 2 (см. ниже) |
+| `docs_archive_v0.1.0/` 🔄 | 🗄️ **АРХИВ** v0.1.0 (бывш. `docs/`), не редактировать (см. `ARCHIVE_NOTE.md`) |
 | `uploads/` | Медиафайлы (видео, изображения) |
 
-##### Документация версии 2 (`demo app/version 2/docs/`)
+##### Архивная документация (`demo app/version 2/docs_archive_v0.1.0/`) 🗄️
 | Файл | Описание |
 |------|----------|
 | `INDEX.md` | Навигационный документ версии 2 |
@@ -278,6 +293,15 @@
 | [docs/CHANGELOG.md](./docs/CHANGELOG.md) | История изменений документации |
 
 > **Начните с [`docs/INDEX.md`](./docs/INDEX.md)** — там карта всей документации и рекомендуемый порядок чтения для разных ролей.
+> ⚠️ См. [`docs/STATUS_DISCLAIMER.md`](./docs/STATUS_DISCLAIMER.md) — текущая версия `docs/` это «первоначальная фиксация», не утв. ТЗ.
+
+---
+
+## 🔍 Discovery 1С:Медицина.Поликлиника
+
+| Документ | Описание |
+|----------|----------|
+| [`DISCOVERY_PLAN.md`](./DISCOVERY_PLAN.md) 🆕 | **Подробный план обследования** — что изучить, в какой последовательности, что задокументировать, что заскриншотить, что уточнить у заказчика, какие формы и списки нужны для blueprint |
 
 ---
 
