@@ -1,0 +1,60 @@
+workflowsname: Auto-generate Release, CHANGELOG & INDEX
+
+on:
+  push:
+    branches:
+      - main
+      - master
+  # Оставляем возможность запустить пайплайн вручную для тестов или внеплановых релизов
+  workflow_dispatch:
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    
+    # КРИТИЧНО: Защита от бесконечного цикла (infinite loop).
+    # Мы не запускаем action, если коммит был сгенерирован самим ботом на предыдущем запуске.
+    if: "!startsWith(github.event.head_commit.message, 'chore(release):')"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          # Забираем всю историю коммитов. Это обязательно, иначе standard-version 
+          # не сможет прочитать старые conventional commits для формирования changelog.
+          fetch-depth: 0 
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install -g standard-version
+
+      - name: Generate INDEX.md
+        run: |
+          # Запускаем наш кастомный скрипт парсинга 1С-структуры
+          node scripts/update-index.js
+          
+          # Добавляем файл в staging area, чтобы standard-version 
+          # захватил его в свой итоговый релизный коммит
+          git add INDEX.md
+
+      - name: Configure Git Author
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Generate CHANGELOG and Create Release Commit
+        run: |
+          # standard-version автоматически:
+          # 1. Посчитает новую версию (SemVer) на базе feat/fix коммитов
+          # 2. Сгенерирует CHANGELOG.md
+          # 3. Флаг --commit-all заберет наш INDEX.md в этот же коммит
+          # 4. Создаст коммит с именем "chore(release): x.x.x" и git tag
+          standard-version --commit-all
+
+      - name: Push changes and tags back to repo
+        run: |
+          git push --follow-tags origin HEAD
