@@ -1,0 +1,42 @@
+name: Auto-generate Release, CHANGELOG & INDEX
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  update-docs:
+    runs-on: ubuntu-latest
+    if: "!startsWith(github.event.head_commit.message, 'chore(release):')"
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install dependencies
+        run: npm install -g standard-version
+
+      - name: Generate INDEX.md
+        run: |
+          node scripts/update-index.js
+          git add INDEX.md
+
+      - name: Configure Git Author
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email 'github-actions[bot]@users.noreply.github.com'
+
+      - name: Generate CHANGELOG and Create Release Commit
+        run: standard-version --commit-all
+
+      - name: Push changes and tags back to repo
+        run: git push --follow-tags origin HEAD
