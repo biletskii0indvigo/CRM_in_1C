@@ -2,6 +2,8 @@
 
 All notable changes to this project will be documented in this file. See [standard-version](https://github.com/conventional-changelog/standard-version) for commit guidelines.
 
+### [1.0.2](https://github.com/bitdenvic-sudo/CRM_in_1C/compare/v1.0.1...v1.0.2) (2026-05-26)
+
 ### [1.0.5](https://github.com/biletskii0indvigo/CRM_in_1C/compare/v1.0.4...v1.0.5) (2026-05-26)
 
 ### [1.0.4](https://github.com/biletskii0indvigo/CRM_in_1C/compare/v1.0.3...v1.0.4) (2026-05-26)
