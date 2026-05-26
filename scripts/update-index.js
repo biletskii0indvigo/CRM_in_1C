@@ -2,14 +2,15 @@ const fs = require('fs');
 const path = require('path');
 
 // --- Конфигурация ---
-const SRC_DIR = process.env.SRC_DIR || './src'; // Директория с выгрузкой 1С
+const SRC_DIR = process.env.SRC_DIR || './src';
 const OUTPUT_FILE = 'INDEX.md';
 
-// Исключения: папки, которые не нужно индексировать
 const IGNORE_DIRS = new Set(['node_modules', '.git', '.github', 'scripts', 'build']);
 
-// Правила классификации: регулярные выражения для привязки файлов к бизнес-модулям.
-// Порядок важен: от специфичных бизнес-процессов к общим техническим файлам.
+// Те самые невидимые маркеры, которые ищет скрипт
+const START_MARKER = '';
+const END_MARKER = '';
+
 const MODULE_RULES = [
     { pattern: /Subsystems[\\/]CRM|DataProcessors[\\/]CRM_/, name: 'Модуль CRM и Воронки продаж' },
     { pattern: /Catalogs[\\/]PatientCards|Documents[\\/]PatientRecord/, name: 'Карты пациентов (Медицинский блок)' },
@@ -19,7 +20,7 @@ const MODULE_RULES = [
     { pattern: /\.xml$/, name: 'Прочие Метаданные и Формы' }
 ];
 
-// --- Логика ---
+// --- Вспомогательные функции ---
 
 function walkDir(currentPath, fileList = []) {
     if (!fs.existsSync(currentPath)) return fileList;
@@ -42,11 +43,8 @@ function walkDir(currentPath, fileList = []) {
 
 function classifyFiles(files) {
     const indexMap = {};
-
     files.forEach(file => {
-        // Нормализуем пути для кроссплатформенности
         const normalizedPath = file.split(path.sep).join('/');
-        
         let assignedModule = 'Нераспределенное (Требует внимания)';
         for (const rule of MODULE_RULES) {
             if (rule.pattern.test(file)) {
@@ -54,41 +52,57 @@ function classifyFiles(files) {
                 break;
             }
         }
-
-        if (!indexMap[assignedModule]) {
-            indexMap[assignedModule] = [];
-        }
+        if (!indexMap[assignedModule]) indexMap[assignedModule] = [];
         indexMap[assignedModule].push(normalizedPath);
     });
-
     return indexMap;
 }
 
-function generateMarkdown(indexMap) {
-    let md = `# Индекс Репозитория\n\n`;
-    md += `*Сгенерировано автоматически. Описывает связь физических файлов выгрузки 1С с логическими бизнес-модулями.*\n\n`;
+function generateMarkdownTree(indexMap) {
+    let md = `\n### ⚙️ Автоматический реестр файлов (Технический слой)\n`;
+    md += `*Обновляется CI/CD пайплайном. Не редактируйте этот блок вручную.*\n\n`;
 
-    // Сортируем модули по алфавиту для стабильности diff-ов в гите
     const sortedModules = Object.keys(indexMap).sort();
-
     for (const mod of sortedModules) {
-        md += `### ${mod}\n`;
-        // Сортируем файлы внутри модуля
+        md += `#### ${mod}\n`;
         const sortedFiles = indexMap[mod].sort();
         sortedFiles.forEach(file => {
             md += `- \`${file}\`\n`;
         });
         md += `\n`;
     }
-
     return md;
 }
 
-// --- Запуск ---
+// --- Главная логика (Safe Inject) ---
+
 console.log('Начинаю индексацию директории:', SRC_DIR);
 const allFiles = walkDir(SRC_DIR);
 const classified = classifyFiles(allFiles);
-const markdownContent = generateMarkdown(classified);
+const treeMarkdown = generateMarkdownTree(classified);
 
-fs.writeFileSync(OUTPUT_FILE, markdownContent, 'utf8');
-console.log(`Успешно! Индекс сохранен в ${OUTPUT_FILE}`);
+// Формируем блок, который будет вставляться
+const autoSection = `${START_MARKER}\n${treeMarkdown}${END_MARKER}`;
+
+// Читаем текущий INDEX.md, если он есть
+let fileContent = '';
+if (fs.existsSync(OUTPUT_FILE)) {
+    fileContent = fs.readFileSync(OUTPUT_FILE, 'utf8');
+}
+
+// Экранируем спецсимволы маркеров для регулярного выражения
+const escapeRegExp = (string) => string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+const regex = new RegExp(`${escapeRegExp(START_MARKER)}[\\s\\S]*?${escapeRegExp(END_MARKER)}`);
+
+if (regex.test(fileContent)) {
+    // Если маркеры найдены — заменяем всё между ними
+    fileContent = fileContent.replace(regex, autoSection);
+    console.log('Найдены маркеры. Обновлен только технический блок.');
+} else {
+    // Если маркеров нет — добавляем их в конец файла
+    fileContent = fileContent.trim() + '\n\n' + autoSection + '\n';
+    console.log('Маркеры не найдены. Технический блок добавлен в конец файла.');
+}
+
+fs.writeFileSync(OUTPUT_FILE, fileContent, 'utf8');
+console.log(`Успешно! Файл ${OUTPUT_FILE} сохранен без повреждения ручной разметки.`);
