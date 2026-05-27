@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CRM «Индвиго» — Per-Screen Wireframes</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Sans:wght@400;500;600;700&family=IBM+Plex+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --amber:#FFCC00; --amber-2:#F0BC00; --amber-active:#FFF5C0; --amber-light:#FFFCE8; --amber-border:#CCA300;
+  --blue:#1450A0; --green:#1A6B30; --red:#C0392B; --purple:#6A3FAA; --teal:#0C6E56; --orange:#B7770D;
+  --ink:#1d2126; --ink-2:#41474f; --muted:#7b828c; --line:#d9dde3; --line-2:#eef1f5;
+  --panel:#ffffff; --bg:#f4f5f7; --link:#0055A6;
+  --wire:#aeb6c0; --wire-bg:#fbfcfd; --wire-fill:#eef2f7;
+  --mono:'IBM Plex Mono',monospace; --sans:'IBM Plex Sans',sans-serif; --disp:'Archivo',sans-serif;
+}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;font-family:var(--sans);color:var(--ink);background:var(--bg);
+  background-image:linear-gradient(var(--line-2) 1px,transparent 1px),linear-gradient(90deg,var(--line-2) 1px,transparent 1px);
+  background-size:48px 48px;line-height:1.5;-webkit-font-smoothing:antialiased}
+
+/* ---- Top bar ---- */
+header.top{position:sticky;top:0;z-index:50;background:var(--ink);color:#fff;
+  border-bottom:3px solid var(--amber);display:flex;align-items:center;gap:18px;padding:0 20px;height:60px}
+.brand{display:flex;align-items:center;gap:11px;font-family:var(--disp);font-weight:800;letter-spacing:-.01em}
+.brand .mark{width:30px;height:30px;border-radius:7px;background:var(--amber);color:#1d2126;
+  display:grid;place-items:center;font-weight:800;font-size:15px;font-family:var(--disp)}
+.brand small{font-family:var(--mono);font-weight:500;color:var(--amber);font-size:11px;letter-spacing:.04em;text-transform:uppercase}
+.top .spacer{flex:1}
+.role-switch{display:flex;gap:6px;align-items:center}
+.role-switch .lbl{font-family:var(--mono);font-size:10.5px;color:#aeb6c0;text-transform:uppercase;letter-spacing:.08em;margin-right:4px}
+.role-btn{font-family:var(--mono);font-size:12px;font-weight:500;color:#cdd3db;background:#2a2f37;border:1px solid #3a4049;
+  padding:6px 11px;border-radius:6px;cursor:pointer;transition:.15s}
+.role-btn:hover{background:#343a44;color:#fff}
+.role-btn.active{background:var(--amber);color:#1d2126;border-color:var(--amber);font-weight:600}
+
+/* ---- Layout ---- */
+.wrap{display:grid;grid-template-columns:248px 1fr;gap:0;max-width:1480px;margin:0 auto}
+nav.side{position:sticky;top:60px;align-self:start;height:calc(100vh - 60px);overflow-y:auto;
+  background:var(--panel);border-right:1px solid var(--line);padding:18px 14px 60px}
+nav.side .group{font-family:var(--mono);font-size:10.5px;font-weight:600;text-transform:uppercase;letter-spacing:.1em;
+  color:var(--muted);margin:16px 8px 7px;padding-bottom:5px;border-bottom:1px dashed var(--line)}
+nav.side a{display:flex;align-items:center;gap:9px;text-decoration:none;color:var(--ink-2);font-size:13.5px;
+  padding:7px 9px;border-radius:7px;transition:.12s;border:1px solid transparent}
+nav.side a:hover{background:var(--amber-light);color:var(--ink)}
+nav.side a.dim{opacity:.34}
+nav.side a .num{font-family:var(--mono);font-size:10px;color:var(--muted);min-width:20px}
+nav.side a .lock{margin-left:auto;font-size:11px}
+
+main{padding:26px 30px 90px;min-width:0}
+.intro{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 24px;margin-bottom:26px;
+  box-shadow:0 1px 0 rgba(0,0,0,.02)}
+.intro h1{font-family:var(--disp);font-weight:800;font-size:27px;margin:0 0 6px;letter-spacing:-.02em;line-height:1.1}
+.intro .sub{font-family:var(--mono);font-size:12px;color:var(--muted);margin-bottom:14px}
+.intro p{margin:0 0 10px;color:var(--ink-2);font-size:14px;max-width:78ch}
+.legend{display:flex;flex-wrap:wrap;gap:8px;margin-top:6px}
+.legend .chip{font-family:var(--mono);font-size:11px;padding:3px 9px;border-radius:20px;border:1px solid var(--line)}
+.banner-role{margin:0 0 22px;padding:11px 16px;border-radius:10px;border:1px solid var(--amber-border);
+  background:var(--amber-light);font-size:13px;display:flex;gap:10px;align-items:center}
+.banner-role b{font-family:var(--mono);font-weight:600}
+
+/* ---- Screen card ---- */
+.screen{background:var(--panel);border:1px solid var(--line);border-radius:14px;margin-bottom:26px;overflow:hidden;
+  scroll-margin-top:78px;transition:opacity .2s}
+.screen.hidden-role{opacity:.4}
+.screen-head{display:flex;align-items:flex-start;gap:14px;padding:18px 22px;border-bottom:1px solid var(--line-2);
+  background:linear-gradient(180deg,#fff,#fcfcfa)}
+.screen-head .idx{font-family:var(--disp);font-weight:800;font-size:30px;color:var(--amber-border);line-height:1;min-width:46px}
+.screen-head .ttl{flex:1}
+.screen-head h2{font-family:var(--disp);font-weight:700;font-size:19px;margin:0 0 4px;letter-spacing:-.01em}
+.screen-head .obj{font-family:var(--mono);font-size:11.5px;color:var(--muted)}
+.screen-head .badges{display:flex;flex-wrap:wrap;gap:5px;justify-content:flex-end;max-width:280px}
+.badge{font-family:var(--mono);font-size:10.5px;font-weight:500;padding:3px 8px;border-radius:5px;white-space:nowrap}
+.badge.fr{background:#eaf0fb;color:var(--blue);border:1px solid #cfe0fb}
+.badge.hi{background:#e9f5ef;color:var(--green);border:1px solid #c7e7d3}
+.badge.me{background:var(--amber-light);color:var(--orange);border:1px solid #f0e0a8}
+.badge.role{background:#f3ecfb;color:var(--purple);border:1px solid #e0d0f3}
+.lock-note{margin:0;padding:9px 22px;background:#fbeeec;border-bottom:1px solid #f3d6d1;color:#8a2c20;font-size:12.5px;
+  font-family:var(--mono);display:none}
+.screen.masked .lock-note{display:block}
+
+.screen-body{display:grid;grid-template-columns:1.55fr 1fr;gap:0}
+@media(max-width:1080px){.screen-body{grid-template-columns:1fr}}
+.wire-pane{padding:20px 22px;border-right:1px solid var(--line-2);min-width:0}
+@media(max-width:1080px){.wire-pane{border-right:none;border-bottom:1px solid var(--line-2)}}
+.meta-pane{padding:20px 22px}
+
+/* ---- Wireframe primitives ---- */
+.wf{border:1.5px solid var(--wire);border-radius:9px;background:var(--wire-bg);overflow:hidden;font-size:11.5px}
+.wf .bar{display:flex;align-items:center;gap:7px;flex-wrap:wrap;padding:8px 10px;background:#f1f4f8;border-bottom:1px dashed var(--wire)}
+.wf .bar.amber{background:var(--amber-active);border-bottom:1px solid var(--amber-border)}
+.wf .btn{font-family:var(--mono);font-size:10.5px;padding:4px 9px;border-radius:5px;border:1px solid var(--wire);background:#fff;color:var(--ink-2)}
+.wf .btn.pri{background:var(--blue);color:#fff;border-color:var(--blue)}
+.wf .btn.warn{background:#fff;border-color:var(--red);color:var(--red)}
+.wf .btn.am{background:var(--amber);border-color:var(--amber-border);color:#1d2126;font-weight:600}
+.wf .pill{font-family:var(--mono);font-size:10px;padding:2px 7px;border-radius:11px;border:1px solid var(--wire);background:#fff;color:var(--ink-2)}
+.wf .pill.g{background:#e9f5ef;border-color:#bfe2cc;color:var(--green)}
+.wf .pill.r{background:#fbe9e7;border-color:#f0c5bd;color:var(--red)}
+.wf .pill.a{background:var(--amber-active);border-color:#e6cf86;color:var(--orange)}
+.wf .pill.b{background:#eaf0fb;border-color:#cfe0fb;color:var(--blue)}
+.wf .pill.p{background:#f3ecfb;border-color:#e0d0f3;color:var(--purple)}
+.wf .row{display:flex;gap:8px;padding:7px 10px;border-bottom:1px dotted var(--line)}
+.wf .row:last-child{border-bottom:none}
+.wf .seg{flex:1;min-width:0;background:var(--wire-fill);border:1px solid var(--line);border-radius:5px;padding:6px 8px;color:var(--ink-2)}
+.wf .seg.lbl{font-family:var(--mono);font-size:10px;color:var(--muted);background:transparent;border:none;padding:6px 0;flex:0 0 auto}
+.wf .ph{height:9px;background:linear-gradient(90deg,#dfe5ec,#eef2f7);border-radius:3px}
+.wf .ph.sm{width:40%}.wf .ph.md{width:65%}.wf .ph.lg{width:88%}
+.wf .grid{display:grid;gap:8px;padding:10px}
+.wf .kpi{background:#fff;border:1px solid var(--line);border-radius:7px;padding:8px;text-align:center}
+.wf .kpi b{display:block;font-family:var(--disp);font-size:18px;color:var(--ink)}
+.wf .kpi span{font-family:var(--mono);font-size:9px;color:var(--muted);text-transform:uppercase;letter-spacing:.05em}
+.wf .col-head{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--ink-2);text-transform:uppercase;letter-spacing:.04em}
+.wf table{width:100%;border-collapse:collapse}
+.wf th{font-family:var(--mono);font-size:9.5px;text-transform:uppercase;letter-spacing:.04em;color:var(--muted);
+  text-align:left;padding:7px 8px;background:#f1f4f8;border-bottom:1px solid var(--wire);font-weight:600}
+.wf td{padding:6px 8px;border-bottom:1px dotted var(--line);color:var(--ink-2)}
+.wf tr.over td{background:#fbeeec}
+.wf .kanban{display:grid;grid-auto-flow:column;grid-auto-columns:minmax(108px,1fr);gap:8px;padding:10px;overflow-x:auto}
+.wf .kcol{background:#f1f4f8;border:1px solid var(--line);border-radius:7px;padding:7px;min-height:120px}
+.wf .kcol .kc-h{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--ink-2);display:flex;justify-content:space-between;margin-bottom:6px;border-bottom:1px dashed var(--wire);padding-bottom:4px}
+.wf .kcard{background:#fff;border:1px solid var(--line);border-radius:5px;padding:6px;margin-bottom:6px}
+.wf .kcard .nm{font-weight:600;font-size:10.5px;margin-bottom:3px}
+.wf .split{display:grid;grid-template-columns:1fr 1.4fr;gap:0}
+.wf .split .l{border-right:1px dashed var(--wire);padding:8px}
+.wf .split .r{padding:8px}
+.wf .qitem{background:#fff;border:1px solid var(--line);border-radius:5px;padding:6px;margin-bottom:6px;font-size:10.5px}
+.wf .qitem.sel{border-color:var(--blue);box-shadow:0 0 0 2px #cfe0fb}
+.wf .mask{background:repeating-linear-gradient(45deg,#f0d8d4,#f0d8d4 4px,#f8e6e3 4px,#f8e6e3 8px);
+  border:1px solid #e3b3aa;border-radius:4px;color:#8a2c20;font-family:var(--mono);font-size:9.5px;padding:5px 7px;text-align:center}
+.wf .ved{border:2px dashed var(--amber-border);background:var(--amber-light);border-radius:7px;margin:9px;padding:9px}
+.wf .ved .vh{font-family:var(--mono);font-size:10px;font-weight:600;color:var(--orange);text-transform:uppercase;letter-spacing:.04em;margin-bottom:6px}
+.wf .count{font-family:var(--mono);font-size:11px;font-weight:600;color:var(--green);float:right}
+.wf .note{background:var(--amber-light);border-left:3px solid var(--amber);padding:6px 9px;margin:9px;font-size:10.5px;color:var(--ink-2);border-radius:0 5px 5px 0}
+.wf .barfill{height:8px;border-radius:4px;background:var(--blue)}
+.tabs{display:flex;gap:0;border-bottom:1px solid var(--wire);padding:0 10px;background:#f7f9fb}
+.tabs .t{font-family:var(--mono);font-size:10px;padding:6px 10px;border-bottom:2px solid transparent;color:var(--muted)}
+.tabs .t.on{color:var(--ink);border-bottom-color:var(--amber);font-weight:600}
+
+/* ---- Meta pane ---- */
+.meta h4{font-family:var(--mono);font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);
+  margin:0 0 8px;padding-bottom:5px;border-bottom:1px dashed var(--line)}
+.meta + .meta{margin-top:16px}
+.acts{display:flex;flex-wrap:wrap;gap:6px}
+.act{font-family:var(--mono);font-size:11px;padding:4px 9px;border-radius:6px;background:#f1f4f8;border:1px solid var(--line);color:var(--ink-2)}
+.act.pri{background:var(--blue);color:#fff;border-color:var(--blue)}
+.act.warn{background:#fbe9e7;color:var(--red);border-color:#f0c5bd}
+.meta ul{margin:0;padding-left:17px}
+.meta li{font-size:13px;color:var(--ink-2);margin-bottom:5px}
+.meta .ux li{color:#8a4a1f}
+.flows{display:flex;flex-direction:column;gap:4px}
+.flow{font-family:var(--mono);font-size:11px;color:var(--ink-2);background:#f7f9fb;border:1px solid var(--line-2);border-radius:6px;padding:6px 8px}
+footer{max-width:1480px;margin:0 auto;padding:24px 30px 50px;color:var(--muted);font-family:var(--mono);font-size:11px;border-top:1px solid var(--line)}
+.toast{position:fixed;bottom:20px;right:20px;background:var(--ink);color:#fff;font-family:var(--mono);font-size:12px;
+  padding:11px 16px;border-radius:8px;border-left:3px solid var(--amber);opacity:0;transform:translateY(10px);transition:.25s;z-index:80}
+.toast.show{opacity:1;transform:translateY(0)}
+</style>
+</head>
+<body>
+<header class="top">
+  <div class="brand"><span class="mark">ИД</span>
+    <span>Индвиго&nbsp;CRM<br><small>per-screen wireframes</small></span>
+  </div>
+  <div class="spacer"></div>
+  <div class="role-switch">
+    <span class="lbl">Роль:</span>
+    <button class="role-btn active" data-role="all">Все</button>
+    <button class="role-btn" data-role="rop">РОП</button>
+    <button class="role-btn" data-role="cur">Куратор</button>
+    <button class="role-btn" data-role="ass">Помощник</button>
+    <button class="role-btn" data-role="adm">Админ</button>
+  </div>
+</header>
+
+<div class="wrap">
+  <nav class="side" id="sidenav"></nav>
+  <main>
+    <section class="intro">
+      <h1>Wireframes CRM «Индвиго» / «Институт Движения»</h1>
+      <div class="sub">16 экранов прототипа · расширение .cfe к 1С:Медицина.Поликлиника · build-trace v2 · 26.05.2026</div>
+      <p>Интерактивные схемы раскладки всех экранов CRM-модуля. Переключатель ролей вверху затемняет недоступные роли экраны и показывает маскировку данных (например, у помощника куратора скрыты ДМС-пациенты и финансовые суммы). Каждый экран содержит каталог действий, ключевые элементы, привязку к функциональным требованиям (FR) и уровень уверенности.</p>
+      <div class="legend">
+        <span class="chip" style="border-color:#c7e7d3;color:var(--green)">HIGH — подтверждено кодом/прототипом</span>
+        <span class="chip" style="border-color:#f0e0a8;color:var(--orange)">MEDIUM — частично / гипотеза</span>
+        <span class="chip" style="border-color:#cfe0fb;color:var(--blue)">FR-NNN — функц. требование</span>
+        <span class="chip" style="border-color:#f3d6d1;color:#8a2c20">маскировка для роли</span>
+      </div>
+    </section>
+    <div class="banner-role" id="roleBanner">
+      <b id="roleBannerTitle">Режим: Все роли</b>
+      <span id="roleBannerText">Показаны все 16 экранов без ограничений доступа.</span>
+    </div>
+    <div id="screens"></div>
+  </main>
+</div>
+<footer>
+  Источники: репозиторий CRM_in_1C (figma_blueprint_v2, demo app, DATA_MODEL, FUNCTIONAL_REQUIREMENTS, CONFLICTS, MoM 0–9) + 20 скриншотов.
+  Все экраны — прототип/гипотеза TO-BE; подлежат верификации Discovery (старт 27.05.2026). Wireframes ≠ финальный UI 1С.
+</footer>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ===== Screen data ===== */
+const ROLES = {
+  all:{t:'Все роли',d:'Показаны все 16 экранов без ограничений доступа.'},
+  rop:{t:'РОП — Васильев С.И.',d:'Видит всё: всех пациентов, заказы, задачи, дашборды, замещения. Вход → Дашборд РОП.'},
+  cur:{t:'Куратор — Аникина / Романова / Горбунов',d:'Видит только своих пациентов и задачи. Вход → Дашборд куратора.'},
+  ass:{t:'Помощник куратора — Иванова Н.А.',d:'Очередь задач прикреплённого куратора. Скрыты: ДМС-пациенты, флаг «Не связываться», эскалации, финансовые суммы.'},
+  adm:{t:'Администратор — Кузнецова',d:'Справочники, роли, шаблоны, источники. Без доступа к мед. данным пациентов.'}
+};
+// roles that can SEE the screen; masked = roles for which data is partially hidden
+const S = [
+ {id:'home',group:'Старт',idx:'00',title:'Начальная страница (Home)',obj:'workspace',fr:['Навигация'],conf:'hi',
+   roles:['rop','cur','ass','adm'],
+   wf:`<div class="wf"><div class="bar"><span class="pill">Индвиго · CRM «Маркетинг» · v0.1.0 · Фаза 1</span></div>
+     <div class="grid" style="grid-template-columns:repeat(4,1fr)"><div class="kpi"><b>13</b><span>Активных</span></div><div class="kpi"><b>7</b><span>Без куратора</span></div><div class="kpi"><b>4</b><span>Просрочки</span></div><div class="kpi"><b>28%</b><span>Конверсия</span></div></div>
+     <div class="row"><span class="seg lbl">Избранное →</span></div>
+     <div class="grid" style="grid-template-columns:repeat(4,1fr)"><span class="pill b">Дашборд РОП</span><span class="pill b">Дашборд кур.</span><span class="pill b">Пациенты</span><span class="pill b">Канбан</span><span class="pill b">Утр.планир.</span><span class="pill b">Задачи</span><span class="pill b">РМ помощн.</span><span class="pill b">Напомин.</span><span class="pill b">Замещения</span><span class="pill b">Аналитика</span><span class="pill b">Источники</span><span class="pill b">Отчёт</span></div></div>`,
+   acts:[['Открыть экран','']], el:['4 KPI-плитки','12 плиток-ссылок «Избранное»'], ux:[]},
+
+ {id:'patients',group:'Списки / реестры',idx:'01',title:'Пациенты (CRM) — реестр',obj:'Справочник.ФизическиеЛица (+CRM_*)',fr:['FR-001','FR-004','FR-005','FR-017','FR-020'],conf:'hi',
+   roles:['rop','cur','adm'],
+   wf:`<div class="wf"><div class="bar amber"><span class="btn am">Создать</span><span class="btn">Открыть</span><span class="btn">Позвонить</span><span class="btn">⟳ Синхр.</span></div>
+     <div class="bar"><span class="pill">Тип</span><span class="pill">Ведение</span><span class="pill">Гео</span><span class="pill">Психотип</span><span class="pill">Источник</span><span class="pill">Формат</span><span class="pill a">Дожим</span></div>
+     <table><thead><tr><th>☑</th><th>№ карты</th><th>Пациент</th><th>ABC</th><th>Цикл</th><th>Σ / Опл / К опл</th><th>След.контакт</th><th>Куратор</th><th>Статус</th></tr></thead><tbody>
+     <tr><td>☐</td><td>К-404</td><td>Тестов Т.Т. <span class="pill b">ДМС</span></td><td><span class="pill g">A</span></td><td>№2·Острый</td><td>32 490 / 0 / 32 490</td><td><span class="pill r">день 7</span></td><td>Аникина ●</td><td><span class="pill a">Записан</span></td></tr>
+     <tr><td>☐</td><td>К-118</td><td>Иванов М.С.</td><td><span class="pill">B</span></td><td>№1·Хрон.</td><td>19 910</td><td>04.06</td><td>Романова ●</td><td><span class="pill g">В лечении</span></td></tr></tbody></table>
+     <div class="note">17 колонок · сортировка по любой · значки 📵«Не связываться», 🎫 абонемент N/M</div></div>`,
+   acts:[['Создать','pri'],['Открыть',''],['Позвонить',''],['Синхронизировать',''],['Фильтр-чипы (7 групп)','']],
+   el:['17 колонок: №карты, дата, пациент, ABC, цикл№·тип, акт.заказов, Σ/опл/к опл, след.контакт, куратор, комментарий+дожим, статус, тип, приоритет','Панель тегов-чипов'],
+   ux:['Горизонтальный скролл (17 колонок)','Нет тегов УМС/возраст-категория (gap FR-004)','Проверка дублей при создании — placeholder']},
+
+ {id:'kanban',group:'Списки / реестры',idx:'02',title:'Воронка продаж (Канбан)',obj:'агрегат ФизическиеЛица + CRM_Заказ',fr:['FR-003'],conf:'hi',
+   roles:['rop','cur'],
+   wf:`<div class="wf"><div class="bar amber"><span class="btn am">Создать сделку</span><span class="btn">Обновить</span><span class="seg lbl">Куратор: Все</span><span class="seg lbl">Тип: Все</span></div>
+     <div class="kanban">
+       <div class="kcol"><div class="kc-h">Лид<span>3</span></div><div class="kcard"><div class="nm">Орлов Д.А.</div><span class="pill a">тревожный</span></div></div>
+       <div class="kcol"><div class="kc-h">Записан<span>4</span></div><div class="kcard"><div class="nm">Кузнецов А.В.</div>18 210 ₽<br><span class="pill b">первичный</span></div></div>
+       <div class="kcol"><div class="kc-h">В лечении<span>5</span></div><div class="kcard"><div class="nm">Иванов М.С.</div>28 410 ₽<br><span class="pill g">решит.</span></div></div>
+       <div class="kcol"><div class="kc-h">Финальная<span>8</span></div><div class="kcard"><div class="nm">Лютина Е.</div><span class="pill a">день 3</span></div></div>
+       <div class="kcol"><div class="kc-h">Ожидание<span>1</span></div></div>
+       <div class="kcol"><div class="kc-h">Реактив.<span>1</span></div></div>
+     </div><div class="note">Drag-and-drop между колонками → toast перехода. Карточка: ФИО · источник·дата · «N/M заказов · Σ₽» · pills · куратор●</div></div>`,
+   acts:[['Создать сделку','pri'],['Обновить',''],['drag-and-drop',''],['Фильтр Куратор/Тип','']],
+   el:['6 колонок-стадий пациента','Карточка с полоской заказов и pills'],
+   ux:['Стадии в проде помечены автором «демо» (реальные — в CJM)','6 стадий пациента ≠ 9 статусов заказа (конфликт C-08)']},
+
+ {id:'tasks',group:'Списки / реестры',idx:'03',title:'Задачи кураторов',obj:'Документ.CRM_Задача',fr:['FR-006','FR-007','FR-009','FR-022'],conf:'hi',
+   roles:['rop','cur'],
+   wf:`<div class="wf"><div class="bar"><span class="seg lbl">Показать: Все</span><span class="seg lbl">Куратор</span><span class="pill a">14 task-тегов</span></div>
+     <table><thead><tr><th>☑</th><th></th><th>Задача</th><th>Пациент</th><th>Тип</th><th>Привязка</th><th>Срок</th><th>Приор.</th><th>Статус</th></tr></thead><tbody>
+     <tr class="over"><td>☐</td><td style="color:var(--red)">▌</td><td>Звонок после частичной оплаты</td><td>Тестов Т.</td><td>Дожим3</td><td>Заказ #540</td><td>вчера</td><td><span class="pill r">выс</span></td><td><span class="pill r">просрочена</span></td></tr>
+     <tr><td>☐</td><td style="color:var(--amber-border)">▌</td><td>Плановый контакт</td><td>Иванов М.</td><td>Контакт</td><td>Пациент</td><td>04.06</td><td><span class="pill">ср</span></td><td><span class="pill a">открыта</span></td></tr>
+     <tr style="opacity:.5;text-decoration:line-through"><td>☑</td><td>▌</td><td>Уточнить запись</td><td>Орлов Д.</td><td>Звонок</td><td>—</td><td>20.05</td><td><span class="pill">низ</span></td><td><span class="pill g">выполнена</span></td></tr></tbody></table></div>`,
+   acts:[['Создать на основании',''],['Перенаправить',''],['Позвонить',''],['Фильтры (4 режима)','']],
+   el:['11 колонок: ☑, срочность, задача, пациент, куратор, тип, привязка(заказ/пациент), теги, срок, приоритет, статус'],
+   ux:['Просрочка = красный фон','Выполнено = opacity + зачёркивание']},
+
+ {id:'sources',group:'Списки / реестры',idx:'14',title:'Источники обращений (справочник)',obj:'Справочник.CRM_ИсточникиОбращений',fr:['FR-020'],conf:'hi',
+   roles:['rop','adm'],
+   wf:`<div class="wf"><div class="bar amber"><span class="btn am">Создать</span></div>
+     <table><thead><tr><th>Источник</th><th>Группа</th><th>UTM</th><th>Обращ.</th><th>Конв.</th><th>CPL</th></tr></thead><tbody>
+     <tr><td>Реклама Яндекс</td><td><span class="pill b">Paid</span></td><td>cpc/yandex</td><td>120</td><td>22%</td><td>1 450₽</td></tr>
+     <tr><td>Сайт (форма)</td><td><span class="pill g">Organic</span></td><td>—</td><td>84</td><td>31%</td><td>620₽</td></tr>
+     <tr><td>WhatsApp</td><td><span class="pill p">Messenger</span></td><td>—</td><td>56</td><td>18%</td><td>—</td></tr></tbody></table></div>`,
+   acts:[['Создать','pri'],['Деактивировать источник','']],
+   el:['Колонки: источник, группа, UTM, обращений, конверсия, CPL','6 групп: Digital/Organic/Messenger/Paid/Social/Inbound'], ux:[]},
+
+ {id:'morning',group:'Рабочие места',idx:'04',title:'Утреннее планирование',obj:'обработка CRM (распределение)',fr:['FR-013'],conf:'hi',
+   roles:['rop'],
+   wf:`<div class="wf"><div class="bar amber"><span class="btn am">✦ Авто-распределить</span><span class="btn">↺ Сбросить</span><span class="btn">📨 Уведомить кураторов</span><span class="btn">Журнал</span></div>
+     <div class="grid" style="grid-template-columns:repeat(4,1fr)"><div class="kpi"><b>13</b><span>Активных</span></div><div class="kpi"><b>7</b><span>Без кур.</span></div><div class="kpi"><b>8</b><span>Финальных</span></div><div class="kpi"><b>3</b><span>Кураторов</span></div></div>
+     <div class="note">⚠ KPI-счётчики — placeholder («фантазия»); нет счётчика нагрузки в часах (gap FR-013)</div>
+     <div class="split"><div class="l"><div class="col-head">Нераспределённые (7)</div><div class="qitem">Лютина Е. <span class="pill">звонок</span></div><div class="qitem">Орлов Д. <span class="pill">реклама</span></div><div class="qitem">Поляков А. <span class="pill">сайт</span></div></div>
+     <div class="r"><div class="col-head">Кураторы (drag-drop →)</div><div class="qitem">Аникина С.В. · 5 пац.</div><div class="qitem">Романова М.П. · 5 пац.</div><div class="qitem">Горбунов В.К. · 5 пац.</div></div></div></div>`,
+   acts:[['Авто-распределить (round-robin)','pri'],['Сбросить',''],['Уведомить кураторов',''],['drag-and-drop','']],
+   el:['Двухколоночный: пул нераспределённых ↔ 3 дорожки кураторов','4 stat-box'],
+   ux:['KPI декоративны (подтверждено)','Нет нагрузки в часах','Алгоритм нормирования открыт (OQ-002)']},
+
+ {id:'assist',group:'Рабочие места',idx:'05',title:'РМ помощника куратора (split-pane)',obj:'обработка CRM',fr:['FR-011','FR-012'],conf:'hi',
+   roles:['ass'], masked:true,
+   wf:`<div class="wf"><div class="bar">Помощник: Иванова Н.А. · прикреплён к: Аникина С.В.</div>
+     <div class="split"><div class="l"><div class="col-head">Очередь (приоритет)</div>
+       <div class="qitem sel">1. Иванов М. 🔴 <span class="pill r">A</span> <span class="pill">Иног.</span><br>📞 14:00</div>
+       <div class="qitem">2. Петров К. 🟡 <span class="pill">B</span> <span class="pill">Мест.</span><br>💬 15:30</div></div>
+     <div class="r"><div class="col-head">Карточка задачи</div>
+       <div class="row"><span class="seg">Иванов М. · A · первичный · Иногородний</span></div>
+       <div class="row"><span class="seg">Заказ #540 · статус-9 · тип приёма · услуги</span></div>
+       <div class="mask">🔒 Финансовые суммы скрыты для роли «Помощник»</div>
+       <div class="row"><span class="seg">Абонемент 10/12 · ⚠ предпоследнее → продлить</span></div>
+       <div class="row"><span class="btn">📞</span><span class="btn">💬</span><span class="btn">✉</span><span class="seg lbl">канал + шаблон</span></div>
+       <div class="row"><span class="seg">Закрытие: чипсы исходов · <b>ОБЯЗ.</b> комментарий</span><span class="btn pri">Закрыть</span></div></div></div></div>`,
+   acts:[['Контакт 📞/💬/✉',''],['Закрыть задачу (только с комментарием)','pri'],['Запросить замену','']],
+   el:['Очередь приоритизирована','Карточка: пациент, заказ, абонемент, контакт, закрытие'],
+   ux:['Скрыты: ДМС, «Не связываться», эскалации, финансовые суммы','Обязательный комментарий при закрытии']},
+
+ {id:'rop',group:'Рабочие места',idx:'09',title:'Дашборд РОП',obj:'workspace + СКД',fr:['FR-018'],conf:'hi',
+   roles:['rop'],
+   wf:`<div class="wf"><div class="bar"><span class="seg lbl">Период</span><span class="seg lbl">Куратор</span><span class="seg lbl">Город</span><span class="btn">Обновить</span><span class="btn">Export PDF</span></div>
+     <div class="grid" style="grid-template-columns:repeat(6,1fr)"><div class="kpi"><b>13</b><span>Активн.</span></div><div class="kpi"><b>179к</b><span>Сумма</span></div><div class="kpi"><b>92к</b><span>К опл.</span></div><div class="kpi"><b>4</b><span>Просрочки</span></div><div class="kpi"><b>34%</b><span>Конв.дожим</span></div><div class="kpi"><b>18к</b><span>Ср.чек</span></div></div>
+     <div class="grid" style="grid-template-columns:1fr 1fr"><div class="kpi" style="text-align:left"><span>Воронка 6 стадий</span><div class="barfill" style="width:90%;margin:5px 0"></div><div class="barfill" style="width:62%;margin:5px 0;background:var(--teal)"></div><div class="barfill" style="width:30%;background:var(--orange)"></div></div>
+     <div class="kpi" style="text-align:left"><span>ABC</span><div class="barfill" style="width:70%;margin:5px 0;background:var(--green)"></div><div class="barfill" style="width:45%;margin:5px 0"></div><div class="barfill" style="width:20%;background:var(--red)"></div></div></div>
+     <div class="note">Низ: эффективность кураторов (таблица %) · источники (bars+CPL) · просроченные задачи top-8</div></div>`,
+   acts:[['Обновить',''],['Export PDF',''],['Фильтры период/куратор/город','']],
+   el:['6 KPI','Воронка + ABC + кураторы + источники + просрочки'], ux:[]},
+
+ {id:'curdash',group:'Рабочие места',idx:'10',title:'Дашборд куратора',obj:'workspace',fr:['FR-019','FR-022'],conf:'hi',
+   roles:['cur'],
+   wf:`<div class="wf"><div class="bar amber">☀ Доброе утро, Аникина! На сегодня 6 задач, 1 просрочена</div>
+     <div class="grid" style="grid-template-columns:repeat(5,1fr)"><div class="kpi"><b>6</b><span>Задач</span></div><div class="kpi"><b>1</b><span>Просроч.</span></div><div class="kpi"><b>3</b><span>Частич.опл</span></div><div class="kpi"><b>78%</b><span>%вып</span></div><div class="kpi"><b>34%</b><span>Конв.дожим</span></div></div>
+     <div class="row"><span class="seg lbl">Топ-приоритеты дня</span></div><div class="row"><span class="seg">1. Звонок Иванову (день 3) · 2. Контроль абонемента Петрова · 3. ...</span></div>
+     <div class="note">Мини-воронка моих пациентов + мои метрики за месяц (ср.чек / конверсия / время / no-show)</div></div>`,
+   acts:[['Открыть задачу',''],['Перейти к пациенту','']],
+   el:['Welcome-блок (FR-022)','5 KPI','Топ-приоритеты','Мини-воронка','Метрики месяца'], ux:[]},
+
+ {id:'subst',group:'Рабочие места',idx:'12',title:'Замещения / Отпуска',obj:'РС.CRM_ЗамещенияCRM',fr:['FR-014','FR-015'],conf:'hi',
+   roles:['rop','adm'],
+   wf:`<div class="wf"><div class="note">Ответственный остаётся прежним — для KPI/бонусов</div>
+     <div class="bar amber"><span class="btn am">+ Создать замещение</span></div>
+     <table><thead><tr><th>Кто</th><th>→ Кому</th><th>Период</th><th>Причина</th><th>Задач передано</th></tr></thead><tbody>
+     <tr><td>Романова</td><td>Аникина</td><td>01–14.06</td><td>Отпуск</td><td>12</td></tr></tbody></table>
+     <div class="row"><span class="seg">Автоперераспределение при увольнении</span><span class="btn warn">Деактивировать куратора</span></div>
+     <div class="note">⚠ Окно деактивации — placeholder (gap FR-015)</div></div>`,
+   acts:[['Создать замещение','pri'],['Завершить замещение',''],['Деактивировать куратора','warn']],
+   el:['Таблица активных замещений','Блок автоперераспределения'],
+   ux:['Деактивация — placeholder','Триггер +6 мес. при увольнении открыт (OQ-023)']},
+
+ {id:'remind',group:'Рабочие места',idx:'13',title:'Напоминания пациентам',obj:'РЗ.CRM_НапоминанияДоВизита',fr:['FR-021'],conf:'hi',
+   roles:['rop','cur','adm'],
+   wf:`<div class="wf"><div class="split"><div class="l"><div class="col-head">Расписание</div>
+     <table><thead><tr><th>Пациент</th><th>Визит</th><th>Канал</th><th>Статус</th></tr></thead><tbody>
+     <tr><td>Иванов М.</td><td>04.06 10:00</td><td>WA</td><td><span class="pill g">отправлено</span></td></tr>
+     <tr><td>Петров К.</td><td>05.06 14:30</td><td>SMS</td><td><span class="pill a">в очереди</span></td></tr></tbody></table></div>
+     <div class="r"><div class="col-head">Превью WhatsApp</div><div class="qitem">«Здравствуйте! Напоминаем о визите 04.06 в 10:00…»</div>
+     <div class="grid" style="grid-template-columns:repeat(2,1fr)"><div class="kpi"><b>56</b><span>Отправлено</span></div><div class="kpi"><b>12%</b><span>No-show</span></div></div></div></div></div>`,
+   acts:[['Изменить шаблон',''],['Отправить вручную','']],
+   el:['Расписание авто-напоминаний','Превью шаблона + метрики'], ux:[]},
+
+ {id:'analytics',group:'Аналитика',idx:'11',title:'Аналитика CRM (4 вкладки)',obj:'РН.CRM_МетрикиCRM + СКД',fr:['FR-023'],conf:'hi',
+   roles:['rop'],
+   wf:`<div class="wf"><div class="tabs"><span class="t on">LTV по сегментам</span><span class="t">Каналы</span><span class="t">Кураторы</span><span class="t">Воронка-9</span></div>
+     <div class="grid" style="grid-template-columns:repeat(3,1fr)"><div class="kpi"><b>42к</b><span>LTV первичн.</span></div><div class="kpi"><b>118к</b><span>LTV повторн.</span></div><div class="kpi"><b>75к</b><span>LTV реактив.</span></div></div>
+     <div class="row"><span class="seg lbl">Динамика 6 мес.</span></div><div class="grid" style="grid-template-columns:repeat(6,1fr);align-items:end">
+     <div class="barfill" style="height:20px"></div><div class="barfill" style="height:34px"></div><div class="barfill" style="height:28px"></div><div class="barfill" style="height:48px"></div><div class="barfill" style="height:40px"></div><div class="barfill" style="height:60px"></div></div>
+     <div class="note">Воронка-9: полная 9-статусная с conversion-rate по каждому шагу + узкое место</div></div>`,
+   acts:[['Переключить вкладку',''],['Экспорт','']],
+   el:['4 вкладки: LTV / Каналы (CPL,ROI) / Кураторы / Воронка-9 статусов'], ux:[]},
+
+ {id:'report',group:'Аналитика',idx:'16',title:'Отчёт «Пациенты: по ответственным»',obj:'Отчёт СКД',fr:['существующий'],conf:'hi',
+   roles:['rop','adm'],
+   wf:`<div class="wf"><div class="bar"><span class="seg lbl">Сформировать</span><span class="seg lbl">Настройки</span></div>
+     <table><thead><tr><th>Ответственный / Пациент / Номенклатура</th><th>Кол-во</th><th>Сумма</th><th>Оплачено</th></tr></thead><tbody>
+     <tr><td><b>▼ Аникина С.В.</b></td><td>—</td><td>92 000</td><td>54 000</td></tr>
+     <tr><td>&nbsp;&nbsp;▼ Иванов М.С.</td><td>—</td><td>28 410</td><td>10 000</td></tr>
+     <tr><td>&nbsp;&nbsp;&nbsp;&nbsp;Магнит SIS (2 прогр.)</td><td>1</td><td>3 000</td><td>3 000</td></tr></tbody></table></div>`,
+   acts:[['Сформировать',''],['Настройки СКД','']],
+   el:['Иерархия 3 уровня · 11 колонок'], ux:[]},
+
+ {id:'card',group:'Карточки документов',idx:'06',title:'Карточка пациента',obj:'Справочник.ФизическиеЛица (+CRM_*)',fr:['FR-001','FR-005','FR-008','FR-016','FR-017'],conf:'hi',
+   roles:['rop','cur'],
+   wf:`<div class="wf"><div class="bar amber"><span class="btn pri">Записать и закрыть ⛔</span><span class="btn">Записать</span><span class="btn warn">Оформить отказ</span><span class="btn">+Заказ</span><span class="btn">+Задача</span><span class="btn">Позвонить</span></div>
+     <div class="row"><span class="seg">аватар · Тестов Т.Т. · К-404 · стадия: Записан · тип: повторный</span></div>
+     <div class="grid" style="grid-template-columns:repeat(5,1fr)"><div class="kpi"><b>32к</b><span>Цена</span></div><div class="kpi"><b>0</b><span>Оплач.</span></div><div class="kpi"><b>32к</b><span>К опл.</span></div><div class="kpi"><b>0</b><span>Отмен.</span></div><div class="kpi"><b>—</b><span>Остаток</span></div></div>
+     <div class="row"><span class="seg lbl">Атрибуты:</span><span class="pill g">ABC: A</span><span class="pill">Цикл №2·Острый</span><span class="pill a">тревожный</span><span class="pill b">ДМС</span></div>
+     <div class="ved"><div class="vh">Блок «Ведение» (FR-008) <span class="count">3 / 6</span></div>
+       <div class="row"><span class="seg">Тип ведения ▾</span><span class="seg">Подтип ▾</span></div>
+       <div class="row"><span class="seg" style="background:var(--amber-light)">📅 Дата след.контакта</span><span class="seg">Формат: визит/проц/диаг</span></div>
+       <div class="row"><span class="seg">Комментарий пациенту (280)</span><span class="seg">Ответственный куратор</span></div></div>
+     <div class="tabs"><span class="t on">Задачи пациента</span><span class="t">Дополнительно</span><span class="t">Стратегия 0-3-7</span></div></div>`,
+   acts:[['Записать и закрыть (заблок. пока 6/6)','pri'],['Оформить отказ','warn'],['+Заказ',''],['+Задача',''],['Позвонить',''],['Синхронизировать','']],
+   el:['Шапка · командная панель · 5 метрик · таблица заказов · атрибуты · блок «Ведение» (6 обяз.полей) · 3 вкладки'],
+   ux:['Кнопка закрытия блокируется до 6/6 (валидация финалки)','При 6/6 → авто-задача на −7 дней (FR-009)']},
+
+ {id:'order',group:'Карточки документов',idx:'07',title:'Карточка заказа',obj:'Документ.CRM_Заказ',fr:['FR-002','FR-003','FR-017'],conf:'hi',
+   roles:['rop','cur'], masked:true,
+   wf:`<div class="wf"><div class="bar amber"><span class="btn pri">Записать и закрыть</span><span class="btn">Отметить оплату</span><span class="btn warn">Отменить заказ</span><span class="btn">+Задача</span><span class="btn">Печать/Счёт/Чек</span></div>
+     <div class="row"><span class="seg">Заказ #540 · 26.05.2026 · → Тестов Т.Т.</span><span class="pill a">Сделано предложение ▾</span></div>
+     <div class="split"><div class="l"><div class="col-head">Номенклатура</div>
+       <table><tr><td>Магнит SIS (2)</td><td>3 000</td></tr><tr><td>HILT 2 (1 зона)</td><td>2 500</td></tr><tr><td><b>Итого</b></td><td><b>5 500</b></td></tr></table></div>
+     <div class="r"><div class="col-head">Сайдбар</div><div class="mask">🔒 Финансы скрыты для «Помощник»</div><div class="qitem">Σ 5 500 · Оплачено 0 · К опл. 5 500</div><div class="qitem">Карточка пациента</div><div class="qitem">История операций</div></div></div>
+     <div class="row"><span class="seg lbl">Задачи по заказу →</span><span class="seg">2-клик → карточка задачи</span></div></div>`,
+   acts:[['Записать и закрыть','pri'],['Отметить оплату',''],['Отменить заказ','warn'],['+Задача по заказу',''],['Печать/Счёт/Чек','']],
+   el:['Шапка + status9 ▾','Номенклатура (услуги)','Реквизиты','Задачи по заказу','Сайдбар: финансы/пациент/история'],
+   ux:['Целевая замена легаси-документа «Сделка» (C-06)','9 статусов — на уровне модели и в этом dropdown']},
+
+ {id:'taskcard',group:'Карточки документов',idx:'08',title:'Карточка задачи',obj:'Документ.CRM_Задача',fr:['FR-006','FR-009','FR-014'],conf:'hi',
+   roles:['rop','cur','ass'],
+   wf:`<div class="wf"><div class="split"><div class="l"><div class="col-head">Основные</div>
+     <div class="row"><span class="seg">Заголовок задачи</span></div>
+     <div class="row"><span class="seg">Пациент ▾</span><span class="seg">Ответственный (+замещающий) ▾</span></div>
+     <div class="row"><span class="seg">Тип ▾</span><span class="seg">Приоритет ◉выс ○ср ○низ</span></div>
+     <div class="row"><span class="seg" style="background:var(--amber-light)">📅 Срок + напоминание</span><span class="seg">Канал ▾</span></div>
+     <div class="row"><span class="seg">Привязка к заказу ▾</span><span class="pill a">+ тег</span></div>
+     <div class="row"><span class="seg">Результат: чипсы исходов · <b>ОБЯЗ.</b> комментарий</span></div></div>
+     <div class="r"><div class="col-head">Контекст</div><div class="qitem">Карточка пациента (компакт)</div><div class="qitem">Карточка заказа + услуги</div><div class="qitem">История / Аудит</div></div></div></div>`,
+   acts:[['Записать',''],['Выполнить (с комментарием)','pri'],['Перенаправить',''],['Позвонить','']],
+   el:['2 колонки: основные/теги/описание/результат + контекст пациент/заказ/аудит'],
+   ux:['Замещающий — для отпусков (FR-014)','Закрытие требует комментарий']},
+];
+
+/* ===== Render ===== */
+const groups = {};
+S.forEach(s=>{ (groups[s.group]=groups[s.group]||[]).push(s); });
+const nav = document.getElementById('sidenav');
+const screensEl = document.getElementById('screens');
+
+Object.keys(groups).forEach(g=>{
+  const gh=document.createElement('div'); gh.className='group'; gh.textContent=g; nav.appendChild(gh);
+  groups[g].forEach(s=>{
+    const a=document.createElement('a'); a.href='#'+s.id; a.dataset.sid=s.id;
+    a.innerHTML=`<span class="num">${s.idx}</span><span>${s.title.replace(/ \(.+/,'')}</span>`+(s.masked?'<span class="lock">🔒</span>':'');
+    nav.appendChild(a);
+  });
+});
+
+S.forEach(s=>{
+  const sec=document.createElement('section'); sec.className='screen'; sec.id=s.id; sec.dataset.roles=s.roles.join(',');
+  if(s.masked) sec.dataset.masked='1';
+  const frb=s.fr.map(f=>`<span class="badge fr">${f}</span>`).join('');
+  const conf=s.conf==='hi'?'<span class="badge hi">HIGH</span>':'<span class="badge me">MEDIUM</span>';
+  const acts=s.acts.map(a=>`<span class="act ${a[1]||''}">${a[0]}</span>`).join('');
+  const el=s.el.map(x=>`<li>${x}</li>`).join('');
+  const ux=s.ux.length?`<div class="meta"><h4>UX-проблемы</h4><ul class="ux">${s.ux.map(x=>`<li>${x}</li>`).join('')}</ul></div>`:'';
+  sec.innerHTML=`
+    <div class="screen-head"><div class="idx">${s.idx}</div>
+      <div class="ttl"><h2>${s.title}</h2><div class="obj">🧩 ${s.obj}</div></div>
+      <div class="badges">${conf}${frb}</div></div>
+    <p class="lock-note">🔒 Для текущей роли часть данных на этом экране маскируется (финансовые суммы, ДМС-пациенты, эскалации).</p>
+    <div class="screen-body">
+      <div class="wire-pane">${s.wf}</div>
+      <div class="meta-pane">
+        <div class="meta"><h4>Действия</h4><div class="acts">${acts}</div></div>
+        <div class="meta"><h4>Ключевые элементы</h4><ul>${el}</ul></div>
+        ${ux}
+      </div>
+    </div>`;
+  screensEl.appendChild(sec);
+});
+
+/* ===== Role switching ===== */
+const toast=document.getElementById('toast');
+let toastT;
+function showToast(msg){ toast.textContent=msg; toast.classList.add('show'); clearTimeout(toastT); toastT=setTimeout(()=>toast.classList.remove('show'),2600); }
+function applyRole(role){
+  document.querySelectorAll('.role-btn').forEach(b=>b.classList.toggle('active',b.dataset.role===role));
+  const rb=ROLES[role];
+  document.getElementById('roleBannerTitle').textContent='Режим: '+rb.t;
+  document.getElementById('roleBannerText').textContent=rb.d;
+  document.querySelectorAll('.screen').forEach(sec=>{
+    const roles=sec.dataset.roles.split(',');
+    const visible = role==='all' || roles.includes(role);
+    sec.classList.toggle('hidden-role',!visible);
+    // masking: assistant role on masked screens
+    sec.classList.toggle('masked', role==='ass' && sec.dataset.masked==='1' && visible);
+  });
+  document.querySelectorAll('nav.side a').forEach(a=>{
+    const sec=document.getElementById(a.dataset.sid);
+    const roles=sec.dataset.roles.split(',');
+    const visible = role==='all' || roles.includes(role);
+    a.classList.toggle('dim',!visible);
+  });
+  if(role!=='all'){ const n=document.querySelectorAll('.screen:not(.hidden-role)').length; showToast(`Роль «${rb.t.split(' —')[0]}»: доступно ${n} экранов`); }
+}
+document.querySelectorAll('.role-btn').forEach(b=>b.addEventListener('click',()=>applyRole(b.dataset.role)));
+// smooth nav active highlight
+const obs=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){document.querySelectorAll('nav.side a').forEach(a=>a.style.background=a.dataset.sid===e.target.id?'var(--amber-active)':'');}})},{rootMargin:'-40% 0px -55% 0px'});
+document.querySelectorAll('.screen').forEach(s=>obs.observe(s));
+</script>
+</body>
+</html>
